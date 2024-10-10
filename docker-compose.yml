@@ -6,9 +6,9 @@ services:
       POSTGRES_USER: quickcheck
       POSTGRES_PASSWORD: password
       POSTGRES_DB: quickcheck
-      PGDATA: /data/postgres
+      PGDATA: /data/quickcheck
     volumes:
-      - db:/data/postgres
+      - db:/data/quickcheck
     ports:
       - "5333:5432"
     networks:

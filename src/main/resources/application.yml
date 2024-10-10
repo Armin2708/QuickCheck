@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8008
   error:
     include-message: always
 
@@ -10,7 +10,7 @@ cors:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5333/quickcheck
-    username: quickcheck
+    username: admin
     password: password
   jpa:
     hibernate:
