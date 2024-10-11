@@ -4,6 +4,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -27,7 +28,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest registrationRequest){
+    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
         userService.addUser(registrationRequest);
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION)

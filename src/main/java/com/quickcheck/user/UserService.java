@@ -4,10 +4,13 @@ import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class UserService{
+
     private final UserDao userDao;
 
     public UserService(UserDao userDao) {
@@ -25,7 +28,7 @@ public class UserService{
                 ));
     }
 
-    public void addUser(UserRegistrationRequest request){
+    public void addUser(UserRegistrationRequest request) throws SQLException {
         String email = request.email();
         if (userDao.existUserWithEmail(email)) {
             throw new DuplicateResourceException("Email already exists");

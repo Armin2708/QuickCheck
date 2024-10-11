@@ -26,11 +26,14 @@ public class UserRowMapper implements RowMapper<User> {
         user.setGender(Gender.valueOf(rs.getString("gender")));
         Array sqlArray = rs.getArray("classesid");
         if (sqlArray != null) {
-            // Convert SQL array to a Java array of Integers
-            Integer[] classesIdArray = (Integer[]) sqlArray.getArray();
+            // Retrieve the SQL array as an Integer[] (PostgreSQL INTEGER[])
+            Integer[] classesIdArray = (Integer[]) sqlArray.getArray();  // Cast to Integer[]
+
             // Convert Integer[] to List<Integer>
-            List<Integer> classesIdList = Arrays.stream(classesIdArray).collect(Collectors.toList());
-            user.setClassesId(classesIdList); // Assuming `setClassId` expects a List<Integer>
+            List<Integer> classesIdList = Arrays.asList(classesIdArray);  // Convert to List
+
+            // Set the List<Integer> in the User object
+            user.setClassesId(classesIdList); // Assuming `setClassesId` now expects a List<Integer>
         }
 
         return user;

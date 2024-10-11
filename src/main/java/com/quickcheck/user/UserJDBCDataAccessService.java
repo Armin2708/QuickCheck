@@ -3,8 +3,11 @@ package com.quickcheck.user;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.sql.Array;  // Import the correct Array class
 
 @Repository("user")
 public class UserJDBCDataAccessService implements UserDao {
@@ -39,11 +42,12 @@ public class UserJDBCDataAccessService implements UserDao {
     }
 
     @Override
-    public void insertUser(User user) {
+    public void insertUser(User user) throws SQLException {
         var sql= """
-                INSERT INTO "user"(schoolname,name,address,email,password,dateofbirth,gender,classesid) 
+                INSERT INTO "user"(schoolname, name, address, email, password, dateofbirth, gender, classesid)
                 VALUES(?,?,?,?,?,?,?,?)
                 """;
+
         int result = jdbcTemplate.update(
                 sql,
                 user.getSchoolName(),
@@ -51,9 +55,9 @@ public class UserJDBCDataAccessService implements UserDao {
                 user.getAddress(),
                 user.getEmail(),
                 user.getPassword(),
-                user.getDateOfBirth(),
-                user.getGender(),
-                user.getClassesId()
+                java.sql.Date.valueOf(user.getDateOfBirth()),
+                user.getGender().name(),
+                user.getClassesId().toArray(new Integer[0])
         );
         System.out.println("jdbcTemplate.result = "+result);
 
@@ -171,7 +175,7 @@ public class UserJDBCDataAccessService implements UserDao {
                     """;
             int result = jdbcTemplate.update(
                     sql,
-                    update.getDateOfBirth(),
+                    java.sql.Date.valueOf(update.getDateOfBirth()),
                     update.getId()
             );
             System.out.println("update user dateOfBirth result = " +result);
@@ -197,7 +201,7 @@ public class UserJDBCDataAccessService implements UserDao {
                     """;
             int result = jdbcTemplate.update(
                     sql,
-                    update.getClassesId(),
+                    update.getClassesId().toArray(new Integer[0]),
                     update.getId()
             );
             System.out.println("update user classesId result = " +result);
