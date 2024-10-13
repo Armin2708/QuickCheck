@@ -12,13 +12,6 @@ spring:
     url: jdbc:postgresql://localhost:5333/quickcheck
     username: admin
     password: password
-  jpa:
-    hibernate:
-      ddl-auto: validate
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    show-sql: true
+
   main:
     web-application-type: servlet

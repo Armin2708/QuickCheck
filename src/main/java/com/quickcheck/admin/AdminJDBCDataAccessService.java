@@ -1,83 +1,79 @@
-package com.quickcheck.user;
+package com.quickcheck.admin;
 
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-@Repository("user")
-public class UserJDBCDataAccessService implements UserDao {
+@Repository("admin")
+public class AdminJDBCDataAccessService implements AdminDao {
 
     private final JdbcTemplate jdbcTemplate;
-    private final UserRowMapper userRowMapper;
+    private final AdminRowMapper adminRowMapper;
 
-    public UserJDBCDataAccessService(JdbcTemplate jdbcTemplate, UserRowMapper userRowMapper) {
+    public AdminJDBCDataAccessService(JdbcTemplate jdbcTemplate, AdminRowMapper adminRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
-        this.userRowMapper = userRowMapper;
+        this.adminRowMapper = adminRowMapper;
     }
 
     @Override
-    public List<User> selectAllUsers() {
+    public List<Admin> selectAllAdmins() {
         var sql= """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
-                FROM "user"
+                SELECT id, schoolname, name, address, email, password, dateofbirth, gender, classesid
+                FROM "admin"
                 """;
-        return jdbcTemplate.query(sql,userRowMapper);
+        return jdbcTemplate.query(sql, adminRowMapper);
     }
 
     @Override
-    public Optional<User> selectUserById(Integer id) {
+    public Optional<Admin> selectAdminById(Integer id) {
         var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
-                FROM "user"
-                WHERE id= ?
+                SELECT id, schoolname, name, address, email, password, dateofbirth, gender, classesid
+                FROM "admin"
+                WHERE id=?
                 """;
-        return jdbcTemplate.query(sql,userRowMapper,id)
+        return jdbcTemplate.query(sql, adminRowMapper, id)
                 .stream()
                 .findFirst();
     }
 
     @Override
-    public void insertUser(User user) throws SQLException {
+    public void insertAdmin(Admin admin) {
         var sql= """
-                INSERT INTO "user"(schoolname, name, address, email, password, dateofbirth, gender, classesid)
+                INSERT INTO "admin"(schoolname, name, address, email, password, dateofbirth, gender, classesid)
                 VALUES(?,?,?,?,?,?,?,?)
                 """;
-
         int result = jdbcTemplate.update(
                 sql,
-                user.getSchoolName(),
-                user.getName(),
-                user.getAddress(),
-                user.getEmail(),
-                user.getPassword(),
-                java.sql.Date.valueOf(user.getDateOfBirth()),
-                user.getGender().name(),
-                user.getClassesId().toArray(new Integer[0])
+                admin.getSchoolName(),
+                admin.getName(),
+                admin.getAddress(),
+                admin.getEmail(),
+                admin.getPassword(),
+                java.sql.Date.valueOf(admin.getDateOfBirth()),
+                admin.getGender().name(),
+                admin.getClassesId().toArray(new Integer[0])
         );
         System.out.println("jdbcTemplate.result = "+result);
-
     }
 
     @Override
-    public boolean existUserWithEmail(String email) {
+    public boolean existAdminWithEmail(String email) {
         var sql = """
                 SELECT count(id)
-                FROM "user"
+                FROM "admin"
                 WHERE email=?
                 """;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,email);
-        return count != null &&count>0;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 
-
     @Override
-    public void deleteUserById(Integer id) {
+    public void deleteAdminById(Integer id) {
         var sql = """
                 DELETE
-                FROM "user"
+                FROM "admin"
                 WHERE id=?
                 """;
         Integer result = jdbcTemplate.update(sql, id);
@@ -85,21 +81,21 @@ public class UserJDBCDataAccessService implements UserDao {
     }
 
     @Override
-    public boolean existUserById(Integer id) {
+    public boolean existAdminById(Integer id) {
         var sql = """
                 SELECT count(id)
-                FROM "user"
+                FROM "admin"
                 WHERE id=?
                 """;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,id);
-        return count != null &&count>0;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
     }
 
     @Override
-    public void updateUser(User update) {
+    public void updateAdmin(Admin update) {
         if(update.getSchoolName()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET schoolname = ? 
                     WHERE id = ?
                     """;
@@ -108,11 +104,11 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getSchoolName(),
                     update.getId()
             );
-            System.out.println("update user schoolName result = " +result);
+            System.out.println("update admin schoolName result = " +result);
         }
         if(update.getName()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET name = ? 
                     WHERE id = ?
                     """;
@@ -121,12 +117,12 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getName(),
                     update.getId()
             );
-            System.out.println("update user name result = " +result);
+            System.out.println("update admin name result = " +result);
         }
 
         if(update.getAddress()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET address = ? 
                     WHERE id = ?
                     """;
@@ -135,12 +131,12 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getAddress(),
                     update.getId()
             );
-            System.out.println("update user address result = " +result);
+            System.out.println("update admin address result = " +result);
         }
 
         if(update.getEmail()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET email = ? 
                     WHERE id = ?
                     """;
@@ -149,12 +145,12 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getEmail(),
                     update.getId()
             );
-            System.out.println("update user email result = " +result);
+            System.out.println("update admin email result = " +result);
         }
 
         if(update.getPassword()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET password = ? 
                     WHERE id = ?
                     """;
@@ -163,11 +159,11 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getPassword(),
                     update.getId()
             );
-            System.out.println("update user password result = " +result);
+            System.out.println("update admin password result = " +result);
         }
         if(update.getDateOfBirth()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET dateofbirth = ? 
                     WHERE id = ?
                     """;
@@ -176,11 +172,11 @@ public class UserJDBCDataAccessService implements UserDao {
                     java.sql.Date.valueOf(update.getDateOfBirth()),
                     update.getId()
             );
-            System.out.println("update user dateOfBirth result = " +result);
+            System.out.println("update admin dateOfBirth result = " +result);
         }
         if(update.getGender()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET gender = ? 
                     WHERE id = ?
                     """;
@@ -189,11 +185,11 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getGender().name(),
                     update.getId()
             );
-            System.out.println("update user gender result = " +result);
+            System.out.println("update admin gender result = " +result);
         }
         if(update.getClassesId()!=null){
             String sql = """
-                    UPDATE "user" 
+                    UPDATE "admin" 
                     SET classesid = ? 
                     WHERE id = ?
                     """;
@@ -202,19 +198,7 @@ public class UserJDBCDataAccessService implements UserDao {
                     update.getClassesId().toArray(new Integer[0]),
                     update.getId()
             );
-            System.out.println("update user classesId result = " +result);
+            System.out.println("update admin classesId result = " +result);
         }
-    }
-
-    @Override
-    public Optional<User> selectUserByEmail(String email) {
-        var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
-                FROM "user"
-                WHERE email= ?
-                """;
-        return jdbcTemplate.query(sql,userRowMapper,email)
-                .stream()
-                .findFirst();
     }
 }

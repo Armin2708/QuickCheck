@@ -47,10 +47,12 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.flywaydb</groupId>
-            <artifactId>flyway-core</artifactId>
-        </dependency>-->
+            <artifactId>flyway-database-postgresql</artifactId>
+            <version>10.19.0</version>
+            <scope>runtime</scope>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -130,7 +132,7 @@
     <build>
         <plugins>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <executions>
@@ -141,7 +143,7 @@
                         </goals>
                         <configuration>
                             <arguments>
-                                <argument>&#45;&#45;server.port=${tomcat.http.port}</argument>
+                                <argument>--server.port=${tomcat.http.port}</argument>
                             </arguments>
                         </configuration>
                     </execution>
@@ -152,7 +154,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>-->
+            </plugin>
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -164,20 +166,20 @@
                 </configuration>
             </plugin>
 
-            <!--<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <configuration>
-                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
-                    <includes>
-                        <include>**/*IntegrationTest.java</include>
-                        <include>**/*IT.java</include>
-                    </includes>
-                    <systemPropertyVariables>
-                        <test.server.port>${tomcat.http.port}</test.server.port>
-                    </systemPropertyVariables>
-                </configuration>
-            </plugin>-->
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>-->
+<!--                    <includes>-->
+<!--                        <include>**/*IntegrationTest.java</include>-->
+<!--                        <include>**/*IT.java</include>-->
+<!--                    </includes>-->
+<!--                    <systemPropertyVariables>-->
+<!--                        <test.server.port>${tomcat.http.port}</test.server.port>-->
+<!--                    </systemPropertyVariables>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -199,7 +201,7 @@
                 </executions>
             </plugin>
 
-            <!--<plugin>
+            <plugin>
                 <groupId>com.google.cloud.tools</groupId>
                 <artifactId>jib-maven-plugin</artifactId>
                 <version>3.3.1</version>
@@ -224,7 +226,7 @@
                         </tags>
                     </to>
                 </configuration>
-            </plugin>-->
+            </plugin>
         </plugins>
     </build>
 

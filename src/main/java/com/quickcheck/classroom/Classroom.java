@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Classroom {
 
-    private BigInteger id;
+    private Integer id;
     private String className;
     private String professorName;
     private List<Integer> adminsId;
@@ -33,11 +33,13 @@ public class Classroom {
         this.classLocation = classLocation;
     }
 
-    public BigInteger getId() {
+    public Integer getId() {
         return id;
     }
 
-
+    public void setId(Integer id) {
+        this.id = id;
+    }
     public String getClassName() {
         return className;
     }
