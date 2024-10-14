@@ -1,6 +1,6 @@
 import {Badge, Tab, TabList, TabPanel, TabPanels, Tabs, Tr} from "@chakra-ui/react";
 import DropDownMenu from "./DropDownMenu.jsx";
-import WhatIsQuicCheck from "./WhatIsQuicCheck.jsx";
+import WhatIsQuicCheck from "./WhatIsQuickCheck.jsx";
 import TryQuickCheck from "./TryQuickCheck.jsx";
 import GetQuickCheck from "./GetQuickCheck.jsx";
 
