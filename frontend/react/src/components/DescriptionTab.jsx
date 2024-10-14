@@ -1,5 +1,8 @@
-import {Badge, Tab, TabList, TabPanel, TabPanels, Tabs} from "@chakra-ui/react";
+import {Badge, Tab, TabList, TabPanel, TabPanels, Tabs, Tr} from "@chakra-ui/react";
 import DropDownMenu from "./DropDownMenu.jsx";
+import WhatIsQuicCheck from "./WhatIsQuicCheck.jsx";
+import TryQuickCheck from "./TryQuickCheck.jsx";
+import GetQuickCheck from "./GetQuickCheck.jsx";
 
 export default function DescriptionTab(){
     return(
@@ -18,13 +21,13 @@ export default function DescriptionTab(){
 
             <TabPanels>
                 <TabPanel>
-                    <p>one!</p>
+                    <WhatIsQuicCheck/>
                 </TabPanel>
                 <TabPanel>
-                    <p>two!</p>
+                    <TryQuickCheck/>
                 </TabPanel>
                 <TabPanel>
-                    <p>three!</p>
+                    <GetQuickCheck/>
                 </TabPanel>
             </TabPanels>
         </Tabs>

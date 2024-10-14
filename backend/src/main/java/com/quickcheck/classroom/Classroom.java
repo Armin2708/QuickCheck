@@ -1,36 +1,47 @@
 package com.quickcheck.classroom;
 
-import org.springframework.data.relational.core.sql.In;
-
-import java.math.BigInteger;
 import java.util.List;
 
 public class Classroom {
 
     private Integer id;
     private String className;
-    private String professorName;
-    private List<Integer> adminsId;
-    private List <Integer> studentsId;
-    private List<String> attendanceOfStudents;
-    private List<List<String>> attendanceRecord;
+    private Integer professorId;
     private String classLocation;
-
-    //private Class schedule;
-    //private Class Chat;
-
+    private String startDate;
+    private String endDate;
+    private List<String> classDays;
+    private List<Integer> studentsId;
+    private List<Integer> adminsId;
 
     public Classroom() {
     }
 
-    public Classroom(String className, String professorName, List<Integer> adminsId, List<Integer> studentsId, List<String> attendanceOfStudents, List<List<String>> attendanceRecord, String classLocation) {
+    public Classroom(Integer id, String className, Integer professorId, String classLocation,
+                     String startDate, String endDate, List<String> classDays, List<Integer> studentsId,
+                     List<Integer> adminsId) {
+        this.id = id;
         this.className = className;
-        this.professorName = professorName;
-        this.adminsId = adminsId;
-        this.studentsId = studentsId;
-        this.attendanceOfStudents = attendanceOfStudents;
-        this.attendanceRecord = attendanceRecord;
+        this.professorId = professorId;
         this.classLocation = classLocation;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.classDays = classDays;
+        this.studentsId=studentsId;
+        this.adminsId=adminsId;
+    }
+
+    public Classroom(String className, Integer professorId, String classLocation, String startDate,
+                     String endDate, List<String> classDays, List<Integer> studentsId,
+                     List<Integer> adminsId) {
+        this.className = className;
+        this.professorId = professorId;
+        this.classLocation = classLocation;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.classDays = classDays;
+        this.studentsId = studentsId;
+        this.adminsId = adminsId;
     }
 
     public Integer getId() {
@@ -40,6 +51,7 @@ public class Classroom {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getClassName() {
         return className;
     }
@@ -48,20 +60,44 @@ public class Classroom {
         this.className = className;
     }
 
-    public String getProfessorName() {
-        return professorName;
+    public Integer getProfessorId() {
+        return professorId;
     }
 
-    public void setProfessorName(String professorName) {
-        this.professorName = professorName;
+    public void setProfessorId(Integer professorId) {
+        this.professorId = professorId;
     }
 
-    public List<Integer> getAdminsId() {
-        return adminsId;
+    public String getClassLocation() {
+        return classLocation;
     }
 
-    public void setAdminsId(List<Integer> adminsId) {
-        this.adminsId = adminsId;
+    public void setClassLocation(String classLocation) {
+        this.classLocation = classLocation;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public List<String> getClassDays() {
+        return classDays;
+    }
+
+    public void setClassDays(List<String> classDays) {
+        this.classDays = classDays;
     }
 
     public List<Integer> getStudentsId() {
@@ -72,27 +108,11 @@ public class Classroom {
         this.studentsId = studentsId;
     }
 
-    public List<String> getAttendanceOfStudents() {
-        return attendanceOfStudents;
+    public List<Integer> getAdminsId() {
+        return adminsId;
     }
 
-    public void setAttendanceOfStudents(List<String> attendanceOfStudents) {
-        this.attendanceOfStudents = attendanceOfStudents;
-    }
-
-    public List<List<String>> getAttendanceRecord() {
-        return attendanceRecord;
-    }
-
-    public void setAttendanceRecord(List<List<String>> attendanceRecord) {
-        this.attendanceRecord = attendanceRecord;
-    }
-
-    public String getClassLocation() {
-        return classLocation;
-    }
-
-    public void setClassLocation(String classLocation) {
-        this.classLocation = classLocation;
+    public void setAdminsId(List<Integer> adminsId) {
+        this.adminsId = adminsId;
     }
 }

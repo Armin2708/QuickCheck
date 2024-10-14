@@ -34,17 +34,17 @@ public class ClassroomService {
         }
         Classroom classroom = new Classroom(
                 request.className(),
-                request.professorName(),
-                request.adminsId(),
+                request.professorId(),
+                request.classLocation(),
+                request.startDate(),
+                request.endDate(),
+                request.classDays(),
                 request.studentsId(),
-                request.attendanceOfStudents(),
-                request.attendanceRecord(),
-                request.classLocation()
+                request.adminsId()
         );
         classroomDao.insertClassroom(classroom);
     }
 
-    // Assuming ClassroomUpdateRequest is a similar record with ClassroomRegistrationRequest
     public void updateClassroom(Integer classroomId, ClassroomUpdateRequest classroomUpdateRequest) {
         Classroom classroom = classroomDao.selectClassroomById(classroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -52,7 +52,7 @@ public class ClassroomService {
                 ));
         boolean changes = false;
 
-        // Only implemented for some fields. Add more fields as needed.
+        // Check and update className
         if (classroomUpdateRequest.className() != null && !classroomUpdateRequest.className().equals(classroom.getClassName())) {
             if (classroomDao.existClassroomByName(classroomUpdateRequest.className())) {
                 throw new DuplicateResourceException("Classroom name already taken");
@@ -61,19 +61,57 @@ public class ClassroomService {
             changes = true;
         }
 
-        if (classroomUpdateRequest.professorName() != null && !classroomUpdateRequest.professorName().equals(classroom.getProfessorName())) {
-            classroom.setProfessorName(classroomUpdateRequest.professorName());
+        // Check and update professorId
+        if (classroomUpdateRequest.professorId() != null && !classroomUpdateRequest.professorId().equals(classroom.getProfessorId())) {
+            classroom.setProfessorId(classroomUpdateRequest.professorId());
             changes = true;
         }
 
-        // Implement rest of the updates here...
+        // Check and update classLocation
+        if (classroomUpdateRequest.classLocation() != null && !classroomUpdateRequest.classLocation().equals(classroom.getClassLocation())) {
+            classroom.setClassLocation(classroomUpdateRequest.classLocation());
+            changes = true;
+        }
 
+        // Check and update startDate
+        if (classroomUpdateRequest.startDate() != null && !classroomUpdateRequest.startDate().equals(classroom.getStartDate())) {
+            classroom.setStartDate(classroomUpdateRequest.startDate());
+            changes = true;
+        }
+
+        // Check and update endDate
+        if (classroomUpdateRequest.endDate() != null && !classroomUpdateRequest.endDate().equals(classroom.getEndDate())) {
+            classroom.setEndDate(classroomUpdateRequest.endDate());
+            changes = true;
+        }
+
+        // Check and update classDays
+        if (classroomUpdateRequest.classDays() != null && !classroomUpdateRequest.classDays().equals(classroom.getClassDays())) {
+            classroom.setClassDays(classroomUpdateRequest.classDays());
+            changes = true;
+        }
+
+        // Check and update studentsId
+        if (classroomUpdateRequest.studentsId() != null && !classroomUpdateRequest.studentsId().equals(classroom.getStudentsId())) {
+            classroom.setStudentsId(classroomUpdateRequest.studentsId());
+            changes = true;
+        }
+
+        // Check and update adminsId
+        if (classroomUpdateRequest.adminsId() != null && !classroomUpdateRequest.adminsId().equals(classroom.getAdminsId())) {
+            classroom.setAdminsId(classroomUpdateRequest.adminsId());
+            changes = true;
+        }
+
+        // If no changes were made, throw an exception
         if (!changes) {
             throw new RequestValidationException("No data changes found");
         }
 
+        // Update the classroom in the database
         classroomDao.updateClassroom(classroom);
     }
+
 
     public void deleteClassroom(Integer classroomId) {
         if (!classroomDao.existClassroomById(classroomId)){

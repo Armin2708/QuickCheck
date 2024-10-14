@@ -19,8 +19,8 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
 
     @Override
     public List<Classroom> selectAllClassrooms() {
-        var sql= """
-                SELECT id, classname, professorname, adminsid, studentsid, attendanceofstudents, attendancerecord, classlocation
+        var sql = """
+                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
                 FROM "classroom"
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper);
@@ -29,9 +29,9 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public Optional<Classroom> selectClassroomById(Integer id) {
         var sql = """
-                SELECT id, classname, professorname, adminsid, studentsid, attendanceofstudents, attendancerecord, classlocation
+                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
                 FROM "classroom"
-                WHERE id=?
+                WHERE id = ?
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper, id)
                 .stream()
@@ -40,20 +40,20 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
 
     @Override
     public void insertClassroom(Classroom classroom) {
-        var sql= """
-                INSERT INTO "classroom"(classname, professorname, adminsid, studentsid, attendanceofstudents, attendancerecord, classlocation)
-                VALUES(?,?,?,?,?,?,?)
+        var sql = """
+                INSERT INTO "classroom" (classname, professorid, classlocation, startdate, enddate, classdays, adminsid, studentsid)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         int result = jdbcTemplate.update(
                 sql,
                 classroom.getClassName(),
-                classroom.getProfessorName(),
-                classroom.getAdminsId().toArray(new Integer[0]),
-                classroom.getStudentsId().toArray(new Integer[0]),
-                // Assuming attendanceOfStudents and attendanceRecord are serializable to array
-                (Object[]) classroom.getAttendanceOfStudents().toArray(new String[0]),
-                (Object[]) classroom.getAttendanceRecord().toArray(new Object[0]),
-                classroom.getClassLocation()
+                classroom.getProfessorId(),
+                classroom.getClassLocation(),
+                classroom.getStartDate(),
+                classroom.getEndDate(),
+                classroom.getClassDays().toArray(new String[0]),  // Insert classDays as TEXT[]
+                classroom.getAdminsId().toArray(new Integer[0]),  // Insert adminsId as INT[]
+                classroom.getStudentsId().toArray(new Integer[0])  // Insert studentsId as INT[]
         );
         System.out.println("jdbcTemplate result = " + result);
     }
@@ -63,10 +63,10 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         var sql = """
                 SELECT count(id)
                 FROM "classroom"
-                WHERE classname=?
+                WHERE classname = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name);
-        return count != null && count>0;
+        return count != null && count > 0;
     }
 
     @Override
@@ -74,10 +74,10 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         var sql = """
                 DELETE
                 FROM "classroom"
-                WHERE id=?
+                WHERE id = ?
                 """;
-        Integer result = jdbcTemplate.update(sql, id);
-        System.out.println("deleteClassroomById result = "+ result);
+        int result = jdbcTemplate.update(sql, id);
+        System.out.println("deleteClassroomById result = " + result);
     }
 
     @Override
@@ -85,45 +85,133 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         var sql = """
                 SELECT count(id)
                 FROM "classroom"
-                WHERE id=?
+                WHERE id = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
-        return count != null && count>0;
+        return count != null && count > 0;
     }
 
     @Override
     public void updateClassroom(Classroom update) {
-        var sql = """
+        if (update.getClassName() != null) {
+            String sql = """
                 UPDATE "classroom"
-                SET classname = ?, 
-                    professorname = ?,
-                    adminsid = ?,
-                    studentsid = ?,
-                    attendanceofstudents = ?,
-                    attendancerecord = ?,
-                    classlocation = ?
+                SET classname = ? 
                 WHERE id = ?
                 """;
-        int result = jdbcTemplate.update(
-                sql,
-                update.getClassName(),
-                update.getProfessorName(),
-                update.getAdminsId().toArray(new Integer[0]),
-                update.getStudentsId().toArray(new Integer[0]),
-                (Object[]) update.getAttendanceOfStudents().toArray(new String[0]),
-                (Object[]) update.getAttendanceRecord().toArray(new Object[0]),
-                update.getClassLocation(),
-                update.getId()
-        );
-        System.out.println("update classroom result = " + result);
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getClassName(),
+                    update.getId()
+            );
+            System.out.println("update classroom className result = " + result);
+        }
+
+        if (update.getProfessorId() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET professorid = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getProfessorId(),
+                    update.getId()
+            );
+            System.out.println("update classroom professorId result = " + result);
+        }
+
+        if (update.getClassLocation() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET classlocation = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getClassLocation(),
+                    update.getId()
+            );
+            System.out.println("update classroom classLocation result = " + result);
+        }
+
+        if (update.getStartDate() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET startdate = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getStartDate(),
+                    update.getId()
+            );
+            System.out.println("update classroom startDate result = " + result);
+        }
+
+        if (update.getEndDate() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET enddate = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getEndDate(),
+                    update.getId()
+            );
+            System.out.println("update classroom endDate result = " + result);
+        }
+
+        if (update.getClassDays() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET classdays = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getClassDays().toArray(new String[0]),
+                    update.getId()
+            );
+            System.out.println("update classroom classDays result = " + result);
+        }
+
+        if (update.getAdminsId() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET adminsid = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getAdminsId().toArray(new Integer[0]),
+                    update.getId()
+            );
+            System.out.println("update classroom adminsId result = " + result);
+        }
+
+        if (update.getStudentsId() != null) {
+            String sql = """
+                UPDATE "classroom"
+                SET studentsid = ? 
+                WHERE id = ?
+                """;
+            int result = jdbcTemplate.update(
+                    sql,
+                    update.getStudentsId().toArray(new Integer[0]),
+                    update.getId()
+            );
+            System.out.println("update classroom studentsId result = " + result);
+        }
     }
 
     @Override
     public Optional<Classroom> selectClassroomByName(String name) {
         var sql = """
-                SELECT id, classname, professorname, adminsid, studentsid, attendanceofstudents, attendancerecord, classlocation
+                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
                 FROM "classroom"
-                WHERE classname=?
+                WHERE classname = ?
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper, name)
                 .stream()

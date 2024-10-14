@@ -23,12 +23,13 @@ CREATE TABLE "admin" (
 );
 
 CREATE TABLE "classroom" (
-                             id BIGSERIAL NOT NULL PRIMARY KEY,
-                             className VARCHAR(255) NOT NULL,
-                             professorName VARCHAR(255) NOT NULL,
-                             adminsId INT[] NOT NULL,
-                             studentsId INT[] NOT NULL,
-                             attendanceOfStudents TEXT NOT NULL,
-                             attendanceRecord TEXT NOT NULL,
-                             classLocation VARCHAR(255) NOT NULL
+                         id BIGSERIAL NOT NULL PRIMARY KEY,
+                         className VARCHAR(255) NOT NULL,
+                         professorId INT NOT NULL REFERENCES "admin"(id),
+                         classLocation VARCHAR(255) NOT NULL,
+                         startDate VARCHAR(255) NOT NULL,
+                         endDate VARCHAR(255) NOT NULL,
+                         classDays TEXT[] NOT NULL,
+                         studentsId INT[] NOT NULL,
+                         adminsId INT[] NOT NULL
 );

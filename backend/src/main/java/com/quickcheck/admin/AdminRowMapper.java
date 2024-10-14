@@ -18,14 +18,10 @@ public class AdminRowMapper implements RowMapper<Admin> {
         admin.setName(rs.getString("name"));
         admin.setAddress(rs.getString("address"));
         admin.setEmail(rs.getString("email"));
-        admin.setPassword(rs.getString("password")); // Please note that it's not secure to store and retrieve plain text passwords
-        admin.setDateOfBirth(rs.getString("dateofbirth")); // Set type to match your database scheme
-
-        // assuming the gender is stored as a string in the database
+        admin.setPassword(rs.getString("password"));
+        admin.setDateOfBirth(rs.getString("dateofbirth"));
         admin.setGender(Gender.valueOf(rs.getString("gender")));
-
-        Integer[] classesIdArray = (Integer[])rs.getArray("classesid").getArray();
-        admin.setClassesId(Arrays.asList(classesIdArray));
+        admin.setClassesId(Arrays.asList((Integer[])rs.getArray("classesid").getArray()));
 
         return admin;
     }

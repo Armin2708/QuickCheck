@@ -4,11 +4,12 @@ import java.util.List;
 
 public record ClassroomUpdateRequest(
         String className,
-        String professorName,
-        List<Integer> adminsId,
+        Integer professorId,
+        String classLocation,
+        String startDate,
+        String endDate,
+        List<String> classDays,
         List<Integer> studentsId,
-        List<String> attendanceOfStudents,
-        List<List<String>> attendanceRecord,
-        String classLocation
+        List<Integer> adminsId
 ) {
 }
