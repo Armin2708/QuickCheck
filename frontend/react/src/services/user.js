@@ -7,6 +7,13 @@ export const getUsers= async () => {
         throw e;
     }
 }
+export const getUser= async (userId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}`)
+    }catch (e){
+        throw e;
+    }
+}
 
 export const saveUser = async (user) => {
     try{
