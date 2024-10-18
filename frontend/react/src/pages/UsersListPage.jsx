@@ -2,7 +2,7 @@ import {Box, Wrap, WrapItem} from "@chakra-ui/react";
 import UserAdminCard from "../components/UserAdminCard.jsx";
 import {useEffect, useState} from "react";
 import {getUsers} from "../services/user.js";
-import Header from "../shared/Header.jsx";
+import SideBar from "../shared/SideBar.jsx";
 
 export default function UsersListPage(){
 
@@ -29,7 +29,7 @@ export default function UsersListPage(){
 
     return(
         <>
-            <Header/>
+            <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
                     <Wrap justify={"center"} spacing={"30px"}>

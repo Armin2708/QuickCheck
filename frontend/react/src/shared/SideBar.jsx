@@ -1,0 +1,164 @@
+import {Stack, Box, Text, Button} from '@chakra-ui/react'
+import {HiOutlineHome} from "react-icons/hi";
+
+export default function SideBar(){
+
+    return(
+        <Stack
+            borderRadius="10px"
+            justify="flex-start"
+            align="flex-start"
+            spacing="30px"
+            width="381px"
+            maxWidth="100%"
+            background="#F9F9F9"
+            boxShadow="4px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+        >
+            <Stack
+                justify="flex-start"
+                align="flex-start"
+                spacing="100%"
+                alignSelf="stretch"
+            >
+                <Stack
+                    justify="flex-start"
+                    align="flex-start"
+                    spacing="25px"
+                    alignSelf="stretch"
+                >
+                    <Stack
+                        justify="flex-start"
+                        align="center"
+                        spacing="9px"
+                        alignSelf="stretch"
+                    >
+                        <Stack
+                            direction="row"
+                            justify="space-between"
+                            align="center"
+                            spacing="238px"
+                            width="344px"
+                            maxWidth="100%"
+                        >
+                            <Box width="78px" height="75px" />
+                        </Stack>
+                        <Box height="1px" alignSelf="stretch" background="#EDEDED" />
+                    </Stack>
+                    <Stack
+                        paddingX="32px"
+                        justify="center"
+                        align="flex-start"
+                        spacing="32px"
+                        alignSelf="stretch"
+                    >
+                        <Button
+                            direction="row"
+                            justify="flex-start"
+                            align="center"
+                            spacing="20px"
+                        >
+                            <HiOutlineHome size={"100%"}/>
+
+                            <Text
+                                fontFamily="Inter"
+                                fontWeight="semibold"
+                                fontSize="28px"
+                                color="#313131"
+                            >
+                                Home
+                            </Text>
+                        </Button>
+                        <Stack
+                            direction="row"
+                            justify="flex-start"
+                            align="center"
+                            spacing="20px"
+                            alignSelf="stretch"
+                        >
+                            <Text
+                                fontFamily="Inter"
+                                fontWeight="semibold"
+                                fontSize="28px"
+                                color="#313131"
+                            >
+                                Classes
+                            </Text>
+                        </Stack>
+                        <Stack
+                            direction="row"
+                            justify="flex-start"
+                            align="center"
+                            spacing="20px"
+                        >
+                            <Text
+                                fontFamily="Inter"
+                                fontWeight="semibold"
+                                fontSize="28px"
+                                color="#313131"
+                                width="64px"
+                                height="34px"
+                            >
+                                User
+                            </Text>
+                        </Stack>
+                        <Stack
+                            direction="row"
+                            justify="flex-start"
+                            align="center"
+                            spacing="20px"
+                        >
+                            <Text
+                                fontFamily="Inter"
+                                fontWeight="semibold"
+                                fontSize="28px"
+                                color="#313131"
+                                width="88px"
+                                height="34px"
+                            >
+                                Admin
+                            </Text>
+                        </Stack>
+                    </Stack>
+                </Stack>
+                <Box height="1px" alignSelf="stretch" background="#EDEDED" />
+            </Stack>
+            <Stack
+                paddingX="32px"
+                paddingY="39px"
+                justify="flex-start"
+                align="flex-start"
+                spacing="22px"
+                height="100%"
+                alignSelf="stretch"
+            >
+                <Stack
+                    direction="row"
+                    justify="flex-start"
+                    align="center"
+                    spacing="20px"
+                    alignSelf="stretch"
+                >
+                    <Text
+                        fontFamily="Inter"
+                        fontWeight="semibold"
+                        fontSize="28px"
+                        color="#313131"
+                    >
+                        Settings
+                    </Text>
+                </Stack>
+                <Stack direction="row" justify="flex-start" align="center" spacing="20px">
+                    <Text
+                        fontFamily="Inter"
+                        fontWeight="semibold"
+                        fontSize="28px"
+                        color="#313131"
+                    >
+                        Sign-in
+                    </Text>
+                </Stack>
+            </Stack>
+        </Stack>
+
+)
+}

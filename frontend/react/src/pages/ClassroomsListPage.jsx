@@ -1,7 +1,7 @@
 import {Box, Wrap, WrapItem} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
 import {getClassrooms} from "../services/classroom.js";
-import Header from "../shared/Header.jsx";
+import SideBar from "../shared/SideBar.jsx";
 import ClassroomCard from "../components/ClassroomCard.jsx";
 
 export default function ClassroomsListPage(){
@@ -29,7 +29,7 @@ export default function ClassroomsListPage(){
 
     return(
         <>
-            <Header/>
+            <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
                     <Wrap justify={"center"} spacing={"30px"}>
