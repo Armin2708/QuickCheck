@@ -33,6 +33,7 @@ export default function Presentation() {
                         fontSize={{ base: "36px", sm: "50px", md: "60px", lg: "70px" }}  // Responsive font size
                         color="#313131"
                         textAlign="center"  // Center the text
+                        lineHeight={"70px"}
                     >
                         Take attendance on your device{" "}
                         <Box as="span" color="#7E3BB5">
