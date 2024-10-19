@@ -1,124 +1,141 @@
-import {Box, Card, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, Icon, Stack, Text} from "@chakra-ui/react";
+import {useState} from "react";
+import {FiThumbsUp} from "react-icons/fi";
+import {LuPen} from "react-icons/lu";
+import {RiShare2Line} from "react-icons/ri";
 
-export default function Tabs(){
-    return(
+export default function Tabs() {
+    const [tab,setTab]=useState(1)
+    const handleTab = (buttonId) => {
+        setTab(buttonId);
+    }
+    return (
         <Stack
-            paddingX="324px"
-            paddingY="178px"
+            paddingX={{ base: "20px", md: "50px", lg: "324px" }}  // Responsive padding
+            paddingY={{ base: "50px", md: "100px", lg: "178px" }}  // Responsive padding
             justify="flex-start"
-            align="flex-start"
+            align="center"
             spacing="10px"
-            width="1512px"
-            height="1131px"
-            maxWidth="100%"
+            width="100%"  // Full width for responsiveness
             background="#F9F9F9"
         >
             <Stack
                 justify="flex-start"
                 align="center"
                 spacing="25px"
-                width="864px"
-                maxWidth="100%"
+                width="100%"  // Full width for responsiveness
+                maxWidth="864px"  // Limit max width
             >
+                {/* Header Section */}
                 <Stack
                     justify="flex-start"
                     align="center"
                     spacing="32px"
-                    alignSelf="stretch"
+                    width="100%"
                 >
                     <Text
                         fontFamily="Inter"
                         fontWeight="bold"
-                        fontSize="65px"
+                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
                         color="#313131"
-                        height="157px"
-                        alignSelf="stretch"
                         textAlign="center"
                     >
-                        An innovating experience that’d fit your need{' '}
+                        An innovating experience that’d fit your need
                     </Text>
                     <Text
+                        paddingBottom={"40px"}
                         fontFamily="Inter"
                         fontWeight="medium"
-                        fontSize="24px"
+                        fontSize={{ base: "18px", md: "22px", lg: "24px" }}  // Responsive font size
                         color="#707070"
-                        height="86px"
-                        alignSelf="stretch"
                         textAlign="center"
                     >
                         Designed to fit your needs
                     </Text>
                 </Stack>
-                <Stack direction="row" justify="flex-start" align="center" spacing="39px">
-                    <Stack
+
+                {/* Buttons Section */}
+                <Stack
+                    direction={{ base: "column", md: "row" }}  // Stack vertically on small screens
+                    justify="center"
+                    align="center"
+                    spacing="20px"  // Adjust spacing between buttons
+                    width="100%"  // Full width for responsiveness
+                    maxWidth="100%"  // Prevent buttons from shrinking too much
+                >
+                    <Button
                         paddingX="58px"
                         paddingY="29px"
                         borderRadius="10px"
-                        direction="row"
-                        justify="center"
-                        align="center"
-                        spacing="10px"
-                        width="224px"
-                        height="90.19px"
-                        background="#BF9BE6"
+                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
+                        height="90px"  // Fixed height for all screen sizes
+                        background={tab==1 ?"#BF9BE6":"#7E3BB5"}
                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                        fontFamily="Inter"
+                        fontWeight="semibold"
+                        fontSize="26px"
+                        color="#FFFFFF"
+                        textAlign="center"
+                        _hover={{ background: tab==1 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
+                        _active={{
+                            transform: "scale(0.95)",  // Scale down a bit on click
+                            background: "#BF9BE6",  // Change background when active
+                        }}
+                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
+                        onClick={() => handleTab(1)}
                     >
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="semibold"
-                            fontSize="26px"
-                            color="#FFFFFF"
-                            textAlign="center"
-                        >
-                            Simple
-                        </Text>
-                    </Stack>
-                    <Stack
-                        padding="24px"
+                        Simple
+                    </Button>
+                    <Button
+                        paddingX="58px"
+                        paddingY="24px"
                         borderRadius="10px"
-                        direction="row"
-                        justify="center"
-                        align="center"
-                        spacing="10px"
-                        width="224px"
-                        height="90.19px"
-                        background="#7E3BB5"
+                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
+                        height="90px"  // Fixed height for all screen sizes
+                        background={tab==2 ?"#BF9BE6":"#7E3BB5"}
                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                        fontFamily="Inter"
+                        fontWeight="semibold"
+                        fontSize="26px"
+                        color="#FFFFFF"
+                        textAlign="center"
+                        _hover={{ background: tab==2 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
+                        _active={{
+                            transform: "scale(0.95)",  // Scale down a bit on click
+                            background: "#BF9BE6",  // Change background when active
+                        }}
+                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
+                        onClick={() => handleTab(2)}
                     >
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="semibold"
-                            fontSize="26px"
-                            color="#FFFFFF"
-                            textAlign="center"
-                        >
-                            Customizable
-                        </Text>
-                    </Stack>
-                    <Stack
+                        Customizable
+                    </Button>
+                    <Button
                         paddingX="39px"
                         paddingY="21px"
                         borderRadius="10px"
-                        direction="row"
-                        justify="center"
-                        align="center"
-                        spacing="10px"
-                        width="224px"
-                        height="90.19px"
-                        background="#7E3BB5"
+                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
+                        height="90px"  // Fixed height for all screen sizes
+                        background={tab==3 ?"#BF9BE6":"#7E3BB5"}
                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                        fontFamily="Inter"
+                        fontWeight="semibold"
+                        fontSize="26px"
+                        color="#FFFFFF"
+                        textAlign="center"
+                        _hover={{ background: tab==3 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
+                        _active={{
+                            transform: "scale(0.95)",  // Scale down a bit on click
+                            background: "#BF9BE6",  // Change background when active
+                        }}
+                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
+                        onClick={() => handleTab(3)}
                     >
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="semibold"
-                            fontSize="26px"
-                            color="#FFFFFF"
-                            textAlign="center"
-                        >
-                            Exportable
-                        </Text>
-                    </Stack>
+                        Exportable
+                    </Button>
                 </Stack>
+
+                {/* Card Section */}
+
                 <Stack
                     paddingX="49px"
                     paddingY="39px"
@@ -146,7 +163,7 @@ export default function Tabs(){
                             spacing="57px"
                             alignSelf="stretch"
                         >
-                            <Stack
+                            <Box
                                 paddingX="35px"
                                 paddingY="32px"
                                 borderRadius="63.5px"
@@ -157,7 +174,11 @@ export default function Tabs(){
                                 width="127px"
                                 height="127px"
                                 background="#7E3BB5"
-                            />
+                            >
+                                {tab==1 ?<FiThumbsUp color={"white"} size={"100%"}/>
+                                    : (tab==2 ? <LuPen color={"white"} size={"100%"}/>
+                                        : <RiShare2Line color={"white"} size={"100%"}/>)}
+                            </Box>
                             <Text
                                 fontFamily="Inter"
                                 fontWeight="bold"
@@ -167,7 +188,9 @@ export default function Tabs(){
                                 height="79px"
                                 maxWidth="100%"
                             >
-                                Intuitive design to maximize your output
+                                {tab==1 ? "Intuitive design to maximize your output"
+                                    : (tab==2 ? "Customize your experience "
+                                        :"Export your data to other platforms")}
                             </Text>
                         </Stack>
                         <Text
@@ -179,14 +202,17 @@ export default function Tabs(){
                             height="111px"
                             alignSelf="stretch"
                         >
-                            Quick Check UI has been engineered to be as intuitive as possible
-                            for you to enjoy the simple but efficient experience.
+                            {tab==1 ?"Quick Check UI has been engineered to be as intuitive as " +
+                                "possible for you to enjoy the simple but efficient experience."
+                                : (tab==2 ? "Quick Check lets you customize your experience to " +
+                                    "better match your specific need."
+                                    :"Quick Check datas can be exported to other platforms \n" +
+                                    "to help you better fit your need.")}
                         </Text>
                     </Stack>
                 </Stack>
+
             </Stack>
         </Stack>
-
-
-)
+    );
 }

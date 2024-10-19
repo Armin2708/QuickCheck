@@ -1,48 +1,50 @@
-import { Box, Text, Stack } from "@chakra-ui/react";
+import { Box, Text, Stack, Button } from "@chakra-ui/react";
 import { LiaAwardSolid } from "react-icons/lia";
 
 export default function Presentation() {
     return (
         <Stack
             justify="flex-start"
-            align="flex-start"
+            align="center"  // Center the content horizontally
             spacing="0px"
-            width="100%"  // Full width of the screen
+            width="100%"
             maxWidth="100%"
         >
             <Stack
-                paddingX={{ base: "20px", md: "10%", lg: "15%" }} // Responsive padding
-                paddingY={{ base: "50px", md: "80px" }} // Responsive padding
+                paddingX={{ base: "20px", md: "10%", lg: "15%" }}  // Responsive padding
+                paddingY={{ base: "50px", md: "80px" }}  // Responsive padding
                 justify="flex-start"
-                align="flex-start"
+                align="center"  // Center the content horizontally
                 spacing="10px"
-                height="auto"  // Auto height to make it flexible
-                alignSelf="stretch"
+                width="100%"  // Full width
                 background="#FFFFFF"
             >
                 <Stack
                     justify="flex-start"
-                    align="center"
+                    align="center"  // Center the heading horizontally
                     spacing="50px"
-                    width="100%"  // Takes full width but adapts to parent
+                    width="100%"  // Full width
                     maxWidth="690px"
                 >
+                    {/* Main Heading */}
                     <Text
                         fontFamily="Inter"
                         fontWeight="bold"
                         fontSize={{ base: "36px", sm: "50px", md: "60px", lg: "70px" }}  // Responsive font size
                         color="#313131"
-                        textAlign="center"
+                        textAlign="center"  // Center the text
                     >
-                        <span>Take attendance on your device </span>
+                        Take attendance on your device{" "}
                         <Box as="span" color="#7E3BB5">
                             Instantly
                         </Box>
                     </Text>
+
+                    {/* Button Section */}
                     <Stack
-                        justify="flex-start"
+                        justify="center"
                         align="center"
-                        spacing="30px"  // Reduce spacing for smaller screens
+                        spacing="30px"
                         width="100%"
                         maxWidth="440px"
                     >
@@ -53,69 +55,84 @@ export default function Presentation() {
                             spacing="12px"
                             width="100%"
                         >
-                            <Stack
+                            {/* Get Started Button */}
+                            <Button
                                 paddingX="20px"
                                 paddingY="20px"
                                 borderRadius="10px"
-                                direction="row"
                                 justify="center"
                                 align="center"
-                                spacing="10px"
                                 background="#7E3BB5"
                                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                                width="204px"
+                                height="74px"
+                                _hover={{ background: "#6C33A1" }}  // Hover effect
+                                _active={{
+                                    transform: "scale(0.95)",  // Scale down a bit on click
+                                    background: "#6C33A1",  // Change background when active
+                                }}
                             >
                                 <Text
                                     fontFamily="Inter"
                                     fontWeight="semibold"
-                                    fontSize={{ base: "20px", md: "26px" }}  // Responsive font size
-                                    color="#FFFFFF"
+                                    fontSize={{ base: "20px", md: "26px" }}
+                                    color="white"
                                     textAlign="center"
                                 >
                                     Get Started ->
                                 </Text>
-                            </Stack>
-                            <Stack
+                            </Button>
+
+                            {/* Learn More Button */}
+                            <Button
                                 paddingX="20px"
                                 paddingY="20px"
                                 borderRadius="10px"
-                                direction="row"
                                 justify="center"
                                 align="center"
-                                spacing="10px"
                                 background="#F9F9F9"
                                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                                width="204px"
+                                height="74px"
+                                _hover={{ background: "#e2e2e2" }}  // Optional hover effect
+                                _active={{
+                                    transform: "scale(0.95)",  // Scale down a bit on click
+                                    background: "#e2e2e2",  // Change background when active
+                                }}
                             >
                                 <Text
                                     fontFamily="Inter"
                                     fontWeight="semibold"
-                                    fontSize={{ base: "20px", md: "26px" }}  // Responsive font size
+                                    fontSize={{ base: "20px", md: "26px" }}
                                     color="#707070"
                                     textAlign="center"
                                 >
                                     Learn More
                                 </Text>
-                            </Stack>
+                            </Button>
                         </Stack>
-                        <Stack
+
+                        {/* Award Button */}
+                        <Button
                             paddingX="20px"
                             paddingY="20px"
                             borderRadius="10px"
                             justify="flex-start"
                             align="flex-start"
-                            spacing="10px"
-                            width="100%"
-                            maxWidth="331px"
                             background="#EBECFF"
                             boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                            width="331px"
+                            height="104px"
+                            _hover={{ background: "#d8dafb" }}  // Optional hover effect
                         >
                             <Stack direction="row" justify="flex-start" align="center" spacing="12px">
+                                <LiaAwardSolid color={"#A15FDD"} size={"100%"}/>
                                 <Stack justify="flex-start" align="flex-start" spacing="0px">
                                     <Text
                                         fontFamily="Inter"
                                         fontWeight="semibold"
                                         fontSize="11px"
                                         color="#313131"
-                                        alignSelf="stretch"
                                     >
                                         CSULA Software Award 🏅
                                     </Text>
@@ -124,17 +141,23 @@ export default function Presentation() {
                                         fontWeight="semibold"
                                         fontSize="18px"
                                         color="#A15FDD"
-                                        alignSelf="stretch"
                                     >
-                                        Most Creative Project for Education
+                                        Most Creative Project
+                                    </Text>
+                                    <Text
+                                        fontFamily="Inter"
+                                        fontWeight="semibold"
+                                        fontSize="18px"
+                                        color="#A15FDD"
+                                    >
+                                        for Education
                                     </Text>
                                 </Stack>
                             </Stack>
-                        </Stack>
+                        </Button>
                     </Stack>
                 </Stack>
             </Stack>
-            <Box height="1px" alignSelf="stretch" background="#D9D9D9" />
         </Stack>
     );
 }

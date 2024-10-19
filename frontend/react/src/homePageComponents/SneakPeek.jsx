@@ -1,38 +1,42 @@
-import {Box, Button, Code, Menu, Stack, Text, Tooltip} from "@chakra-ui/react";
+import {Box, Button, Image, Stack, Text} from "@chakra-ui/react";
+import {FiCheckCircle} from "react-icons/fi";
+import {IoMenu, IoWarningOutline} from "react-icons/io5";
+import {FaCheck} from "react-icons/fa";
+import {IoMdInformationCircleOutline} from "react-icons/io";
+import ClassroomStudents from "../components/ClassroomStudents.jsx";
 
-export default function SneakPeek(){
-    return(
+export default function SneakPeek() {
+    return (
         <Stack
-            paddingX="54px"
+            paddingX={{ base: "20px", md: "50px", lg: "54px" }}  // Responsive padding
             justify="flex-end"
             align="center"
             spacing="10px"
-            width="1512px"
-            height="1006px"
+            width="100%"  // Full width for responsiveness
             maxWidth="100%"
+            height="auto"  // Make the height flexible
             background="#FFFFFF"
         >
             <Stack
                 justify="flex-start"
                 align="center"
                 spacing="56px"
-                width="1404px"
-                maxWidth="100%"
+                width="100%"
+                maxWidth="1404px"
             >
+                {/* Header Section */}
                 <Stack
                     justify="flex-start"
                     align="center"
                     spacing="16px"
-                    width="822px"
-                    maxWidth="100%"
+                    width="100%"
+                    maxWidth="822px"
                 >
                     <Text
                         fontFamily="Inter"
                         fontWeight="bold"
-                        fontSize="65px"
+                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
                         color="#313131"
-                        height="78px"
-                        alignSelf="stretch"
                         textAlign="center"
                     >
                         <span>Less waste. More </span>
@@ -43,26 +47,28 @@ export default function SneakPeek(){
                     <Text
                         fontFamily="Inter"
                         fontWeight="semibold"
-                        fontSize="24px"
+                        fontSize={{ base: "18px", md: "22px", lg: "24px" }}  // Responsive font size
                         color="#707070"
-                        width="508px"
-                        height="79px"
-                        maxWidth="100%"
+                        width="100%"
+                        maxWidth="508px"
                         textAlign="center"
                     >
                         Spend less time doing attendance and more time teaching class
                     </Text>
                 </Stack>
+
+                {/* Attendance Section */}
                 <Stack
-                    direction="row"
-                    justify="flex-start"
+                    direction={{ base: "column", lg: "row" }}  // Responsive direction
+                    justify="center"
                     align="center"
-                    spacing="0px"
-                    alignSelf="stretch"
+                    width="100%"
+                    maxWidth="100%"
                 >
+
                     <Stack
-                        paddingX="55px"
-                        paddingY="59px"
+                        paddingX="12px"
+                        paddingY="13px"
                         borderRadius="10px"
                         justify="flex-start"
                         align="flex-start"
@@ -74,21 +80,96 @@ export default function SneakPeek(){
                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
                     >
                         <Stack
+                            paddingY="0px"
                             justify="flex-start"
                             align="center"
-                            spacing="63px"
-                            width="591.44px"
-                            maxWidth="100%"
+                            spacing="33px"
+                            width={"100%"}
+                            background={"#FBFBFB"}
                         >
+                            {/* Nav Bar */}
+                            <Stack
+                                paddingX="11px"
+                                paddingY="5px"
+                                borderRadius="10px"
+                                justify="center"  // Center vertically
+                                align="center"  // Align content horizontally
+                                spacing="10px"
+                                height="46px"
+                                alignSelf="stretch"
+                                background={"#FFFFFF"}
+                                boxShadow="0px 2px 2px 0px rgba(0, 0, 0, 0.25)"
+                            >
+                                <Stack
+                                    direction="row"
+                                    justify="space-between"
+                                    align="center"
+                                    width="100%"
+                                    maxWidth="653px"
+                                >
+                                    <Stack
+                                        direction="row"
+                                        justify="flex-start"
+                                        align="center"
+                                        spacing="14px"
+                                    >
+                                        {/* Icon Button */}
+                                        <Button
+                                            borderRadius="4px"
+                                            display="flex"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            width="28px"   // Set explicit width
+                                            height="28px"  // Set explicit height to match width for square shape
+                                            background="#FBFBFB"
+                                            padding="0"  // Remove padding to ensure square button
+                                            minWidth="28px"  // Ensure it doesn't shrink below 28px
+                                            minHeight="28px"  // Ensure it doesn't shrink below 28px
+                                        >
+                                            <IoMenu size="16px" color="#313131" /> {/* Set icon size to fit */}
+                                        </Button>
+
+                                        {/* Text and Image Button */}
+                                        <Button
+                                            backgroundColor="transparent"
+                                            _hover={{
+                                                bg: "transparent",  // Keep background transparent on hover
+                                                color: "inherit"  // Maintain text color
+                                            }}
+                                            display="inline-flex"
+                                            alignItems="center"  // Align content vertically
+                                            padding="0"
+                                            width="auto"  // Make the button width automatic based on content
+                                        >
+                                            <Image
+                                                width="34.82px"
+                                                height="34.5px"
+                                                src={"./QuickCheckTransparent.png"}
+                                            />
+                                            <Text
+                                                fontFamily="Inter"
+                                                fontWeight="bold"
+                                                fontSize="26px"
+                                                color="#313131"
+                                                marginLeft="8px"  // Space between image and text
+                                                lineHeight="34.5px"  // Line height matches the image height
+                                            >
+                                                Quick Check
+                                            </Text>
+                                        </Button>
+                                    </Stack>
+                                </Stack>
+                            </Stack>
+
                             <Stack
                                 paddingX="20px"
-                                paddingY="7px"
+                                paddingY="10px"
                                 borderRadius="10px"
                                 justify="flex-start"
                                 align="flex-start"
-                                spacing="10px"
+                                spacing="5px"
                                 width="326px"
-                                height="136px"
+                                height="137px"
                                 maxWidth="100%"
                                 background="#FFFFFF"
                                 boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
@@ -97,25 +178,26 @@ export default function SneakPeek(){
                                     direction="row"
                                     justify="flex-start"
                                     align="flex-start"
-                                    spacing="15px"
+                                    spacing="5px"
                                 >
                                     <Stack
                                         justify="center"
                                         align="flex-start"
-                                        spacing="13px"
+                                        spacing="5px"
                                         height="121px"
                                     >
                                         <Stack
                                             justify="flex-start"
                                             align="center"
-                                            spacing="9px"
-                                            width="218px"
+                                            spacing="5px"
+                                            width="280px"
                                         >
                                             <Stack
                                                 justify="flex-start"
                                                 align="flex-start"
                                                 spacing="4px"
                                                 alignSelf="stretch"
+                                                alignContent={"center"}
                                             >
                                                 <Text
                                                     fontFamily="Inter"
@@ -133,13 +215,18 @@ export default function SneakPeek(){
                                                     color="#313131"
                                                     alignSelf="stretch"
                                                 >
-                                                    <span>Friday 10/15 Code : </span>
-                                                    <Box as="span" fontWeight="bold" color="#7E3BB5">
-                                                        519982
-                                                    </Box>
+                                                    Friday 10/15
+                                                    <Stack direction={"row"}>
+                                                        <Box>
+                                                            Code :
+                                                        </Box>
+                                                        <Box as="span" fontWeight="bold" color="#7E3BB5">
+                                                            519982
+                                                        </Box>
+                                                    </Stack>
                                                 </Text>
                                             </Stack>
-                                            <Stack
+                                            <Button
                                                 paddingX="7px"
                                                 paddingY="8px"
                                                 borderRadius="8px"
@@ -160,112 +247,16 @@ export default function SneakPeek(){
                                                 >
                                                     End Attendance
                                                 </Text>
-                                            </Stack>
+                                            </Button>
                                         </Stack>
                                     </Stack>
                                 </Stack>
                             </Stack>
-                            <Stack
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="15px"
-                                alignSelf="stretch"
-                            >
-                                <Stack
-                                    justify="flex-start"
-                                    align="center"
-                                    spacing="13px"
-                                    alignSelf="stretch"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="25px"
-                                    />
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="flex-start"
-                                        spacing="25px"
-                                        alignSelf="stretch"
-                                    />
-                                </Stack>
-                                <Stack
-                                    direction="row"
-                                    justify="flex-start"
-                                    align="flex-start"
-                                    spacing="4px"
-                                    alignSelf="stretch"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="25px"
-                                    />
-                                    <Stack
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="0px"
-                                        width="95px"
-                                    >
-                                        <Stack
-                                            paddingX="8px"
-                                            paddingY="13px"
-                                            direction="row"
-                                            justify="flex-start"
-                                            align="center"
-                                            spacing="10px"
-                                            height="76px"
-                                            alignSelf="stretch"
-                                        >
-                                            <Stack
-                                                justify="flex-start"
-                                                align="center"
-                                                spacing="0px"
-                                                width="95px"
-                                                boxShadow="0px 2px 4px 0px rgba(0, 0, 0, 0.25)"
-                                            >
-                                            </Stack>
-                                            <Box
-                                                borderRadius="8px"
-                                                height="68px"
-                                                width={"auto"}
-                                                alignSelf="stretch"
-                                                alignContent={"center"}
-                                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                                background="#FFFFFF"
-                                            >
-                                                <Text
-                                                    fontFamily="Inter"
-                                                    lineHeight="1.4"
-                                                    fontWeight="semibold"
-                                                    fontSize="16px"
-                                                    color="#313131"
-                                                    width="78px"
-                                                    height="42px"
-                                                    textAlign="center"
-                                                >
-                                                    John Doe
-                                                    <Box color="#7E3BB5">
-                                                        Present
-                                                    </Box>
-                                                </Text>
-                                            </Box>
-
-                                        </Stack>
-                                    </Stack>
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="25px"
-                                    />
-                                </Stack>
-                            </Stack>
+                            <ClassroomStudents/>
                         </Stack>
                     </Stack>
+
+                    {/* Right Card */}
                     <Stack
                         paddingX="13px"
                         paddingY="14px"
@@ -286,12 +277,14 @@ export default function SneakPeek(){
                             width="675px"
                             maxWidth="100%"
                         >
+
+
                             <Stack
                                 paddingX="11px"
                                 paddingY="5px"
                                 borderRadius="10px"
-                                justify="flex-start"
-                                align="flex-start"
+                                justify="center"  // Center vertically
+                                align="center"  // Align content horizontally
                                 spacing="10px"
                                 height="46px"
                                 alignSelf="stretch"
@@ -301,9 +294,8 @@ export default function SneakPeek(){
                                     direction="row"
                                     justify="space-between"
                                     align="center"
-                                    spacing="390px"
-                                    width="653px"
-                                    maxWidth="100%"
+                                    width="100%"
+                                    maxWidth="653px"
                                 >
                                     <Stack
                                         direction="row"
@@ -311,39 +303,57 @@ export default function SneakPeek(){
                                         align="center"
                                         spacing="14px"
                                     >
-                                        <Stack
-                                            paddingX="7px"
-                                            paddingY="9px"
+                                        {/* Icon Button */}
+                                        <Button
                                             borderRadius="4px"
-                                            justify="flex-start"
-                                            align="flex-start"
-                                            spacing="10px"
-                                            width="25px"
-                                            height="25px"
+                                            display="flex"
+                                            justifyContent="center"
+                                            alignItems="center"
+                                            width="28px"   // Set explicit width
+                                            height="28px"  // Set explicit height to match width for square shape
                                             background="#313131"
-                                        />
-                                        <Stack
-                                            direction="row"
-                                            justify="flex-start"
-                                            align="center"
-                                            spacing="0px"
+                                            padding="0"  // Remove padding to ensure square button
+                                            minWidth="28px"  // Ensure it doesn't shrink below 28px
+                                            minHeight="28px"  // Ensure it doesn't shrink below 28px
                                         >
-                                            <Box width="34.82px" height="34.5px" />
+                                            <IoMenu size="16px" color="#707070" /> {/* Set icon size to fit */}
+                                        </Button>
+
+                                        {/* Text and Image Button */}
+                                        <Button
+                                            backgroundColor="transparent"
+                                            _hover={{
+                                                bg: "transparent",  // Keep background transparent on hover
+                                                color: "inherit"  // Maintain text color
+                                            }}
+                                            display="inline-flex"
+                                            alignItems="center"  // Align content vertically
+                                            padding="0"
+                                            width="auto"  // Make the button width automatic based on content
+                                        >
+                                            <Image
+                                                width="34.82px"
+                                                height="34.5px"
+                                                src={"./QuickCheckTransparent.png"}
+                                            />
                                             <Text
                                                 fontFamily="Inter"
                                                 fontWeight="bold"
                                                 fontSize="26px"
                                                 color="#313131"
-                                                width="164px"
-                                                height="35px"
-                                                textAlign="center"
+                                                marginLeft="8px"  // Space between image and text
+                                                lineHeight="34.5px"  // Line height matches the image height
                                             >
                                                 Quick Check
                                             </Text>
-                                        </Stack>
+                                        </Button>
                                     </Stack>
                                 </Stack>
                             </Stack>
+
+
+
+
                             <Stack
                                 justify="flex-start"
                                 align="center"
@@ -392,7 +402,10 @@ export default function SneakPeek(){
                                                 color="#707070"
                                                 alignSelf="stretch"
                                             >
-                                                Friday 10/15 Class location : FA 218
+                                                Friday 10/15
+                                                <Box>
+                                                    Class location : FA 218
+                                                </Box>
                                             </Text>
                                         </Stack>
                                     </Stack>
@@ -440,7 +453,7 @@ export default function SneakPeek(){
                                                 >
                                                     Location
                                                 </Text>
-                                                <Stack
+                                                <Button
                                                     paddingX="18px"
                                                     paddingY="7px"
                                                     borderRadius="8px"
@@ -462,7 +475,7 @@ export default function SneakPeek(){
                                                     >
                                                         Get location
                                                     </Text>
-                                                </Stack>
+                                                </Button>
                                                 <Stack
                                                     direction="row"
                                                     justify="flex-start"
@@ -474,17 +487,16 @@ export default function SneakPeek(){
                                                         fontWeight="medium"
                                                         fontSize="18px"
                                                         color="#707070"
-                                                        width="114px"
-                                                        height="23px"
-                                                        textAlign="center"
                                                     >
-                                                        My location{' '}
+                                                        My location
                                                     </Text>
+                                                    <FiCheckCircle size={"23px"} color={"#7E3BB5"} />
                                                 </Stack>
+
                                             </Stack>
                                         </Stack>
                                         <Stack
-                                            paddingX="35px"
+                                            paddingX="34px"
                                             paddingY="12px"
                                             borderRadius="10px"
                                             justify="flex-start"
@@ -499,8 +511,8 @@ export default function SneakPeek(){
                                             <Stack
                                                 justify="flex-start"
                                                 align="center"
-                                                spacing="19px"
-                                                width="198px"
+                                                spacing="16px"
+                                                width="200px"
                                             >
                                                 <Text
                                                     fontFamily="Inter"
@@ -542,7 +554,7 @@ export default function SneakPeek(){
                                                             - - - - - -
                                                         </Text>
                                                     </Stack>
-                                                    <Stack
+                                                    <Button
                                                         paddingX="9px"
                                                         paddingY="11px"
                                                         borderRadius="8px"
@@ -553,26 +565,27 @@ export default function SneakPeek(){
                                                         height="38px"
                                                         background="#7E3BB5"
                                                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                                    />
+                                                    >
+                                                        <FaCheck color="#313131" size={"100%"} />
+                                                    </Button>
                                                 </Stack>
                                                 <Stack
                                                     direction="row"
                                                     justify="flex-start"
                                                     align="center"
-                                                    spacing="3px"
+                                                    spacing="7px"
                                                 >
                                                     <Text
                                                         fontFamily="Inter"
                                                         fontWeight="medium"
                                                         fontSize="18px"
                                                         color="#707070"
-                                                        width="110px"
-                                                        height="16px"
-                                                        textAlign="center"
                                                     >
                                                         Invalid Code
                                                     </Text>
+                                                    <IoWarningOutline size={"23px"} color={"#7E3BB5"} />
                                                 </Stack>
+
                                             </Stack>
                                         </Stack>
                                     </Stack>
@@ -599,10 +612,9 @@ export default function SneakPeek(){
                             </Stack>
                         </Stack>
                     </Stack>
+
                 </Stack>
             </Stack>
         </Stack>
-
-
-)
+    );
 }

@@ -1,187 +1,104 @@
-import {Box, Stack, Text} from "@chakra-ui/react";
+import {Box, Stack, Text, SimpleGrid, Image, Button} from "@chakra-ui/react";
 
-export default function SupportedBy(){
-    return(
-
+export default function SupportedBy() {
+    return (
         <Stack
-            paddingX="414px"
+            paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Reduced padding for better responsiveness
             paddingY="70px"
             justify="flex-start"
-            align="flex-start"
+            align="center"
             spacing="10px"
-            width="1512px"
-            height="541px"
-            maxWidth="100%"
+            width="100%"
             background="#FFFFFF"
         >
             <Stack
                 justify="flex-start"
-                align="flex-start"
+                align="center"
                 spacing="27px"
-                width="683px"
-                maxWidth="100%"
+                width="100%"
+                maxWidth="683px"
             >
                 <Text
                     fontFamily="Inter"
                     fontWeight="medium"
                     fontSize="18px"
                     color="#632E8E"
-                    height="51px"
-                    alignSelf="stretch"
                     textAlign="center"
                 >
                     SUPPORTED AND TRUSTED BY
                 </Text>
-                <Stack
-                    justify="flex-start"
-                    align="flex-start"
-                    spacing="7px"
-                    alignSelf="stretch"
+
+                {/* Responsive Grid for Boxes */}
+                <SimpleGrid
+                    minChildWidth="145px"  // Ensures a minimum width per box to prevent stacking
+                    spacing="15px"
+                    width="100%"
+                    maxWidth="100%"
                 >
-                    <Stack
-                        direction="row"
-                        justify="flex-start"
-                        align="center"
-                        spacing="9px"
-                        alignSelf="stretch"
-                    >
-                        <Stack
-                            paddingX="28px"
-                            paddingY="4px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="108px" height="124px" />
-                        </Stack>
-                        <Stack
-                            paddingX="22px"
-                            paddingY="4px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="120px" height="120px" />
-                        </Stack>
-                        <Stack
-                            paddingX="28px"
-                            paddingY="12px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="108px" height="108px" />
-                        </Stack>
-                        <Stack
-                            paddingX="28px"
-                            paddingY="11px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="108px" height="110px" />
-                        </Stack>
-                    </Stack>
-                    <Stack
-                        direction="row"
-                        justify="flex-start"
-                        align="center"
-                        spacing="9px"
-                        alignSelf="stretch"
-                    >
-                        <Stack
-                            paddingX="24px"
-                            paddingY="4px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="115px" height="122px" />
-                        </Stack>
-                        <Stack
-                            paddingX="22px"
-                            paddingY="7px"
-                            borderRadius="10px"
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="120px" height="117px" />
-                        </Stack>
-                        <Stack
-                            paddingX="31px"
-                            paddingY="16px"
-                            borderRadius="10px"
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="10px"
-                            width="164px"
-                            height="132px"
-                            background="#F9F9F9"
-                        >
-                            <Box width="101px" height="100px" />
-                        </Stack>
-                        <Stack
-                            paddingX="4px"
-                            paddingY="53px"
-                            borderRadius="10px"
-                            direction="row"
-                            justify="center"
-                            align="center"
-                            spacing="10px"
-                            borderColor="#7E3BB5"
-                            borderStartWidth="1px"
-                            borderEndWidth="1px"
-                            borderTopWidth="1px"
-                            borderBottomWidth="1px"
-                            borderStyle="dashed"
-                            width="164px"
-                            height="132px"
-                            background="#EBECFF"
-                        >
-                            <Text
-                                fontFamily="Inter"
-                                fontWeight="semibold"
-                                fontSize="22px"
-                                color="#313131"
-                            >
-                                ⭐️Your School{' '}
-                            </Text>
-                        </Stack>
-                    </Stack>
-                </Stack>
+                    {/* Boxes displayed in grid */}
+                    <SupportedBox width="120px" height="120px" src={"./csula.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./UCLA.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./UCB.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./usc.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./caltech.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./harvard.png"}/>
+                    <SupportedBox width="120px" height="120px" src={"./Stanford.png"}/>
+                    <DashedBox />
+                </SimpleGrid>
             </Stack>
         </Stack>
+    );
+}
 
+function SupportedBox({ width, height, src }) {
+    return (
+        <Stack
+            paddingX="10px"
+            paddingY="10px"
+            borderRadius="10px"
+            justify="center"
+            align="center"
+            background="#F9F9F9"
+            width="160px"
+            height="130px"
+        >
+            <Box width={width} height={height} >
+                <Image
+                    src={src}
+                    alt="Supported School Logo"
+                    objectFit="contain"  // Ensures the image fits inside the box while maintaining aspect ratio
+                    width="100%"         // Makes the image fill the width of the box
+                    height="100%"        // Makes the image fill the height of the box
+                />
+            </Box>
+        </Stack>
+    );
+}
 
-
-)
+function DashedBox() {
+    return (
+        <Button
+            paddingX="10px"
+            paddingY="40px"
+            borderRadius="10px"
+            justify="center"
+            align="center"
+            borderWidth="1px"
+            borderColor="#7E3BB5"
+            borderStyle="dashed"
+            width="164px"
+            height="132px"
+            background="#EBECFF"
+        >
+            <Text
+                fontFamily="Inter"
+                fontWeight="semibold"
+                fontSize="22px"
+                color="#313131"
+                textAlign="center"
+            >
+                ⭐️Your School
+            </Text>
+        </Button>
+    );
 }

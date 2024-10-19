@@ -1,48 +1,49 @@
-import { Stack, Box, Text, Menu } from '@chakra-ui/react'
+import { Stack, Box, Text, Image } from '@chakra-ui/react';
 
-export default function Footer(){
-    return(
+export default function Footer() {
+    return (
         <Stack
-            paddingX="89px"
+            paddingX={{ base: "20px", md: "50px", lg: "89px" }}  // Responsive padding
             paddingY="52px"
             justify="flex-start"
             align="flex-start"
             spacing="10px"
-            width="1512px"
-            height="181px"
-            maxWidth="100%"
+            width="100%"  // Full width to make it responsive
             background="#EDEDED"
         >
             <Stack
                 direction="row"
                 justify="space-between"
                 align="center"
-                spacing="635px"
-                width="1274px"
-                maxWidth="100%"
+                width="100%"  // Full width for responsiveness
             >
-                <Stack direction="row" justify="flex-start" align="center" spacing="1px">
-                    <Box width="78px" height="75px" />
+                {/* Left Section: Logo and Text */}
+                <Stack direction="row" justify="flex-start" align="center" spacing="10px">
+                    <Image width="78px" height="75px" src={"././QuickCheckTransparent.png"} />
                     <Text
                         fontFamily="Inter"
                         fontWeight="bold"
                         fontSize="26px"
                         color="#313131"
-                        width="172px"
-                        height="77px"
                         textAlign="center"
                     >
                         Quick Check
                     </Text>
                 </Stack>
-                <Stack direction="row" justify="flex-start" align="center" spacing="0px">
+
+                {/* Right Section: Links and Copyright */}
+                <Stack
+                    direction="row"
+                    justify="flex-start"
+                    align="center"
+                    spacing="30px"
+                    ml="auto"  // Push the right-side content to the right
+                >
                     <Text
                         fontFamily="Inter"
                         fontWeight="semibold"
                         fontSize="20px"
                         color="#707070"
-                        width="92px"
-                        height="29px"
                         textAlign="center"
                     >
                         Docs
@@ -52,8 +53,6 @@ export default function Footer(){
                         fontWeight="semibold"
                         fontSize="20px"
                         color="#707070"
-                        width="113px"
-                        height="29px"
                         textAlign="center"
                     >
                         Privacy
@@ -63,18 +62,16 @@ export default function Footer(){
                         fontWeight="regular"
                         fontSize="18px"
                         color="#313131"
-                        width="183px"
-                        height="29px"
                         textAlign="center"
+                        as="span"
+                        fontSize="20px"
+                        fontWeight="bold"
                     >
-                        <span>©️ </span>
-                        <Box as="span" fontSize="20px">
-                            Quick Check
-                        </Box>
+                            ©️ Quick Check
+
                     </Text>
                 </Stack>
             </Stack>
         </Stack>
-
-)
+    );
 }

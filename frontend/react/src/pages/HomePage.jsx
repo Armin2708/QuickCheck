@@ -10,14 +10,15 @@ import JoinQuickCheck from "../homePageComponents/JoinQuickCheck.jsx";
 import Footer from "../homePageComponents/Footer.jsx";
 import Comments from "../homePageComponents/Comments.jsx";
 import SideBar from "../shared/SideBar.jsx";
+import ClassroomStudents from "../components/ClassroomStudents.jsx";
 
 
 export default function HomePage({children}){
     return(
         <Stack>
             <Header/>
-            <SideBar/>
-            {/*<Presentation/>
+            {/*<SideBar/>*/}
+            <Presentation/>
             <Divider/>
             <SupportedBy/>
             <SneakPeek/>
@@ -25,7 +26,7 @@ export default function HomePage({children}){
             <Tabs/>
             <Efficiency/>
             <JoinQuickCheck/>
-            <Footer/>*/}
+            <Footer/>
         </Stack>
     )
 }

@@ -1,39 +1,40 @@
-import {Box, Button, Card, Stack, Text} from "@chakra-ui/react";
+import { Box, Button, Stack, Text } from "@chakra-ui/react";
+import { TbClockUp } from "react-icons/tb";
+import { LiaToolsSolid } from "react-icons/lia";
+import { PiSmiley } from "react-icons/pi";
+import {IoMdCheckmarkCircleOutline} from "react-icons/io";
 
-export default function JoinQuickCheck(){
-    return(
+export default function JoinQuickCheck() {
+    return (
         <Stack
-            paddingX="201px"
-            paddingY="215px"
+            paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Responsive padding
+            paddingY={{ base: "50px", md: "100px", lg: "150px" }}  // Responsive padding
             justify="flex-start"
-            align="flex-start"
+            align="center"
             spacing="10px"
-            width="1512px"
-            height="1020px"
-            maxWidth="100%"
+            width="100%"  // Full width for responsiveness
             background="#FFFFFF"
         >
             <Stack
                 justify="flex-start"
                 align="center"
                 spacing="93px"
-                width="1059px"
-                maxWidth="100%"
+                width="100%"  // Full width for responsiveness
+                maxWidth="1059px"
             >
+                {/* Header Section */}
                 <Stack
                     justify="flex-start"
                     align="center"
                     spacing="20px"
-                    width="822px"
-                    maxWidth="100%"
+                    width="100%"
+                    maxWidth="822px"
                 >
                     <Text
                         fontFamily="Inter"
                         fontWeight="bold"
-                        fontSize="65px"
+                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
                         color="#313131"
-                        height="85px"
-                        alignSelf="stretch"
                         textAlign="center"
                     >
                         Join Quick Check
@@ -41,176 +42,86 @@ export default function JoinQuickCheck(){
                     <Text
                         fontFamily="Inter"
                         fontWeight="medium"
-                        fontSize="24px"
+                        fontSize={{ base: "18px", md: "20px", lg: "24px" }}  // Responsive font size
                         color="#707070"
-                        height="39px"
-                        alignSelf="stretch"
                         textAlign="center"
                     >
-                        Start increasing your productivity today !
+                        Start increasing your productivity today!
                     </Text>
                 </Stack>
+
+                {/* Feature and Card Section */}
                 <Stack
-                    direction="row"
-                    justify="flex-start"
+                    direction={{ base: "column", md: "row" }}  // Stack vertically on small screens
+                    justify="space-between"
                     align="center"
-                    spacing="103px"
-                    alignSelf="stretch"
+                    spacing={{ base: "50px", md: "100px" }}  // Adjust spacing for small screens
+                    width="100%"
                 >
+                    {/* Features Section */}
                     <Stack
                         justify="flex-start"
                         align="flex-start"
                         spacing="39px"
-                        width="467px"
-                        maxWidth="100%"
+                        width="100%"  // Full width
+                        maxWidth="467px"
                     >
-                        <Stack
-                            direction="row"
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="11px"
-                            alignSelf="stretch"
-                        >
+                        {["Speed up your meetings", "Best classroom toolbox", "Support Quick Check"].map((title, index) => (
                             <Stack
-                                paddingX="13px"
-                                paddingY="14px"
-                                borderRadius="5px"
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="10px"
-                                width="47px"
-                                height="47px"
-                                background="#7E3BB5"
-                            />
-                            <Stack
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="4px"
-                                width="409px"
-                                maxWidth="100%"
-                            >
-                                <Text
-                                    fontFamily="Inter"
-                                    fontWeight="bold"
-                                    fontSize="24px"
-                                    color="#313131"
-                                    height="30px"
-                                    alignSelf="stretch"
-                                >
-                                    Speed up your meetings
-                                </Text>
-                                <Text
-                                    fontFamily="Inter"
-                                    lineHeight="1.38"
-                                    fontWeight="semibold"
-                                    fontSize="16px"
-                                    color="#707070"
-                                    height="43px"
-                                    alignSelf="stretch"
-                                >
-                                    With just one click, attend your meetings with ease and
-                                    efficiency.
-                                </Text>
-                            </Stack>
-                        </Stack>
-                        <Stack
-                            direction="row"
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="11px"
-                            alignSelf="stretch"
-                        >
-                            <Stack
-                                paddingX="13px"
-                                paddingY="14px"
-                                borderRadius="5px"
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="10px"
-                                width="47px"
-                                height="47px"
-                                background="#7E3BB5"
-                            />
-                            <Stack
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="4px"
-                                width="409px"
-                                maxWidth="100%"
-                            >
-                                <Text
-                                    fontFamily="Inter"
-                                    fontWeight="bold"
-                                    fontSize="24px"
-                                    color="#313131"
-                                    height="30px"
-                                    alignSelf="stretch"
-                                >
-                                    Best classroom toolbox
-                                </Text>
-                                <Text
-                                    fontFamily="Inter"
-                                    lineHeight="1.38"
-                                    fontWeight="semibold"
-                                    fontSize="16px"
-                                    color="#707070"
-                                    height="43px"
-                                    alignSelf="stretch"
-                                >
-                                    No more need to download 10 apps just to be equipped for class,
-                                    everything is in there.
-                                </Text>
-                            </Stack>
-                        </Stack>
-                        <Stack
-                            direction="row"
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="11px"
-                            alignSelf="stretch"
-                        >
-                            <Stack
-                                padding="13px"
-                                borderRadius="5px"
+                                key={index}
                                 direction="row"
                                 justify="flex-start"
                                 align="center"
-                                spacing="10px"
-                                width="47px"
-                                height="47px"
-                                background="#7E3BB5"
-                            />
-                            <Stack
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="4px"
-                                width="409px"
-                                maxWidth="100%"
+                                spacing="11px"
+                                width="100%"
                             >
-                                <Text
-                                    fontFamily="Inter"
-                                    fontWeight="bold"
-                                    fontSize="24px"
-                                    color="#313131"
-                                    height="30px"
-                                    alignSelf="stretch"
+                                <Box
+                                    padding="13px"
+                                    borderRadius="5px"
+                                    width="60px"  // Increased width for icon box
+                                    height="60px"  // Increased height for icon box
+                                    background="#7E3BB5"
                                 >
-                                    Support Quick Check
-                                </Text>
-                                <Text
-                                    fontFamily="Inter"
-                                    lineHeight="1.38"
-                                    fontWeight="semibold"
-                                    fontSize="16px"
-                                    color="#707070"
-                                    height="43px"
-                                    alignSelf="stretch"
+                                    {index === 0
+                                        ? <TbClockUp color={"white"} size={"35px"}/>  // Set icon size
+                                        : index === 1
+                                            ? <LiaToolsSolid color={"white"} size={"35px"}/>  // Set icon size
+                                            : <PiSmiley color={"white"} size={"35px"}/>  // Set icon size
+                                    }
+                                </Box>
+                                <Stack
+                                    justify="flex-start"
+                                    align="flex-start"
+                                    spacing="4px"
+                                    width="100%"
+                                    maxWidth="409px"
                                 >
-                                    Every sign-up is the beginning of a trust relationship, your
-                                    belief of Quick Check
-                                </Text>
+                                    <Text
+                                        fontFamily="Inter"
+                                        fontWeight="bold"
+                                        fontSize="24px"
+                                        color="#313131"
+                                        textAlign="left"
+                                    >
+                                        {title}
+                                    </Text>
+                                    <Text
+                                        fontFamily="Inter"
+                                        lineHeight="1.38"
+                                        fontWeight="semibold"
+                                        fontSize="16px"
+                                        color="#707070"
+                                        textAlign="left"
+                                    >
+                                        {index === 0
+                                            ? "With just one click, attend your meetings with ease and efficiency."
+                                            : index === 1
+                                                ? "No need to download 10 apps just to be equipped for class, everything is here."
+                                                : "Every sign-up begins a trust relationship, supporting Quick Check."}
+                                    </Text>
+                                </Stack>
                             </Stack>
-                        </Stack>
+                        ))}
                     </Stack>
                     <Stack
                         paddingY="31px"
@@ -274,7 +185,7 @@ export default function JoinQuickCheck(){
                                     <Stack
                                         direction="row"
                                         justify="flex-start"
-                                        align="flex-start"
+                                        align="center"  // Aligns items vertically in the center
                                         spacing="0px"
                                     >
                                         <Text
@@ -283,7 +194,6 @@ export default function JoinQuickCheck(){
                                             fontSize="45px"
                                             color="#313131"
                                             width="85px"
-                                            height="30px"
                                         >
                                             $10
                                         </Text>
@@ -294,11 +204,11 @@ export default function JoinQuickCheck(){
                                             fontSize="14px"
                                             color="#707070"
                                             width="113px"
-                                            height="26px"
                                         >
                                             per user / month
                                         </Text>
                                     </Stack>
+
                                 </Stack>
                                 <Stack
                                     justify="flex-start"
@@ -344,6 +254,7 @@ export default function JoinQuickCheck(){
                                                     align="center"
                                                     spacing="6px"
                                                 >
+                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
                                                     <Text
                                                         fontFamily="Inter"
                                                         lineHeight="1.57"
@@ -362,6 +273,7 @@ export default function JoinQuickCheck(){
                                                     align="center"
                                                     spacing="6px"
                                                 >
+                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
                                                     <Text
                                                         fontFamily="Inter"
                                                         lineHeight="1.57"
@@ -388,6 +300,8 @@ export default function JoinQuickCheck(){
                                                     align="center"
                                                     spacing="6px"
                                                 >
+                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
+
                                                     <Text
                                                         fontFamily="Inter"
                                                         lineHeight="1.57"
@@ -406,6 +320,8 @@ export default function JoinQuickCheck(){
                                                     align="center"
                                                     spacing="6px"
                                                 >
+                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
+
                                                     <Text
                                                         fontFamily="Inter"
                                                         lineHeight="1.57"
@@ -424,7 +340,7 @@ export default function JoinQuickCheck(){
                                     <Box height="1px" alignSelf="stretch" background="#EDEDED" />
                                 </Stack>
                             </Stack>
-                            <Stack
+                            <Button
                                 paddingX="160px"
                                 paddingY="7px"
                                 borderRadius="5px"
@@ -447,12 +363,12 @@ export default function JoinQuickCheck(){
                                 >
                                     Start free trial
                                 </Text>
-                            </Stack>
+                            </Button>
                         </Stack>
                     </Stack>
+
                 </Stack>
             </Stack>
         </Stack>
-
-)
+    );
 }
