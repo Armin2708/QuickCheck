@@ -264,7 +264,7 @@ export default function JoinQuickCheck() {
                                                         width="133px"
                                                         height="18px"
                                                     >
-                                                        With all features
+                                                        Unlimited Classes
                                                     </Text>
                                                 </Stack>
                                                 <Stack
@@ -283,7 +283,7 @@ export default function JoinQuickCheck() {
                                                         width="133px"
                                                         height="18px"
                                                     >
-                                                        With all features
+                                                        Class Chats
                                                     </Text>
                                                 </Stack>
                                             </Stack>
@@ -311,7 +311,7 @@ export default function JoinQuickCheck() {
                                                         width="133px"
                                                         height="18px"
                                                     >
-                                                        With all features
+                                                        Schedule Calendar
                                                     </Text>
                                                 </Stack>
                                                 <Stack
@@ -331,7 +331,7 @@ export default function JoinQuickCheck() {
                                                         width="133px"
                                                         height="18px"
                                                     >
-                                                        With all features
+                                                        Custom Reports
                                                     </Text>
                                                 </Stack>
                                             </Stack>

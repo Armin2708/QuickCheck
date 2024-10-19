@@ -1,11 +1,21 @@
-import {Box, Button, Image, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, Image, Input, Stack, Text} from "@chakra-ui/react";
 import {FiCheckCircle} from "react-icons/fi";
 import {IoMenu, IoWarningOutline} from "react-icons/io5";
 import {FaCheck} from "react-icons/fa";
 import {IoMdInformationCircleOutline} from "react-icons/io";
 import ClassroomStudents from "../components/ClassroomStudents.jsx";
+import {useEffect, useState} from "react";
 
 export default function SneakPeek() {
+    const [randomCode, setRandomCode] = useState("");
+    const [inputCode, setInputCode] = useState(""); // To store the input code
+    const [isValid, setIsValid] = useState(null);  // To store if the code is valid or not
+
+    // Generate a random 6-digit code when the component mounts
+    useEffect(() => {
+        const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate random 6-digit code
+        setRandomCode(code);
+    }, []);
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "54px" }}  // Responsive padding
@@ -221,7 +231,7 @@ export default function SneakPeek() {
                                                             Code :
                                                         </Box>
                                                         <Box as="span" fontWeight="bold" color="#7E3BB5">
-                                                            519982
+                                                            {randomCode}  {/* Display the generated random code */}
                                                         </Box>
                                                     </Stack>
                                                 </Text>
@@ -252,7 +262,7 @@ export default function SneakPeek() {
                                     </Stack>
                                 </Stack>
                             </Stack>
-                            <ClassroomStudents/>
+                            <ClassroomStudents />
                         </Stack>
                     </Stack>
 
@@ -532,28 +542,39 @@ export default function SneakPeek() {
                                                     spacing="6px"
                                                     alignSelf="stretch"
                                                 >
-                                                    <Stack
-                                                        paddingX="35px"
-                                                        borderRadius="4px"
-                                                        direction="row"
-                                                        justify="center"
-                                                        align="center"
-                                                        spacing="10px"
-                                                        width="154px"
-                                                        height="38px"
-                                                        background="#707070"
-                                                        boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
-                                                    >
-                                                        <Text
-                                                            fontFamily="Inter"
+                                                        <Input
+                                                            type="text"
+                                                            maxLength={6}
+                                                            value={inputCode}
+                                                            onChange={(e) => {
+                                                                if (/^\d*$/.test(e.target.value)) { // Ensure only digits
+                                                                    setInputCode(e.target.value);
+                                                                }
+                                                            }}
+                                                            paddingX="35px"
+                                                            borderRadius="4px"
+                                                            direction="row"
+                                                            justify="center"
+                                                            align="center"
+                                                            spacing="10px"
+                                                            width="154px"
+                                                            height="38px"
+                                                            textAlign="center"
+                                                            background="#707070"
+                                                            color="#313131"
                                                             fontWeight="medium"
                                                             fontSize="20px"
-                                                            color="#444343"
-                                                            textAlign="center"
+                                                            boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
+                                                            placeholder={"123456"}
+                                                            border="none"  // Remove default border
+                                                            _focus={{
+                                                                outline: "none",  // Remove default outline
+                                                                boxShadow: "0px 0px 0px 2px #7E3BB5",  // Custom focus shadow
+                                                                border: "none",  // Ensure no border on focus
+                                                            }}
                                                         >
-                                                            - - - - - -
-                                                        </Text>
-                                                    </Stack>
+
+                                                        </Input>
                                                     <Button
                                                         paddingX="9px"
                                                         paddingY="11px"
@@ -565,6 +586,7 @@ export default function SneakPeek() {
                                                         height="38px"
                                                         background="#7E3BB5"
                                                         boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                                                        onClick={() => setIsValid(inputCode === randomCode)}
                                                     >
                                                         <FaCheck color="#313131" size={"100%"} />
                                                     </Button>
@@ -581,9 +603,10 @@ export default function SneakPeek() {
                                                         fontSize="18px"
                                                         color="#707070"
                                                     >
-                                                        Invalid Code
+                                                        {isValid === null ? "Enter Code" : isValid ? "Valid Code" : "Invalid Code"}
                                                     </Text>
-                                                    <IoWarningOutline size={"23px"} color={"#7E3BB5"} />
+                                                    {isValid === true ? <FiCheckCircle size={"23px"} color={"#7E3BB5"} />
+                                                        : isValid === false ? <IoWarningOutline size="23px" color="#7E3BB5" /> : null}
                                                 </Stack>
 
                                             </Stack>
