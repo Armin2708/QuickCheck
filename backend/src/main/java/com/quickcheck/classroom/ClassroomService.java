@@ -28,14 +28,14 @@ public class ClassroomService {
     }
 
     public void addClassroom(ClassroomRegistrationRequest request) {
-        String className = request.className();
-        if (classroomDao.existClassroomByName(className)) {
+        String name = request.name();
+        if (classroomDao.existClassroomByName(name)) {
             throw new DuplicateResourceException("Class name already exists");
         }
         Classroom classroom = new Classroom(
-                request.className(),
+                request.name(),
                 request.professorId(),
-                request.classLocation(),
+                request.location(),
                 request.startDate(),
                 request.endDate(),
                 request.classDays(),
@@ -52,12 +52,12 @@ public class ClassroomService {
                 ));
         boolean changes = false;
 
-        // Check and update className
-        if (classroomUpdateRequest.className() != null && !classroomUpdateRequest.className().equals(classroom.getClassName())) {
-            if (classroomDao.existClassroomByName(classroomUpdateRequest.className())) {
+        // Check and update name
+        if (classroomUpdateRequest.name() != null && !classroomUpdateRequest.name().equals(classroom.getName())) {
+            if (classroomDao.existClassroomByName(classroomUpdateRequest.name())) {
                 throw new DuplicateResourceException("Classroom name already taken");
             }
-            classroom.setClassName(classroomUpdateRequest.className());
+            classroom.setName(classroomUpdateRequest.name());
             changes = true;
         }
 
@@ -67,9 +67,9 @@ public class ClassroomService {
             changes = true;
         }
 
-        // Check and update classLocation
-        if (classroomUpdateRequest.classLocation() != null && !classroomUpdateRequest.classLocation().equals(classroom.getClassLocation())) {
-            classroom.setClassLocation(classroomUpdateRequest.classLocation());
+        // Check and update location
+        if (classroomUpdateRequest.location() != null && !classroomUpdateRequest.location().equals(classroom.getLocation())) {
+            classroom.setLocation(classroomUpdateRequest.location());
             changes = true;
         }
 

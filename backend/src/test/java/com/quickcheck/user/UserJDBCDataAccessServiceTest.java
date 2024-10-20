@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserJDBCDataAccessServiceTestContainer extends AbstractTestContainer {
+public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private UserJDBCDataAccessService underTest;
     private final UserRowMapper userRowMapper = new UserRowMapper();

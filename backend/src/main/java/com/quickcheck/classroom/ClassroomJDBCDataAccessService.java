@@ -20,7 +20,7 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public List<Classroom> selectAllClassrooms() {
         var sql = """
-                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
+                SELECT id, name, professorid, adminsid, studentsid, location, startdate, enddate, classdays
                 FROM "classroom"
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper);
@@ -29,7 +29,7 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public Optional<Classroom> selectClassroomById(Integer id) {
         var sql = """
-                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
+                SELECT id, name, professorid, adminsid, studentsid, location, startdate, enddate, classdays
                 FROM "classroom"
                 WHERE id = ?
                 """;
@@ -41,14 +41,14 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public void insertClassroom(Classroom classroom) {
         var sql = """
-                INSERT INTO "classroom" (classname, professorid, classlocation, startdate, enddate, classdays, adminsid, studentsid)
+                INSERT INTO "classroom" (name, professorid, location, startdate, enddate, classdays, adminsid, studentsid)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
         int result = jdbcTemplate.update(
                 sql,
-                classroom.getClassName(),
+                classroom.getName(),
                 classroom.getProfessorId(),
-                classroom.getClassLocation(),
+                classroom.getLocation(),
                 classroom.getStartDate(),
                 classroom.getEndDate(),
                 classroom.getClassDays().toArray(new String[0]),  // Insert classDays as TEXT[]
@@ -63,7 +63,7 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         var sql = """
                 SELECT count(id)
                 FROM "classroom"
-                WHERE classname = ?
+                WHERE name = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name);
         return count != null && count > 0;
@@ -93,18 +93,18 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
 
     @Override
     public void updateClassroom(Classroom update) {
-        if (update.getClassName() != null) {
+        if (update.getName() != null) {
             String sql = """
                 UPDATE "classroom"
-                SET classname = ? 
+                SET name = ? 
                 WHERE id = ?
                 """;
             int result = jdbcTemplate.update(
                     sql,
-                    update.getClassName(),
+                    update.getName(),
                     update.getId()
             );
-            System.out.println("update classroom className result = " + result);
+            System.out.println("update classroom name result = " + result);
         }
 
         if (update.getProfessorId() != null) {
@@ -121,18 +121,18 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
             System.out.println("update classroom professorId result = " + result);
         }
 
-        if (update.getClassLocation() != null) {
+        if (update.getLocation() != null) {
             String sql = """
                 UPDATE "classroom"
-                SET classlocation = ? 
+                SET location = ? 
                 WHERE id = ?
                 """;
             int result = jdbcTemplate.update(
                     sql,
-                    update.getClassLocation(),
+                    update.getLocation(),
                     update.getId()
             );
-            System.out.println("update classroom classLocation result = " + result);
+            System.out.println("update classroom location result = " + result);
         }
 
         if (update.getStartDate() != null) {
@@ -209,9 +209,9 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public Optional<Classroom> selectClassroomByName(String name) {
         var sql = """
-                SELECT id, classname, professorid, adminsid, studentsid, classlocation, startdate, enddate, classdays
+                SELECT id, name, professorid, adminsid, studentsid, location, startdate, enddate, classdays
                 FROM "classroom"
-                WHERE classname = ?
+                WHERE name = ?
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper, name)
                 .stream()

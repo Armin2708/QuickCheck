@@ -3,9 +3,9 @@ package com.quickcheck.classroom;
 import java.util.List;
 
 public record ClassroomRegistrationRequest(
-        String className,
+        String name,
         Integer professorId,
-        String classLocation,
+        String location,
         String startDate,
         String endDate,
         List<String> classDays,

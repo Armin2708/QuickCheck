@@ -12,7 +12,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class AdminJDBCDataAccessServiceTestContainer extends AbstractTestContainer {
+public class AdminJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private AdminJDBCDataAccessService underTest;
     private final AdminRowMapper adminRowMapper = new AdminRowMapper();

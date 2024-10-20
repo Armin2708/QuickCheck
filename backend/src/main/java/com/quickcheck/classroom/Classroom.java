@@ -1,13 +1,15 @@
 package com.quickcheck.classroom;
 
+
 import java.util.List;
+import java.util.Objects;
 
 public class Classroom {
 
     private Integer id;
-    private String className;
+    private String name;
     private Integer professorId;
-    private String classLocation;
+    private String location;
     private String startDate;
     private String endDate;
     private List<String> classDays;
@@ -17,13 +19,13 @@ public class Classroom {
     public Classroom() {
     }
 
-    public Classroom(Integer id, String className, Integer professorId, String classLocation,
+    public Classroom(Integer id, String name, Integer professorId, String location,
                      String startDate, String endDate, List<String> classDays, List<Integer> studentsId,
                      List<Integer> adminsId) {
         this.id = id;
-        this.className = className;
+        this.name = name;
         this.professorId = professorId;
-        this.classLocation = classLocation;
+        this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.classDays = classDays;
@@ -31,12 +33,12 @@ public class Classroom {
         this.adminsId=adminsId;
     }
 
-    public Classroom(String className, Integer professorId, String classLocation, String startDate,
+    public Classroom(String name, Integer professorId, String location, String startDate,
                      String endDate, List<String> classDays, List<Integer> studentsId,
                      List<Integer> adminsId) {
-        this.className = className;
+        this.name = name;
         this.professorId = professorId;
-        this.classLocation = classLocation;
+        this.location = location;
         this.startDate = startDate;
         this.endDate = endDate;
         this.classDays = classDays;
@@ -52,12 +54,12 @@ public class Classroom {
         this.id = id;
     }
 
-    public String getClassName() {
-        return className;
+    public String getName() {
+        return name;
     }
 
-    public void setClassName(String className) {
-        this.className = className;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Integer getProfessorId() {
@@ -68,12 +70,12 @@ public class Classroom {
         this.professorId = professorId;
     }
 
-    public String getClassLocation() {
-        return classLocation;
+    public String getLocation() {
+        return location;
     }
 
-    public void setClassLocation(String classLocation) {
-        this.classLocation = classLocation;
+    public void setLocation(String location) {
+        this.location = location;
     }
 
     public String getStartDate() {
@@ -114,5 +116,43 @@ public class Classroom {
 
     public void setAdminsId(List<Integer> adminsId) {
         this.adminsId = adminsId;
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Classroom classroom = (Classroom) o;
+        return Objects.equals(id, classroom.id) &&
+                Objects.equals(name, classroom.name) &&
+                Objects.equals(professorId, classroom.professorId) &&
+                Objects.equals(location, classroom.location) &&
+                Objects.equals(startDate, classroom.startDate) &&
+                Objects.equals(endDate, classroom.endDate) &&
+                Objects.equals(classDays, classroom.classDays) &&
+                Objects.equals(studentsId, classroom.studentsId)&&
+                Objects.equals(adminsId, classroom.adminsId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, professorId, location, startDate, endDate, classDays, studentsId, adminsId);
+    }
+
+    @Override
+    public String toString() {
+
+        return "admin{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", professorId='" + professorId + '\'' +
+                ", location='" + location + '\'' +
+                ", startDate='" + startDate + '\'' +
+                ", endDate='" + endDate + '\'' +
+                ", classDays=" + classDays + '\'' +
+                ", studentsId=" + studentsId +
+                ", adminsId='" + adminsId + '\'' +
+                '}';
     }
 }
