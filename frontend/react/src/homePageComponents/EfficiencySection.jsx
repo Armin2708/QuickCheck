@@ -1,6 +1,6 @@
 import { Box, Stack, Text } from "@chakra-ui/react";
 
-export default function Efficiency() {
+export default function EfficiencySection() {
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "174px" }}  // Responsive padding

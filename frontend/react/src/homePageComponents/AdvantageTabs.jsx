@@ -3,8 +3,11 @@ import {useState} from "react";
 import {FiThumbsUp} from "react-icons/fi";
 import {LuPen} from "react-icons/lu";
 import {RiShare2Line} from "react-icons/ri";
+import TitleWrapper from "../components/TitleWrapper.jsx";
+import TitleText from "../components/TitleText.jsx";
+import TitleDescription from "../components/TitleDescription.jsx";
 
-export default function Tabs() {
+export default function AdvantageTabs() {
     const [tab,setTab]=useState(1)
     const handleTab = (buttonId) => {
         setTab(buttonId);
@@ -12,7 +15,7 @@ export default function Tabs() {
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "324px" }}  // Responsive padding
-            paddingY={{ base: "50px", md: "100px", lg: "178px" }}  // Responsive padding
+            paddingY={{ base: "40px", md: "70px", lg: "100px" }}  // Responsive padding
             justify="flex-start"
             align="center"
             spacing="10px"
@@ -27,36 +30,19 @@ export default function Tabs() {
                 maxWidth="864px"  // Limit max width
             >
                 {/* Header Section */}
-                <Stack
-                    justify="flex-start"
-                    align="center"
-                    spacing="32px"
-                    width="100%"
-                >
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="bold"
-                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
-                        color="#313131"
-                        textAlign="center"
-                    >
+                <TitleWrapper>
+                    <TitleText>
                         An innovating experience that’d fit your need
-                    </Text>
-                    <Text
-                        paddingBottom={"40px"}
-                        fontFamily="Inter"
-                        fontWeight="medium"
-                        fontSize={{ base: "18px", md: "22px", lg: "24px" }}  // Responsive font size
-                        color="#707070"
-                        textAlign="center"
-                    >
+                    </TitleText>
+                    <TitleDescription>
                         Designed to fit your needs
-                    </Text>
-                </Stack>
+                    </TitleDescription>
+                </TitleWrapper>
 
                 {/* Buttons Section */}
                 <Stack
                     direction={{ base: "column", md: "row" }}  // Stack vertically on small screens
+                    paddingTop={"40px"}
                     justify="center"
                     align="center"
                     spacing="20px"  // Adjust spacing between buttons

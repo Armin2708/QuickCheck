@@ -1,7 +1,14 @@
 import { Box, Text, Stack, Button } from "@chakra-ui/react";
 import { LiaAwardSolid } from "react-icons/lia";
+import PresentationButton from "../components/PresentationButton.jsx";
+import {useNavigate} from "react-router-dom";
 
-export default function Presentation() {
+export default function PresentationSection() {
+    const navigate = useNavigate(); // Get the navigate function from react-router-dom
+
+    const handleNavigate = (to) => {
+        return () => navigate(to); // Return a function that navigates to the specified path
+    };
     return (
         <Stack
             justify="flex-start"
@@ -57,21 +64,14 @@ export default function Presentation() {
                             width="100%"
                         >
                             {/* Get Started Button */}
-                            <Button
-                                paddingX="20px"
-                                paddingY="20px"
-                                borderRadius="10px"
-                                justify="center"
-                                align="center"
-                                background="#7E3BB5"
-                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                width="204px"
-                                height="74px"
-                                _hover={{ background: "#6C33A1" }}  // Hover effect
-                                _active={{
-                                    transform: "scale(0.95)",  // Scale down a bit on click
-                                    background: "#6C33A1",  // Change background when active
-                                }}
+                            <PresentationButton
+                                width={"204px"}
+                                height={"74px"}
+                                color={"#7E3BB5"}
+                                hoverColor={"#6C33A1"}
+                                clickColor={"#6C33A1"}
+                                handleNavigate={handleNavigate("/login")}
+
                             >
                                 <Text
                                     fontFamily="Inter"
@@ -82,24 +82,16 @@ export default function Presentation() {
                                 >
                                     Get Started ->
                                 </Text>
-                            </Button>
+                            </PresentationButton>
 
                             {/* Learn More Button */}
-                            <Button
-                                paddingX="20px"
-                                paddingY="20px"
-                                borderRadius="10px"
-                                justify="center"
-                                align="center"
-                                background="#F9F9F9"
-                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+
+                            <PresentationButton
                                 width="204px"
                                 height="74px"
-                                _hover={{ background: "#e2e2e2" }}  // Optional hover effect
-                                _active={{
-                                    transform: "scale(0.95)",  // Scale down a bit on click
-                                    background: "#e2e2e2",  // Change background when active
-                                }}
+                                color={"#F9F9F9"}
+                                hoverColor={"#e2e2e2"}
+                                clickColor={"#e2e2e2"}
                             >
                                 <Text
                                     fontFamily="Inter"
@@ -110,21 +102,17 @@ export default function Presentation() {
                                 >
                                     Learn More
                                 </Text>
-                            </Button>
+                            </PresentationButton>
                         </Stack>
 
                         {/* Award Button */}
-                        <Button
-                            paddingX="20px"
-                            paddingY="20px"
-                            borderRadius="10px"
-                            justify="flex-start"
-                            align="flex-start"
-                            background="#EBECFF"
-                            boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+
+                        <PresentationButton
                             width="331px"
                             height="104px"
-                            _hover={{ background: "#d8dafb" }}  // Optional hover effect
+                            color={"#EBECFF"}
+                            hoverColor={"#d8dafb"}
+                            clickColor={"#d8dafb"}
                         >
                             <Stack direction="row" justify="flex-start" align="center" spacing="12px">
                                 <LiaAwardSolid color={"#A15FDD"} size={"100%"}/>
@@ -151,11 +139,12 @@ export default function Presentation() {
                                         fontSize="18px"
                                         color="#A15FDD"
                                     >
-                                        for Education
+                                        for education
                                     </Text>
+
                                 </Stack>
                             </Stack>
-                        </Button>
+                        </PresentationButton>
                     </Stack>
                 </Stack>
             </Stack>

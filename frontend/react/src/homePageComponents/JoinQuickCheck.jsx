@@ -3,8 +3,17 @@ import { TbClockUp } from "react-icons/tb";
 import { LiaToolsSolid } from "react-icons/lia";
 import { PiSmiley } from "react-icons/pi";
 import {IoMdCheckmarkCircleOutline} from "react-icons/io";
+import TitleWrapper from "../components/TitleWrapper.jsx";
+import TitleText from "../components/TitleText.jsx";
+import TitleDescription from "../components/TitleDescription.jsx";
+import {useNavigate} from "react-router-dom";
 
 export default function JoinQuickCheck() {
+    const navigate = useNavigate(); // Get the navigate function from react-router-dom
+
+    const handleNavigate = (to) => {
+        return () => navigate(to); // Return a function that navigates to the specified path
+    };
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Responsive padding
@@ -23,32 +32,14 @@ export default function JoinQuickCheck() {
                 maxWidth="1059px"
             >
                 {/* Header Section */}
-                <Stack
-                    justify="flex-start"
-                    align="center"
-                    spacing="20px"
-                    width="100%"
-                    maxWidth="822px"
-                >
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="bold"
-                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
-                        color="#313131"
-                        textAlign="center"
-                    >
+                <TitleWrapper>
+                    <TitleText>
                         Join Quick Check
-                    </Text>
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="medium"
-                        fontSize={{ base: "18px", md: "20px", lg: "24px" }}  // Responsive font size
-                        color="#707070"
-                        textAlign="center"
-                    >
+                    </TitleText>
+                    <TitleDescription>
                         Start increasing your productivity today!
-                    </Text>
-                </Stack>
+                    </TitleDescription>
+                </TitleWrapper>
 
                 {/* Feature and Card Section */}
                 <Stack
@@ -353,6 +344,7 @@ export default function JoinQuickCheck() {
                                 maxWidth="100%"
                                 background="#7E3BB5"
                                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                                onClick={handleNavigate("/login")}
                             >
                                 <Text
                                     fontFamily="Inter"

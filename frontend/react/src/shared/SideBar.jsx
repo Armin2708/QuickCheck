@@ -1,67 +1,137 @@
-import { Stack, Box, Text, Button } from '@chakra-ui/react';
+import {
+    Stack,
+    Box,
+    Text,
+    Button,
+    DrawerOverlay,
+    DrawerContent,
+    DrawerCloseButton,
+    DrawerHeader, DrawerBody, DrawerFooter, Drawer, Image, Divider
+} from '@chakra-ui/react';
 import { HiOutlineHome } from 'react-icons/hi';
+import React from 'react';
+import { FiUsers } from "react-icons/fi";
+import { RiLoginBoxLine, RiShieldUserLine } from "react-icons/ri";
+import { LuBookOpen, LuSettings } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
 
-export default function SideBar() {
+export default function SideBar({ isOpen, onClose, finalFocusRef }) {
+    const navigate = useNavigate(); // Get the navigate function from react-router-dom
+
+    const handleNavigate = (to) => {
+        return () => navigate(to); // Return a function that navigates to the specified path
+    };
+
     return (
-        <Stack
-            borderRadius="10px"
-            justify="flex-start"
-            align="flex-start"
-            spacing="30px"
-            width="100%" // Make the width flexible
-            maxWidth="381px"
-            background="#F9F9F9"
-            boxShadow="4px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+        <Drawer
+            isOpen={isOpen}
+            placement='left'
+            onClose={onClose}
+            finalFocusRef={finalFocusRef}
         >
-            {/* Main Section */}
-            <Stack justify="flex-start" align="flex-start" width="100%">
-                {/* Section for Icons and Title */}
-                <Stack justify="flex-start" align="center" spacing="9px" width="100%">
-                    <Box width="78px" height="75px" />
-                    <Box height="1px" width="100%" background="#EDEDED" />
-                </Stack>
+            <DrawerOverlay />
+            <DrawerContent>
+                <DrawerCloseButton />
+                <DrawerHeader>
+                    <Box width="78px" height="auto">
+                        <Image src={"././QuickCheckTransparent.png"} />
+                    </Box>
+                </DrawerHeader>
+                <Divider />
+                <DrawerBody>
+                    <ButtonWrapper>
 
-                {/* Navigation Buttons */}
-                <Stack paddingX="32px" justify="center" align="flex-start" spacing="32px" width="100%">
-                    {/* Home Button with Icon */}
-                    <Button
-                        width="100%"
-                        justifyContent="flex-start"
-                        alignItems="center"
-                        background="transparent" // Make button background transparent
-                        _hover={{ background: 'none' }} // Prevent hover background change
-                    >
-                        <HiOutlineHome size="24px" />
-                        <Text fontFamily="Inter" fontWeight="semibold" fontSize="28px" color="#313131" marginLeft="12px">
-                            Home
-                        </Text>
-                    </Button>
+                        <SideBarPageButton handleNavigate={handleNavigate("/")}>
+                            <HiOutlineHome size="24px" />
+                            <ButtonText>
+                                Home
+                            </ButtonText>
+                        </SideBarPageButton>
 
-                    {/* Classes, User, and Admin Sections */}
-                    <TextOption label="Classes" />
-                    <TextOption label="User" />
-                    <TextOption label="Admin" />
-                </Stack>
-            </Stack>
+                        <SideBarPageButton handleNavigate={handleNavigate("/users")}>
+                            <FiUsers size="24px" />
+                            <ButtonText>
+                                Users
+                            </ButtonText>
+                        </SideBarPageButton>
 
-            <Box height="1px" width="100%" background="#EDEDED" />
+                        <SideBarPageButton handleNavigate={handleNavigate("/admins")}>
+                            <RiShieldUserLine size="24px" />
+                            <ButtonText>
+                                Admins
+                            </ButtonText>
+                        </SideBarPageButton>
 
-            {/* Settings and Sign-In Sections */}
-            <Stack paddingX="32px" paddingY="39px" width="100%" spacing="22px">
-                <TextOption label="Settings" />
-                <TextOption label="Sign-in" />
-            </Stack>
-        </Stack>
+                        <SideBarPageButton handleNavigate={handleNavigate("/classrooms")}>
+                            <LuBookOpen size="24px" />
+                            <ButtonText>
+                                Classrooms
+                            </ButtonText>
+                        </SideBarPageButton>
+
+                    </ButtonWrapper>
+                </DrawerBody>
+
+                <DrawerFooter>
+                    <ButtonWrapper>
+                        <Divider/>
+                        <SideBarPageButton handleNavigate={handleNavigate("/settings")}>
+                            <LuSettings size="24px" />
+                            <ButtonText>
+                                Settings
+                            </ButtonText>
+                        </SideBarPageButton>
+
+                        <SideBarPageButton handleNavigate={handleNavigate("/login")}>
+                            <RiLoginBoxLine size="24px" />
+                            <ButtonText>
+                                Login
+                            </ButtonText>
+                        </SideBarPageButton>
+
+                    </ButtonWrapper>
+                </DrawerFooter>
+            </DrawerContent>
+        </Drawer>
     );
 }
 
-// Component for the text options to make the code more DRY
-function TextOption({ label }) {
+function SideBarPageButton({ children, handleNavigate }) {
     return (
-        <Stack direction="row" justify="flex-start" align="center" width="100%">
-            <Text fontFamily="Inter" fontWeight="semibold" fontSize="28px" color="#313131">
-                {label}
-            </Text>
+        <Button
+            width="100%"
+            justifyContent="flex-start"
+            alignItems="center"
+            background="transparent"
+            _hover={{ background: "#EBECFF" }}
+            _active={{
+                transform: "scale(0.95)",  // Scale down a bit on click
+                background: "#EBECFF",  // Change background when active
+            }}
+            onClick={handleNavigate} // Use handleNavigate passed as prop
+        >
+            {children}
+        </Button>
+    );
+}
+
+function ButtonText({ children }) {
+    return (
+        <Text fontFamily="Inter" fontWeight="semibold" fontSize="28px" color="#313131" marginLeft="12px">
+            {children}
+        </Text>
+    );
+}
+
+function ButtonWrapper({ children }) {
+    return (
+        <Stack
+            justify="center"
+            align="flex-start"
+            spacing="20px"
+            width="100%"
+        >
+            {children}
         </Stack>
     );
 }

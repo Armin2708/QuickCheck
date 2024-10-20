@@ -3,6 +3,7 @@ import UserAdminCard from "../components/UserAdminCard.jsx";
 import {useEffect, useState} from "react";
 import {getUsers} from "../services/user.js";
 import SideBar from "../shared/SideBar.jsx";
+import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
 
 export default function UsersListPage(){
 
@@ -11,7 +12,6 @@ export default function UsersListPage(){
     const fetchUsers = () => {
         getUsers()
             .then(res => {
-                console.log('API Response:', res.data); // Log API response
                 if (Array.isArray(res.data)) {
                     setUsers(res.data); // Set the users state
                 } else {
@@ -28,7 +28,7 @@ export default function UsersListPage(){
     }, []);
 
     return(
-        <>
+        <HeaderFooterWrapper>
             <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
@@ -45,6 +45,6 @@ export default function UsersListPage(){
                     </Wrap>
                 </Box>
             </Wrap>
-        </>
+        </HeaderFooterWrapper>
     )
 }

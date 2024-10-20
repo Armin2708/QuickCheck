@@ -3,6 +3,7 @@ import UserAdminCard from "../components/UserAdminCard.jsx";
 import {useEffect, useState} from "react";
 import {getAdmins} from "../services/admin.js";
 import SideBar from "../shared/SideBar.jsx";
+import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
 
 export default function AdminsListPage(){
 
@@ -11,7 +12,6 @@ export default function AdminsListPage(){
     const fetchAdmins = () => {
         getAdmins()
             .then(res => {
-                console.log('API Response:', res.data); // Log API response
                 if (Array.isArray(res.data)) {
                     setAdmins(res.data); // Set the admins state
                 } else {
@@ -28,7 +28,7 @@ export default function AdminsListPage(){
     }, []);
 
     return(
-        <>
+        <HeaderFooterWrapper>
             <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
@@ -45,6 +45,6 @@ export default function AdminsListPage(){
                     </Wrap>
                 </Box>
             </Wrap>
-        </>
+        </HeaderFooterWrapper>
     )
 }

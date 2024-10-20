@@ -1,10 +1,106 @@
-import {Box, Button, Image, Input, Stack, Text} from "@chakra-ui/react";
+import {Box, Button, Card, Image, Input, Stack, Text} from "@chakra-ui/react";
 import {FiCheckCircle} from "react-icons/fi";
 import {IoMenu, IoWarningOutline} from "react-icons/io5";
 import {FaCheck} from "react-icons/fa";
 import {IoMdInformationCircleOutline} from "react-icons/io";
-import ClassroomStudents from "../components/ClassroomStudents.jsx";
+import AttendanceStudents from "../components/AttendanceStudents.jsx";
 import {useEffect, useState} from "react";
+import TitleText from "../components/TitleText.jsx";
+import TitleDescription from "../components/TitleDescription.jsx";
+import TitleWrapper from "../components/TitleWrapper.jsx";
+
+const Navbar = ({colorTheme}) =>(
+        <Stack
+            paddingX="11px"
+            paddingY="5px"
+            borderRadius="10px"
+            justify="center"  // Center vertically
+            align="center"  // Align content horizontally
+            spacing="10px"
+            height="46px"
+            alignSelf="stretch"
+            background={colorTheme == "darkMode"? "#444343" : "#FFFFFF"}
+            boxShadow="0px 2px 2px 0px rgba(0, 0, 0, 0.25)"
+        >
+            <Stack
+                direction="row"
+                justify="space-between"
+                align="center"
+                width="100%"
+                maxWidth="653px"
+            >
+                <Stack
+                    direction="row"
+                    justify="flex-start"
+                    align="center"
+                    spacing="14px"
+                >
+                    {/* Icon Button */}
+                    <Button
+                        borderRadius="4px"
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        width="28px"   // Set explicit width
+                        height="28px"  // Set explicit height to match width for square shape
+                        background={colorTheme == "darkMode"? "#313131" : "#FBFBFB"}
+                        padding="0"  // Remove padding to ensure square button
+                        minWidth="28px"  // Ensure it doesn't shrink below 28px
+                        minHeight="28px"  // Ensure it doesn't shrink below 28px
+                    >
+                        <IoMenu size="16px" color={colorTheme=="darkMode"? "#707070" : "#313131"} /> {/* Set icon size to fit */}
+                    </Button>
+
+                    {/* Text and Image Button */}
+                    <Button
+                        backgroundColor="transparent"
+                        _hover={{
+                            bg: "transparent",  // Keep background transparent on hover
+                            color: "inherit"  // Maintain text color
+                        }}
+                        display="inline-flex"
+                        alignItems="center"  // Align content vertically
+                        padding="0"
+                        width="auto"  // Make the button width automatic based on content
+                    >
+                        <Image
+                            width="34.82px"
+                            height="34.5px"
+                            src={"./QuickCheckTransparent.png"}
+                        />
+                        <Text
+                            fontFamily="Inter"
+                            fontWeight="bold"
+                            fontSize="26px"
+                            color="#313131"
+                            marginLeft="8px"  // Space between image and text
+                            lineHeight="34.5px"  // Line height matches the image height
+                        >
+                            Quick Check
+                        </Text>
+                    </Button>
+                </Stack>
+            </Stack>
+        </Stack>
+    );
+
+const CardWrapper = ({children,colorTheme}) =>(
+    <Stack
+        paddingX="12px"
+        paddingY="13px"
+        borderRadius="10px"
+        justify="flex-start"
+        align="flex-start"
+        spacing="10px"
+        width="702px"
+        height="689px"
+        maxWidth="100%"
+        background={colorTheme == "darkMode"? "#313131" : "#F9F9F9"}
+        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+    >
+        {children}
+    </Stack>
+);
 
 export default function SneakPeek() {
     const [randomCode, setRandomCode] = useState("");
@@ -35,37 +131,18 @@ export default function SneakPeek() {
                 maxWidth="1404px"
             >
                 {/* Header Section */}
-                <Stack
-                    justify="flex-start"
-                    align="center"
-                    spacing="16px"
-                    width="100%"
-                    maxWidth="822px"
-                >
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="bold"
-                        fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
-                        color="#313131"
-                        textAlign="center"
-                    >
-                        <span>Less waste. More </span>
+                <TitleWrapper>
+                    <TitleText>
+                        Less waste. More
                         <Box as="span" color="#7E3BB5">
-                            speed
+                            {" speed"}
                         </Box>
-                    </Text>
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="semibold"
-                        fontSize={{ base: "18px", md: "22px", lg: "24px" }}  // Responsive font size
-                        color="#707070"
-                        width="100%"
-                        maxWidth="508px"
-                        textAlign="center"
+                    </TitleText>
+                    <TitleDescription
                     >
                         Spend less time doing attendance and more time teaching class
-                    </Text>
-                </Stack>
+                    </TitleDescription>
+                </TitleWrapper>
 
                 {/* Attendance Section */}
                 <Stack
@@ -76,19 +153,7 @@ export default function SneakPeek() {
                     maxWidth="100%"
                 >
 
-                    <Stack
-                        paddingX="12px"
-                        paddingY="13px"
-                        borderRadius="10px"
-                        justify="flex-start"
-                        align="flex-start"
-                        spacing="10px"
-                        width="702px"
-                        height="689px"
-                        maxWidth="100%"
-                        background="#FBFBFB"
-                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                    >
+                    <CardWrapper colorTheme={"lightMode"}>
                         <Stack
                             paddingY="0px"
                             justify="flex-start"
@@ -98,78 +163,7 @@ export default function SneakPeek() {
                             background={"#FBFBFB"}
                         >
                             {/* Nav Bar */}
-                            <Stack
-                                paddingX="11px"
-                                paddingY="5px"
-                                borderRadius="10px"
-                                justify="center"  // Center vertically
-                                align="center"  // Align content horizontally
-                                spacing="10px"
-                                height="46px"
-                                alignSelf="stretch"
-                                background={"#FFFFFF"}
-                                boxShadow="0px 2px 2px 0px rgba(0, 0, 0, 0.25)"
-                            >
-                                <Stack
-                                    direction="row"
-                                    justify="space-between"
-                                    align="center"
-                                    width="100%"
-                                    maxWidth="653px"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="14px"
-                                    >
-                                        {/* Icon Button */}
-                                        <Button
-                                            borderRadius="4px"
-                                            display="flex"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            width="28px"   // Set explicit width
-                                            height="28px"  // Set explicit height to match width for square shape
-                                            background="#FBFBFB"
-                                            padding="0"  // Remove padding to ensure square button
-                                            minWidth="28px"  // Ensure it doesn't shrink below 28px
-                                            minHeight="28px"  // Ensure it doesn't shrink below 28px
-                                        >
-                                            <IoMenu size="16px" color="#313131" /> {/* Set icon size to fit */}
-                                        </Button>
-
-                                        {/* Text and Image Button */}
-                                        <Button
-                                            backgroundColor="transparent"
-                                            _hover={{
-                                                bg: "transparent",  // Keep background transparent on hover
-                                                color: "inherit"  // Maintain text color
-                                            }}
-                                            display="inline-flex"
-                                            alignItems="center"  // Align content vertically
-                                            padding="0"
-                                            width="auto"  // Make the button width automatic based on content
-                                        >
-                                            <Image
-                                                width="34.82px"
-                                                height="34.5px"
-                                                src={"./QuickCheckTransparent.png"}
-                                            />
-                                            <Text
-                                                fontFamily="Inter"
-                                                fontWeight="bold"
-                                                fontSize="26px"
-                                                color="#313131"
-                                                marginLeft="8px"  // Space between image and text
-                                                lineHeight="34.5px"  // Line height matches the image height
-                                            >
-                                                Quick Check
-                                            </Text>
-                                        </Button>
-                                    </Stack>
-                                </Stack>
-                            </Stack>
+                            <Navbar colorTheme={"lightmode"}/>
 
                             <Stack
                                 paddingX="20px"
@@ -218,7 +212,7 @@ export default function SneakPeek() {
                                                 >
                                                     CS 3337 - Prof. Abalos
                                                 </Text>
-                                                <Text
+                                                <Box
                                                     fontFamily="Inter"
                                                     fontWeight="medium"
                                                     fontSize="18px"
@@ -227,14 +221,14 @@ export default function SneakPeek() {
                                                 >
                                                     Friday 10/15
                                                     <Stack direction={"row"}>
-                                                        <Box>
+                                                        <Text>
                                                             Code :
-                                                        </Box>
-                                                        <Box as="span" fontWeight="bold" color="#7E3BB5">
+                                                        </Text>
+                                                        <Text as="span" fontWeight="bold" color="#7E3BB5">
                                                             {randomCode}  {/* Display the generated random code */}
-                                                        </Box>
+                                                        </Text>
                                                     </Stack>
-                                                </Text>
+                                                </Box>
                                             </Stack>
                                             <Button
                                                 paddingX="7px"
@@ -262,24 +256,12 @@ export default function SneakPeek() {
                                     </Stack>
                                 </Stack>
                             </Stack>
-                            <ClassroomStudents />
+                            <AttendanceStudents />
                         </Stack>
-                    </Stack>
+                    </CardWrapper>
 
                     {/* Right Card */}
-                    <Stack
-                        paddingX="13px"
-                        paddingY="14px"
-                        borderRadius="10px"
-                        justify="flex-start"
-                        align="flex-start"
-                        spacing="10px"
-                        width="702px"
-                        height="689px"
-                        maxWidth="100%"
-                        background="#313131"
-                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                    >
+                    <CardWrapper colorTheme={"darkMode"}>
                         <Stack
                             justify="flex-start"
                             align="center"
@@ -287,82 +269,7 @@ export default function SneakPeek() {
                             width="675px"
                             maxWidth="100%"
                         >
-
-
-                            <Stack
-                                paddingX="11px"
-                                paddingY="5px"
-                                borderRadius="10px"
-                                justify="center"  // Center vertically
-                                align="center"  // Align content horizontally
-                                spacing="10px"
-                                height="46px"
-                                alignSelf="stretch"
-                                background="#444343"
-                            >
-                                <Stack
-                                    direction="row"
-                                    justify="space-between"
-                                    align="center"
-                                    width="100%"
-                                    maxWidth="653px"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="14px"
-                                    >
-                                        {/* Icon Button */}
-                                        <Button
-                                            borderRadius="4px"
-                                            display="flex"
-                                            justifyContent="center"
-                                            alignItems="center"
-                                            width="28px"   // Set explicit width
-                                            height="28px"  // Set explicit height to match width for square shape
-                                            background="#313131"
-                                            padding="0"  // Remove padding to ensure square button
-                                            minWidth="28px"  // Ensure it doesn't shrink below 28px
-                                            minHeight="28px"  // Ensure it doesn't shrink below 28px
-                                        >
-                                            <IoMenu size="16px" color="#707070" /> {/* Set icon size to fit */}
-                                        </Button>
-
-                                        {/* Text and Image Button */}
-                                        <Button
-                                            backgroundColor="transparent"
-                                            _hover={{
-                                                bg: "transparent",  // Keep background transparent on hover
-                                                color: "inherit"  // Maintain text color
-                                            }}
-                                            display="inline-flex"
-                                            alignItems="center"  // Align content vertically
-                                            padding="0"
-                                            width="auto"  // Make the button width automatic based on content
-                                        >
-                                            <Image
-                                                width="34.82px"
-                                                height="34.5px"
-                                                src={"./QuickCheckTransparent.png"}
-                                            />
-                                            <Text
-                                                fontFamily="Inter"
-                                                fontWeight="bold"
-                                                fontSize="26px"
-                                                color="#313131"
-                                                marginLeft="8px"  // Space between image and text
-                                                lineHeight="34.5px"  // Line height matches the image height
-                                            >
-                                                Quick Check
-                                            </Text>
-                                        </Button>
-                                    </Stack>
-                                </Stack>
-                            </Stack>
-
-
-
+                            <Navbar colorTheme={"darkMode"}/>
 
                             <Stack
                                 justify="flex-start"
@@ -413,9 +320,8 @@ export default function SneakPeek() {
                                                 alignSelf="stretch"
                                             >
                                                 Friday 10/15
-                                                <Box>
-                                                    Class location : FA 218
-                                                </Box>
+                                                <br/>
+                                                Class location : FA 218
                                             </Text>
                                         </Stack>
                                     </Stack>
@@ -634,7 +540,7 @@ export default function SneakPeek() {
                                 </Stack>
                             </Stack>
                         </Stack>
-                    </Stack>
+                    </CardWrapper>
 
                 </Stack>
             </Stack>

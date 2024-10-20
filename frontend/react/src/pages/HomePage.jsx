@@ -1,32 +1,26 @@
-import Presentation from "../homePageComponents/Presentation.jsx";
-import Header from "../homePageComponents/Header.jsx";
+import PresentationSection from "../homePageComponents/PresentationSection.jsx";
 import SupportedBy from "../homePageComponents/SupportedBy.jsx";
 import SneakPeek from "../homePageComponents/SneakPeek.jsx";
-import {Divider, Stack} from "@chakra-ui/react";
-import InfoTabs from "../homePageComponents/Comments.jsx";
-import Tabs from "../homePageComponents/Tabs.jsx";
-import Efficiency from "../homePageComponents/Efficiency.jsx";
+import {Divider} from "@chakra-ui/react";
+import AdvantageTabs from "../homePageComponents/AdvantageTabs.jsx";
+import EfficiencySection from "../homePageComponents/EfficiencySection.jsx";
 import JoinQuickCheck from "../homePageComponents/JoinQuickCheck.jsx";
-import Footer from "../homePageComponents/Footer.jsx";
-import Comments from "../homePageComponents/Comments.jsx";
-import SideBar from "../shared/SideBar.jsx";
-import ClassroomStudents from "../components/ClassroomStudents.jsx";
+import CommunityComments from "../homePageComponents/CommunityComments.jsx";
+import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
 
 
-export default function HomePage({children}){
+export default function HomePage(){
     return(
-        <Stack>
-            <Header/>
-            {/*<SideBar/>*/}
-            <Presentation/>
+        <HeaderFooterWrapper>
+            <PresentationSection/>
             <Divider/>
             <SupportedBy/>
             <SneakPeek/>
-            <Comments/>
-            <Tabs/>
-            <Efficiency/>
+            <CommunityComments/>
+            <AdvantageTabs/>
+            <EfficiencySection/>
             <JoinQuickCheck/>
-            <Footer/>
-        </Stack>
+        </HeaderFooterWrapper>
+
     )
 }

@@ -12,7 +12,7 @@ const names = [
     "Isabella Baker", "Logan Wright", "Charlotte Roberts", "Ethan Gonzalez", "Harper Perez"
 ];
 
-export default function ClassroomStudents() {
+export default function AttendanceStudents() {
     const [randomValues, setRandomValues] = useState([]);
     const [hoveredIndex, setHoveredIndex] = useState(null);
     const [randomNames, setRandomNames] = useState([]);

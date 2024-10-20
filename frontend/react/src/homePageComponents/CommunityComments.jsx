@@ -1,6 +1,8 @@
 import { Box, Stack, Text, Image } from "@chakra-ui/react";
+import TitleWrapper from "../components/TitleWrapper.jsx";
+import TitleText from "../components/TitleText.jsx";
 
-export default function Comments() {
+export default function CommunityComments() {
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "65px" }}  // Responsive padding
@@ -19,15 +21,11 @@ export default function Comments() {
                 width="100%"
                 maxWidth="1382px"
             >
-                <Text
-                    fontFamily="Inter"
-                    fontWeight="bold"
-                    fontSize={{ base: "36px", md: "50px", lg: "65px" }}  // Responsive font size
-                    color="#313131"
-                    textAlign="center"
-                >
-                    Loved by the community
-                </Text>
+                <TitleWrapper>
+                    <TitleText>
+                        Loved by the community
+                    </TitleText>
+                </TitleWrapper>
 
                 {/* Comments Section */}
                 <Stack

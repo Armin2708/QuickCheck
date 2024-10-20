@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {getClassrooms} from "../services/classroom.js";
 import SideBar from "../shared/SideBar.jsx";
 import ClassroomCard from "../components/ClassroomCard.jsx";
+import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
 
 export default function ClassroomsListPage(){
 
@@ -11,7 +12,6 @@ export default function ClassroomsListPage(){
     const fetchClassrooms = () => {
         getClassrooms()
             .then(res => {
-                console.log('API Response:', res.data); // Log API response
                 if (Array.isArray(res.data)) {
                     setClassrooms(res.data); // Set the admins state
                 } else {
@@ -28,7 +28,7 @@ export default function ClassroomsListPage(){
     }, []);
 
     return(
-        <>
+        <HeaderFooterWrapper>
             <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
@@ -45,6 +45,6 @@ export default function ClassroomsListPage(){
                     </Wrap>
                 </Box>
             </Wrap>
-        </>
+        </HeaderFooterWrapper>
     )
 }
