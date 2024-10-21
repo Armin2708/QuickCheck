@@ -3,6 +3,7 @@ package com.quickcheck.user;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
@@ -12,9 +13,11 @@ import java.util.List;
 public class UserService{
 
     private final UserDao userDao;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserService(UserDao userDao) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
         this.userDao = userDao;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public List<User> getAllUsers(){
@@ -38,7 +41,7 @@ public class UserService{
                     request.name(),
                     request.address(),
                     request.email(),
-                    request.password(),
+                    passwordEncoder.encode(request.password()),
                     request.dateOfBirth(),
                     request.gender(),
                     request.classesId()

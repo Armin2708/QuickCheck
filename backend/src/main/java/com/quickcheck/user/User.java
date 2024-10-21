@@ -1,12 +1,16 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 
-public class User {
+public class User implements UserDetails {
     private Integer id;
     private String schoolName;
     private String name;
@@ -81,8 +85,38 @@ public class User {
         this.email = email;
     }
 
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    }
+
     public String getPassword() {
-        return password;
+        return this.password;
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true /*UserDetails.super.isAccountNonExpired()*/;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true/*UserDetails.super.isAccountNonLocked()*/;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true/*UserDetails.super.isCredentialsNonExpired()*/;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true/*UserDetails.super.isEnabled()*/;
     }
 
     public void setPassword(String password) {
@@ -112,6 +146,8 @@ public class User {
     public void setClassesId(List<Integer> classId) {
         this.classesId = classId;
     }
+
+
 
     @Override
     public boolean equals(Object o) {

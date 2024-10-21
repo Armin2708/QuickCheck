@@ -26,9 +26,12 @@
         <tag/>
         <url/>
     </scm>
+
     <properties>
         <java.version>17</java.version>
+        <jsonwebtoken.version>0.12.5</jsonwebtoken.version>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -98,17 +101,17 @@
             <scope>test</scope>
         </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>-->
+        </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-test</artifactId>
-        </dependency>-->
+        </dependency>
 
-        <!--<dependency>
+        <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>${jsonwebtoken.version}</version>
@@ -121,10 +124,10 @@
         </dependency>
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt-jackson</artifactId> &lt;!&ndash; or jjwt-gson if Gson is preferred &ndash;&gt;
+            <artifactId>jjwt-jackson</artifactId>
             <version>${jsonwebtoken.version}</version>
             <scope>runtime</scope>
-        </dependency>-->
+        </dependency>
 
     </dependencies>
 
@@ -167,20 +170,20 @@
                 </configuration>
             </plugin>
 
-<!--            <plugin>-->
-<!--                <groupId>org.apache.maven.plugins</groupId>-->
-<!--                <artifactId>maven-failsafe-plugin</artifactId>-->
-<!--                <configuration>-->
-<!--                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>-->
-<!--                    <includes>-->
-<!--                        <include>**/*IntegrationTest.java</include>-->
-<!--                        <include>**/*IT.java</include>-->
-<!--                    </includes>-->
-<!--                    <systemPropertyVariables>-->
-<!--                        <test.server.port>${tomcat.http.port}</test.server.port>-->
-<!--                    </systemPropertyVariables>-->
-<!--                </configuration>-->
-<!--            </plugin>-->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <configuration>
+                    <classesDirectory>${project.build.outputDirectory}</classesDirectory>
+                    <includes>
+                        <include>**/*IntegrationTest.java</include>
+                        <include>**/*IT.java</include>
+                    </includes>
+                    <systemPropertyVariables>
+                        <test.server.port>${tomcat.http.port}</test.server.port>
+                    </systemPropertyVariables>
+                </configuration>
+            </plugin>
 
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>

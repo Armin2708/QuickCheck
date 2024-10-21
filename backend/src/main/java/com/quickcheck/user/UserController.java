@@ -1,5 +1,6 @@
 package com.quickcheck.user;
 
+import com.quickcheck.jwt.JWTUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,9 +13,11 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final JWTUtil jwtUtil;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, JWTUtil jwtUtil) {
         this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
     @GetMapping
@@ -28,10 +31,12 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<?> registerUser(@RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
+    public ResponseEntity<?> registerUser(
+            @RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
         userService.addUser(registrationRequest);
+        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),"ROLE_USER");
         return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION)
+                .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();
     }
 

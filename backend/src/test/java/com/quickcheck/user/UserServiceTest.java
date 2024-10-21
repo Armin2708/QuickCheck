@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.SQLException;
 import java.util.Arrays;
@@ -24,12 +25,13 @@ class UserServiceTest {
 
     @Mock
     private UserDao userDao;
-
+    @Mock
+    private PasswordEncoder passwordEncoder;
     private UserService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userDao);
+        underTest = new UserService(userDao,passwordEncoder);
     }
 
     @Test
@@ -46,7 +48,15 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User user = new User(
-                10, "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                10,
+                "Test School",
+                "John Doe",
+                "123 Main St",
+                "john@example.com",
+                "password",
+                "2000-01-01",
+                Gender.MALE,
+                Arrays.asList(1, 2, 3)
         );
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(user));
 
@@ -78,6 +88,10 @@ class UserServiceTest {
                 "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
         );
 
+        String passwordHash="!@#&*jbsfhhsd";
+
+        when(passwordEncoder.encode(request.password())).thenReturn(passwordHash);
+
         when(userDao.existUserWithEmail(request.email())).thenReturn(false);
 
         // When
@@ -91,7 +105,7 @@ class UserServiceTest {
 
         assertThat(capturedUser.getEmail()).isEqualTo(request.email());
         assertThat(capturedUser.getName()).isEqualTo(request.name());
-        assertThat(capturedUser.getPassword()).isEqualTo(request.password());
+        assertThat(capturedUser.getPassword()).isEqualTo(passwordHash);
     }
 
     @Test
