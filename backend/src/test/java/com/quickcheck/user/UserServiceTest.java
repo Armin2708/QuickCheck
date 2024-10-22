@@ -28,10 +28,11 @@ class UserServiceTest {
     @Mock
     private PasswordEncoder passwordEncoder;
     private UserService underTest;
+    private final UserDTOMapper userDTOMapper = new UserDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userDao,passwordEncoder);
+        underTest = new UserService(userDao,passwordEncoder,userDTOMapper);
     }
 
     @Test
@@ -60,11 +61,13 @@ class UserServiceTest {
         );
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(user));
 
+        UserDTO expected = userDTOMapper.apply(user);
+
         // When
-        User actual = underTest.getUser(userId);
+        UserDTO actual = underTest.getUser(userId);
 
         // Then
-        assertThat(actual).isEqualTo(user);
+        assertThat(actual).isEqualTo(expected);
     }
 
     @Test

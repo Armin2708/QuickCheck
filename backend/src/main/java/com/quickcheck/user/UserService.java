@@ -3,29 +3,37 @@ package com.quickcheck.user;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserService{
 
     private final UserDao userDao;
     private final PasswordEncoder passwordEncoder;
+    private final UserDTOMapper userDTOMapper;
 
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder) {
+    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper) {
         this.userDao = userDao;
         this.passwordEncoder = passwordEncoder;
+        this.userDTOMapper = userDTOMapper;
     }
 
-    public List<User> getAllUsers(){
-        return userDao.selectAllUsers();
+    public List<UserDTO> getAllUsers(){
+        return userDao.selectAllUsers()
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
     }
 
-    public User getUser(Integer userId){
+    public UserDTO getUser(Integer userId){
         return userDao.selectUserById(userId)
+                .map(userDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user with id [%s] not found".formatted(userId)
                 ));
@@ -52,7 +60,7 @@ public class UserService{
     public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
         User user = userDao.selectUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
-                        "User with id [%s] not found".formatted(userId)
+                        "user with id [%s] not found".formatted(userId)
                 ));
         boolean changes = false;
 

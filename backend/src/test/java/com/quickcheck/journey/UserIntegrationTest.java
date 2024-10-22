@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
@@ -27,7 +28,7 @@ public class UserIntegrationTest {
     private WebTestClient webTestClient;
 
     private static final Random RANDOM = new Random();
-    private static final String USER_URI = "/api/users";
+    private static final String USER_PATH = "/api/users";
 
     @Test
     void canRegisterUser() throws SQLException {
@@ -49,47 +50,63 @@ public class UserIntegrationTest {
         );
 
         // send a post request
-        webTestClient.post()
-                .uri(USER_URI)
+        String jwtToken = webTestClient.post()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
 
         // get all users
-        List<User> allUsers = webTestClient.get()
-                .uri(USER_URI)
+        List<UserDTO> allUsers = webTestClient.get()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<User>() {})
+                .expectBodyList(new ParameterizedTypeReference<UserDTO>() {})
                 .returnResult()
                 .getResponseBody();
 
         // make sure that user is present
         int id = allUsers.stream()
-                .filter(user -> user.getEmail().equals(email))
-                .map(User::getId)
+                .filter(user -> user.email().equals(email))
+                .map(UserDTO::id)
                 .findFirst()
                 .orElseThrow();
 
-        User expectedUser = new User(
-                id, schoolName, name, address, email, "password", dateOfBirth, gender, classesId
+        UserDTO expectedUser = new UserDTO(
+                id,
+                schoolName,
+                name,
+                address,
+                email,
+                dateOfBirth,
+                gender,
+                classesId,
+                List.of("ROLE_USER"),
+                email
         );
 
         assertThat(allUsers).contains(expectedUser);
 
         // get user by id
         webTestClient.get()
-                .uri(USER_URI + "/{id}", id)
+                .uri(USER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(User.class)
+                .expectBody(new ParameterizedTypeReference<UserDTO>() {
+                })
                 .isEqualTo(expectedUser);
     }
 
@@ -102,6 +119,7 @@ public class UserIntegrationTest {
         String schoolName = "Test School";
         String name = fakerName.fullName();
         String email = fakerName.lastName() + "-" + UUID.randomUUID() + "@quickcheck.com";
+        String email2 = fakerName.lastName() + "-" + UUID.randomUUID() + "@quickcheck.com";
         String address = faker.address().fullAddress();
         String dateOfBirth = "2000-01-01";
         int age = RANDOM.nextInt(1, 100);
@@ -112,45 +130,66 @@ public class UserIntegrationTest {
                 schoolName, name, address, email, "password", dateOfBirth, gender, classesId
         );
 
+        UserRegistrationRequest request2 = new UserRegistrationRequest(
+                schoolName, name, address, email2, "password", dateOfBirth, gender, classesId
+        );
+
         // send a post request
-        webTestClient.post()
-                .uri(USER_URI)
+        String jwtToken = webTestClient.post()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
+
+        webTestClient.post()
+                .uri(USER_PATH)
+                .accept(MediaType.APPLICATION_JSON)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Mono.just(request2), UserRegistrationRequest.class)
+                .exchange()
+                .expectStatus()
                 .isOk();
 
         // get all users
-        List<User> allUsers = webTestClient.get()
-                .uri(USER_URI)
+        List<UserDTO> allUsers = webTestClient.get()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<User>() {})
+                .expectBodyList(new ParameterizedTypeReference<UserDTO>() {})
                 .returnResult()
                 .getResponseBody();
 
         int id = allUsers.stream()
-                .filter(user -> user.getEmail().equals(email))
-                .map(User::getId)
+                .filter(user -> user.email().equals(email2))
+                .map(UserDTO::id)
                 .findFirst()
                 .orElseThrow();
 
+
         // delete user
         webTestClient.delete()
-                .uri(USER_URI + "/{id}", id)
+                .uri(USER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
 
         // try to get user by id (should return 404)
         webTestClient.get()
-                .uri(USER_URI + "/{id}", id)
+                .uri(USER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isNotFound();
@@ -176,29 +215,34 @@ public class UserIntegrationTest {
         );
 
         // send a post request
-        webTestClient.post()
-                .uri(USER_URI)
+        String jwtToken = webTestClient.post()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
-                .isOk();
+                .isOk()
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
 
         // get all users
-        List<User> allUsers = webTestClient.get()
-                .uri(USER_URI)
+        List<UserDTO> allUsers = webTestClient.get()
+                .uri(USER_PATH)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<User>() {})
+                .expectBodyList(new ParameterizedTypeReference<UserDTO>() {})
                 .returnResult()
                 .getResponseBody();
 
         int id = allUsers.stream()
-                .filter(user -> user.getEmail().equals(email))
-                .map(User::getId)
+                .filter(user -> user.email().equals(email))
+                .map(UserDTO::id)
                 .findFirst()
                 .orElseThrow();
 
@@ -209,8 +253,9 @@ public class UserIntegrationTest {
         );
 
         webTestClient.put()
-                .uri(USER_URI + "/{id}", id)
+                .uri(USER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(updateRequest), UserUpdateRequest.class)
                 .exchange()
@@ -218,17 +263,21 @@ public class UserIntegrationTest {
                 .isOk();
 
         // get updated user by id
-        User updatedUser = webTestClient.get()
-                .uri(USER_URI + "/{id}", id)
+        UserDTO updatedUser = webTestClient.get()
+                .uri(USER_PATH + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(User.class)
+                .expectBody(new ParameterizedTypeReference<UserDTO>() {})
                 .returnResult()
                 .getResponseBody();
 
-        User expected = new User(id, "Updated School", newName, "Updated Address", email, "password", dateOfBirth, gender, classesId);
+        UserDTO expected = new UserDTO(
+                id, "Updated School", newName,
+                "Updated Address", email, dateOfBirth, gender, classesId,
+                List.of("ROLE_USER"),email);
 
         assertThat(updatedUser).isEqualTo(expected);
     }
