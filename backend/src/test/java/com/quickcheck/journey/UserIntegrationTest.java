@@ -43,10 +43,12 @@ public class UserIntegrationTest {
         String dateOfBirth = "2000-01-01";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
-        List<Integer> classesId = List.of(1, 2, 3);
+        List<Integer> classesId = List.of();
+        List<String> roles = List.of("ADMIN");
+        List<String> expectedRoles = List.of("ADMIN");
 
         UserRegistrationRequest request = new UserRegistrationRequest(
-                schoolName, name, address, email, "password", dateOfBirth, gender, classesId
+                schoolName, name, address, email, "password", dateOfBirth, gender,roles
         );
 
         // send a post request
@@ -91,7 +93,7 @@ public class UserIntegrationTest {
                 dateOfBirth,
                 gender,
                 classesId,
-                List.of("ROLE_USER"),
+                expectedRoles,
                 email
         );
 
@@ -124,14 +126,15 @@ public class UserIntegrationTest {
         String dateOfBirth = "2000-01-01";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
-        List<Integer> classesId = List.of(1, 2, 3);
+        List<String> roles = List.of("ADMIN");
+
 
         UserRegistrationRequest request = new UserRegistrationRequest(
-                schoolName, name, address, email, "password", dateOfBirth, gender, classesId
+                schoolName, name, address, email, "password", dateOfBirth, gender, roles
         );
 
         UserRegistrationRequest request2 = new UserRegistrationRequest(
-                schoolName, name, address, email2, "password", dateOfBirth, gender, classesId
+                schoolName, name, address, email2, "password", dateOfBirth, gender, roles
         );
 
         // send a post request
@@ -208,10 +211,12 @@ public class UserIntegrationTest {
         String dateOfBirth = "2000-01-01";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
-        List<Integer> classesId = List.of(1, 2, 3);
+        List<Integer> classesId = List.of();
+        List<String> roles = List.of("ADMIN");
+        List<String> expectedRoles = List.of("ADMIN");
 
         UserRegistrationRequest request = new UserRegistrationRequest(
-                schoolName, name, address, email, "password", dateOfBirth, gender, classesId
+                schoolName, name, address, email, "password", dateOfBirth, gender, roles
         );
 
         // send a post request
@@ -277,7 +282,7 @@ public class UserIntegrationTest {
         UserDTO expected = new UserDTO(
                 id, "Updated School", newName,
                 "Updated Address", email, dateOfBirth, gender, classesId,
-                List.of("ROLE_USER"),email);
+                expectedRoles,email);
 
         assertThat(updatedUser).isEqualTo(expected);
     }

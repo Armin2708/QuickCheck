@@ -21,7 +21,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public List<User> selectAllUsers() {
         var sql= """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
+                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
                 FROM "user"
                 """;
         return jdbcTemplate.query(sql,userRowMapper);
@@ -30,7 +30,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public Optional<User> selectUserById(Integer id) {
         var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
+                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
                 FROM "user"
                 WHERE id= ?
                 """;
@@ -42,8 +42,8 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public void insertUser(User user) throws SQLException {
         var sql= """
-                INSERT INTO "user"(schoolname, name, address, email, password, dateofbirth, gender, classesid)
-                VALUES(?,?,?,?,?,?,?,?)
+                INSERT INTO "user"(schoolname, name, address, email, password, dateofbirth, gender, classesid,roles)
+                VALUES(?,?,?,?,?,?,?,?,?)
                 """;
 
         int result = jdbcTemplate.update(
@@ -55,7 +55,8 @@ public class UserJDBCDataAccessService implements UserDao {
                 user.getPassword(),
                 java.sql.Date.valueOf(user.getDateOfBirth()),
                 user.getGender().name(),
-                user.getClassesId().toArray(new Integer[0])
+                user.getClassesId().toArray(new Integer[0]),
+                user.getRoles().toArray(new String[0])
         );
         System.out.println("jdbcTemplate.result = "+result);
 
@@ -209,7 +210,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public Optional<User> selectUserByEmail(String email) {
         var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid
+                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
                 FROM "user"
                 WHERE email= ?
                 """;

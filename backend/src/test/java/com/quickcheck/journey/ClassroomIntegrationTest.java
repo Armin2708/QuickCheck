@@ -1,22 +1,22 @@
 package com.quickcheck.journey;
 
 import com.github.javafaker.Faker;
-import com.quickcheck.admin.Admin;
-import com.quickcheck.admin.AdminRegistrationRequest;
 import com.quickcheck.classroom.Classroom;
 import com.quickcheck.classroom.ClassroomRegistrationRequest;
 import com.quickcheck.classroom.ClassroomUpdateRequest;
 import com.quickcheck.Gender;
+import com.quickcheck.user.User;
+import com.quickcheck.user.UserRegistrationRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
@@ -28,48 +28,54 @@ public class ClassroomIntegrationTest {
     private WebTestClient webTestClient;
 
     private static final String CLASSROOM_URI = "/api/classrooms";
-    private static final String ADMIN_URI = "/api/admins";
+    private static final String USER_URI = "/api/users";
 
     @Test
     void canRegisterClassroom() {
-        // Step 1: Insert an Admin
+        // Step 1: Insert an User
         Faker faker = new Faker();
-        String adminEmail = faker.internet().emailAddress();
-        AdminRegistrationRequest adminRequest = new AdminRegistrationRequest(
+        String userEmail = faker.internet().emailAddress();
+        List<String> roles = List.of("ADMIN");
+        UserRegistrationRequest userRequest = new UserRegistrationRequest(
                 "Test School",
                 faker.name().fullName(),
                 faker.address().fullAddress(),
-                adminEmail,
+                userEmail,
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                roles
         );
 
-        // Send a POST request to register the admin
-        webTestClient.post()
-                .uri(ADMIN_URI)
+        // Send a POST request to register the user
+        String jwtToken = webTestClient.post()
+                .uri(USER_URI)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(adminRequest), AdminRegistrationRequest.class)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        // Get the admin ID
-        List<Admin> allAdmins = webTestClient.get()
-                .uri(ADMIN_URI)
-                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(userRequest), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<Admin>() {})
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
+
+        // Get the user ID
+        List<User> allUsers = webTestClient.get()
+                .uri(USER_URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<User>() {})
                 .returnResult()
                 .getResponseBody();
 
-        int professorId = allAdmins.stream()
-                .filter(admin -> admin.getEmail().equals(adminEmail))
-                .map(Admin::getId)
+        int professorId = allUsers.stream()
+                .filter(user -> user.getEmail().equals(userEmail))
+                .map(User::getId)
                 .findFirst()
                 .orElseThrow();
 
@@ -80,10 +86,10 @@ public class ClassroomIntegrationTest {
         String endDate = "2023-12-15";
         List<String> classDays = List.of("Monday", "Wednesday", "Friday");
         List<Integer> studentsId = List.of(101, 102, 103);
-        List<Integer> adminsId = List.of(201, 202, 203);
+        List<Integer> usersId = List.of(201, 202, 203);
 
         ClassroomRegistrationRequest request = new ClassroomRegistrationRequest(
-                name, professorId, location, startDate, endDate, classDays, studentsId, adminsId
+                name, professorId, location, startDate, endDate, classDays, studentsId, usersId
         );
 
         // Send a POST request to register the classroom
@@ -92,6 +98,7 @@ public class ClassroomIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), ClassroomRegistrationRequest.class)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -100,6 +107,7 @@ public class ClassroomIntegrationTest {
         List<Classroom> allClassrooms = webTestClient.get()
                 .uri(CLASSROOM_URI)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -115,7 +123,7 @@ public class ClassroomIntegrationTest {
                 .orElseThrow();
 
         Classroom expectedClassroom = new Classroom(
-                id, name, professorId, location, startDate, endDate, classDays, studentsId, adminsId
+                id, name, professorId, location, startDate, endDate, classDays, studentsId, usersId
         );
 
         assertThat(allClassrooms).contains(expectedClassroom);
@@ -124,6 +132,7 @@ public class ClassroomIntegrationTest {
         webTestClient.get()
                 .uri(CLASSROOM_URI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -133,42 +142,48 @@ public class ClassroomIntegrationTest {
 
     @Test
     void canDeleteClassroom() {
-        // Step 1: Insert an Admin
+        // Step 1: Insert an User
         Faker faker = new Faker();
-        String adminEmail = faker.internet().emailAddress();
-        AdminRegistrationRequest adminRequest = new AdminRegistrationRequest(
+        List<String> roles = List.of("ADMIN");
+        String userEmail = faker.internet().emailAddress();
+        UserRegistrationRequest userRequest = new UserRegistrationRequest(
                 "Test School",
                 faker.name().fullName(),
                 faker.address().fullAddress(),
-                adminEmail,
+                userEmail,
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                roles
         );
 
-        webTestClient.post()
-                .uri(ADMIN_URI)
+        String jwtToken = webTestClient.post()
+                .uri(USER_URI)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(adminRequest), AdminRegistrationRequest.class)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        List<Admin> allAdmins = webTestClient.get()
-                .uri(ADMIN_URI)
-                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(userRequest), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<Admin>() {})
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
+
+        List<User> allUsers = webTestClient.get()
+                .uri(USER_URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<User>() {})
                 .returnResult()
                 .getResponseBody();
 
-        int professorId = allAdmins.stream()
-                .filter(admin -> admin.getEmail().equals(adminEmail))
-                .map(Admin::getId)
+        int professorId = allUsers.stream()
+                .filter(user -> user.getEmail().equals(userEmail))
+                .map(User::getId)
                 .findFirst()
                 .orElseThrow();
 
@@ -179,10 +194,10 @@ public class ClassroomIntegrationTest {
         String endDate = "2023-12-15";
         List<String> classDays = List.of("Monday", "Wednesday", "Friday");
         List<Integer> studentsId = List.of(101, 102, 103);
-        List<Integer> adminsId = List.of(201, 202, 203);
+        List<Integer> usersId = List.of(201, 202, 203);
 
         ClassroomRegistrationRequest request = new ClassroomRegistrationRequest(
-                name, professorId, location, startDate, endDate, classDays, studentsId, adminsId
+                name, professorId, location, startDate, endDate, classDays, studentsId, usersId
         );
 
         webTestClient.post()
@@ -190,6 +205,7 @@ public class ClassroomIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), ClassroomRegistrationRequest.class)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -198,6 +214,7 @@ public class ClassroomIntegrationTest {
         List<Classroom> allClassrooms = webTestClient.get()
                 .uri(CLASSROOM_URI)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -215,6 +232,7 @@ public class ClassroomIntegrationTest {
         webTestClient.delete()
                 .uri(CLASSROOM_URI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -223,6 +241,7 @@ public class ClassroomIntegrationTest {
         webTestClient.get()
                 .uri(CLASSROOM_URI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isNotFound();
@@ -230,42 +249,48 @@ public class ClassroomIntegrationTest {
 
     @Test
     void canUpdateClassroom() {
-        // Step 1: Insert an Admin
+        // Step 1: Insert an User
         Faker faker = new Faker();
-        String adminEmail = faker.internet().emailAddress();
-        AdminRegistrationRequest adminRequest = new AdminRegistrationRequest(
+        String userEmail = faker.internet().emailAddress();
+        List<String> roles = List.of("ADMIN");
+        UserRegistrationRequest userRequest = new UserRegistrationRequest(
                 "Test School",
                 faker.name().fullName(),
                 faker.address().fullAddress(),
-                adminEmail,
+                userEmail,
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                roles
         );
 
-        webTestClient.post()
-                .uri(ADMIN_URI)
+        String jwtToken = webTestClient.post()
+                .uri(USER_URI)
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
-                .body(Mono.just(adminRequest), AdminRegistrationRequest.class)
-                .exchange()
-                .expectStatus()
-                .isOk();
-
-        List<Admin> allAdmins = webTestClient.get()
-                .uri(ADMIN_URI)
-                .accept(MediaType.APPLICATION_JSON)
+                .body(Mono.just(userRequest), UserRegistrationRequest.class)
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBodyList(new ParameterizedTypeReference<Admin>() {})
+                .returnResult(Void.class)
+                .getResponseHeaders()
+                .get(HttpHeaders.AUTHORIZATION)
+                .get(0);
+
+        List<User> allUsers = webTestClient.get()
+                .uri(USER_URI)
+                .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBodyList(new ParameterizedTypeReference<User>() {})
                 .returnResult()
                 .getResponseBody();
 
-        int professorId = allAdmins.stream()
-                .filter(admin -> admin.getEmail().equals(adminEmail))
-                .map(Admin::getId)
+        int professorId = allUsers.stream()
+                .filter(user -> user.getEmail().equals(userEmail))
+                .map(User::getId)
                 .findFirst()
                 .orElseThrow();
 
@@ -276,10 +301,10 @@ public class ClassroomIntegrationTest {
         String endDate = "2023-12-15";
         List<String> classDays = List.of("Monday", "Wednesday", "Friday");
         List<Integer> studentsId = List.of(101, 102, 103);
-        List<Integer> adminsId = List.of(201, 202, 203);
+        List<Integer> usersId = List.of(201, 202, 203);
 
         ClassroomRegistrationRequest request = new ClassroomRegistrationRequest(
-                name, professorId, location, startDate, endDate, classDays, studentsId, adminsId
+                name, professorId, location, startDate, endDate, classDays, studentsId, usersId
         );
 
         webTestClient.post()
@@ -287,6 +312,7 @@ public class ClassroomIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(request), ClassroomRegistrationRequest.class)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -295,6 +321,7 @@ public class ClassroomIntegrationTest {
         List<Classroom> allClassrooms = webTestClient.get()
                 .uri(CLASSROOM_URI)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()
@@ -320,6 +347,7 @@ public class ClassroomIntegrationTest {
                 .accept(MediaType.APPLICATION_JSON)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(Mono.just(updateRequest), ClassroomUpdateRequest.class)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk();
@@ -328,6 +356,7 @@ public class ClassroomIntegrationTest {
         Classroom updatedClassroom = webTestClient.get()
                 .uri(CLASSROOM_URI + "/{id}", id)
                 .accept(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", jwtToken))
                 .exchange()
                 .expectStatus()
                 .isOk()

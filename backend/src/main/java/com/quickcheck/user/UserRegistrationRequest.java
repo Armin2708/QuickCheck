@@ -12,6 +12,6 @@ public record UserRegistrationRequest(
          String password,
          String dateOfBirth,
          Gender gender,
-         List<Integer> classesId
+         List<String> roles
 ) {
 }

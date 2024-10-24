@@ -14,17 +14,18 @@ import java.util.List;
 public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        User user = new User();
-        user.setId(rs.getInt("id"));
-        user.setSchoolName(rs.getString("schoolname"));
-        user.setName(rs.getString("name"));
-        user.setAddress(rs.getString("address"));
-        user.setEmail(rs.getString("email"));
-        user.setPassword(rs.getString("password"));
-        user.setDateOfBirth(rs.getString("dateofbirth"));
-        user.setGender(Gender.valueOf(rs.getString("gender")));
-        user.setClassesId(Arrays.asList((Integer[])rs.getArray("classesid").getArray()));
-
+        User user = new User(
+        rs.getInt("id"),
+        rs.getString("schoolname"),
+        rs.getString("name"),
+        rs.getString("address"),
+        rs.getString("email"),
+        rs.getString("password"),
+        rs.getString("dateofbirth"),
+        Gender.valueOf(rs.getString("gender")),
+        Arrays.asList((Integer[])rs.getArray("classesid").getArray()),
+        Arrays.asList((String[])rs.getArray("roles").getArray())
+        );
         return user;
     }
 }

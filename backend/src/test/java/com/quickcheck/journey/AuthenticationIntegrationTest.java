@@ -52,10 +52,12 @@ public class AuthenticationIntegrationTest {
         String dateOfBirth = "2000-01-01";
         int age = RANDOM.nextInt(1, 100);
         Gender gender = age % 2 == 0 ? Gender.MALE : Gender.FEMALE;
-        List<Integer> classesId = List.of(1, 2, 3);
+        List<Integer> classesId = List.of();
+        List<String> roles = List.of("ADMIN");
+        List<String> expectedRoles = List.of("ADMIN");
 
         UserRegistrationRequest userRegistrationRequest = new UserRegistrationRequest(
-                schoolName, name, address, email, password, dateOfBirth, gender, classesId
+                schoolName, name, address, email, password, dateOfBirth, gender, roles
         );
 
         AuthenticationRequest authenticationRequest = new AuthenticationRequest(email,password);
@@ -122,7 +124,7 @@ public class AuthenticationIntegrationTest {
         assertThat(userDTO.dateOfBirth()).isEqualTo(dateOfBirth);
         assertThat(userDTO.gender()).isEqualTo(gender);
         assertThat(userDTO.classesId()).isEqualTo(classesId);
-        assertThat(userDTO.roles()).isEqualTo(List.of("ROLE_USER"));
+        assertThat(userDTO.roles()).isEqualTo(expectedRoles);
         assertThat(userDTO.username()).isEqualTo(email);
 
     }

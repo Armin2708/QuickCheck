@@ -2,9 +2,9 @@ package com.quickcheck.classroom;
 
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.Gender;
-import com.quickcheck.admin.Admin;
-import com.quickcheck.admin.AdminJDBCDataAccessService;
-import com.quickcheck.admin.AdminRowMapper;
+import com.quickcheck.user.User;
+import com.quickcheck.user.UserJDBCDataAccessService;
+import com.quickcheck.user.UserRowMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,8 +20,8 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     private ClassroomJDBCDataAccessService underTest;
     private final ClassroomRowMapper classroomRowMapper = new ClassroomRowMapper();
 
-    private AdminJDBCDataAccessService adminUnderTest;
-    private final AdminRowMapper adminRowMapper = new AdminRowMapper();
+    private UserJDBCDataAccessService userUnderTest;
+    private final UserRowMapper userRowMapper = new UserRowMapper();
 
     @BeforeEach
     void setUp() {
@@ -29,18 +29,18 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 classroomRowMapper
         );
-        adminUnderTest = new AdminJDBCDataAccessService(
+        userUnderTest = new UserJDBCDataAccessService(
                 getJdbcTemplate(),
-                adminRowMapper
+                userRowMapper
         );
     }
     @AfterEach
     void tearDown() throws SQLException {
-        // Clean up inserted Admins and Classrooms after each test
+        // Clean up inserted Users and Classrooms after each test
         List<Classroom> classrooms = underTest.selectAllClassrooms();
         classrooms.forEach(classroom -> underTest.deleteClassroomById(classroom.getId()));
-        List<Admin> admins = adminUnderTest.selectAllAdmins();
-        admins.forEach(admin -> adminUnderTest.deleteAdminById(admin.getId()));
+        List<User> users = userUnderTest.selectAllUsers();
+        users.forEach(user -> userUnderTest.deleteUserById(user.getId()));
 
     }
 
@@ -48,19 +48,20 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void selectAllClassrooms() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
-        adminUnderTest.insertAdmin(admin);
+        userUnderTest.insertUser(user);
 
-        Integer id = adminUnderTest.selectAllAdmins().get(0).getId();
+        Integer id = userUnderTest.selectAllUsers().get(0).getId();
 
 
         Classroom classroom = new Classroom(
@@ -71,7 +72,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 
@@ -88,30 +89,31 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void selectClassroomById() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
+        userUnderTest.insertUser(user);
 
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 
@@ -134,27 +136,28 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
             assertThat(c.getStartDate()).isEqualTo(classroom.getStartDate());
             assertThat(c.getEndDate()).isEqualTo(classroom.getEndDate());
             assertThat(c.getClassDays()).containsExactlyElementsOf(classroom.getClassDays());
-            assertThat(c.getAdminsId()).containsExactlyElementsOf(classroom.getAdminsId());
+            assertThat(c.getStudentsId()).containsExactlyElementsOf(classroom.getStudentsId());
             assertThat(c.getStudentsId()).containsExactlyElementsOf(classroom.getStudentsId());
         });
     }
 
     @Test
-    void willReturnEmptyWhenSelectClassroomById() {
+    void willReturnEmptyWhenSelectClassroomById() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
+        userUnderTest.insertUser(user);
         int id = 0;
 
         // When
@@ -168,29 +171,30 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void insertClassroom() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        userUnderTest.insertUser(user);
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
 
         // When
@@ -205,29 +209,30 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void existClassroomByName() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        userUnderTest.insertUser(user);
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 
@@ -239,21 +244,22 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     }
 
     @Test
-    void existClassroomByNameReturnsFalseWhenDoesNotExist() {
+    void existClassroomByNameReturnsFalseWhenDoesNotExist() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
+        userUnderTest.insertUser(user);
         String name = "Non-existent Classroom";
 
         // When
@@ -267,29 +273,30 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void deleteClassroomById() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        userUnderTest.insertUser(user);
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 
@@ -312,29 +319,30 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void updateClassroom() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        userUnderTest.insertUser(user);
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 
@@ -365,29 +373,30 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void willNotUpdateWhenNothingToUpdate() throws SQLException {
         // Given
 
-        Admin admin = new Admin(
+        User user = new User(
                 "CSULA",
-                "Admin admin",
+                "User user",
                 "address",
                 "email@email.com",
                 "password",
                 "2000-10-10",
                 Gender.MALE,
-                List.of(1,2,3)
+                List.of(1,2,3),
+                List.of("ADMIN")
         );
 
-        adminUnderTest.insertAdmin(admin);
-        Integer adminId = adminUnderTest.selectAllAdmins().get(0).getId();
+        userUnderTest.insertUser(user);
+        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
         Classroom classroom = new Classroom(
                 "Math 101",
-                adminId,  // professorId
+                userId,  // professorId
                 "Room 305",
                 "2023-09-01",
                 "2023-12-15",
                 List.of("Monday", "Wednesday", "Friday"), // classDays
                 List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // adminsId
+                List.of(201, 202, 203) // usersId
         );
         underTest.insertClassroom(classroom);
 

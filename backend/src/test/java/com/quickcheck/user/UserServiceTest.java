@@ -14,6 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -57,7 +58,8 @@ class UserServiceTest {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                Arrays.asList(1, 2, 3)
+                Arrays.asList(1, 2, 3),
+                List.of("ADMIN")
         );
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(user));
 
@@ -88,7 +90,9 @@ class UserServiceTest {
     void addUser() throws SQLException {
         // Given
         UserRegistrationRequest request = new UserRegistrationRequest(
-                "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                "Test School", "John Doe", "123 Main St",
+                "john@example.com", "password", "2000-01-01",
+                Gender.MALE, List.of("ADMIN")
         );
 
         String passwordHash="!@#&*jbsfhhsd";
@@ -115,7 +119,10 @@ class UserServiceTest {
     void willThrowWhenEmailExistsWhileAddingUser() throws SQLException {
         // Given
         UserRegistrationRequest request = new UserRegistrationRequest(
-                "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                "Test School", "John Doe", "123 Main St",
+                "john@example.com", "password", "2000-01-01",
+                Gender.MALE,
+                List.of("ADMIN")
         );
 
         when(userDao.existUserWithEmail(request.email())).thenReturn(true);
@@ -164,11 +171,16 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                10, "Test School", "John Doe",
+                "123 Main St", "john@example.com", "password",
+                "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3),
+                List.of("ADMIN")
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                "New School", "Johnny", "New Address", "johnny@example.com", "newpassword", "2000-05-05", Gender.MALE, Arrays.asList(4, 5)
+                "New School", "Johnny", "New Address",
+                "johnny@example.com", "newpassword", "2000-05-05",
+                Gender.MALE, Arrays.asList(4, 5)
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -192,7 +204,10 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                10, "Test School", "John Doe", "123 Main St",
+                "john@example.com", "password", "2000-01-01",
+                Gender.MALE, Arrays.asList(1, 2, 3),
+                List.of("ADMIN")
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
@@ -216,11 +231,16 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe", "123 Main St", "john@example.com", "password", "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3)
+                10, "Test School", "John Doe", "123 Main St",
+                "john@example.com", "password", "2000-01-01",
+                Gender.MALE, Arrays.asList(1, 2, 3),
+                List.of("ADMIN")
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                "Test School", "Johnny", "New Address", "existingemail@example.com", "newpassword", "2000-05-05", Gender.MALE, Arrays.asList(4, 5)
+                "Test School", "Johnny", "New Address",
+                "existingemail@example.com", "newpassword",
+                "2000-05-05", Gender.MALE, Arrays.asList(4, 5)
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));

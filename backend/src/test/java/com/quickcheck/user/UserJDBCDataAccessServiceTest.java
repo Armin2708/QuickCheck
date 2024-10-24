@@ -36,7 +36,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3) // example classesId
+                List.of(1, 2, 3),
+                List.of("ADMIN")// example classesId
         );
         underTest.insertUser(user);
 
@@ -59,7 +60,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
         underTest.insertUser(user);
 
@@ -106,7 +108,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
 
         // When
@@ -129,7 +132,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
         underTest.insertUser(user);
 
@@ -164,7 +168,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
         underTest.insertUser(user);
 
@@ -195,7 +200,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
         underTest.insertUser(user);
 
@@ -234,7 +240,8 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "password",
                 "2000-01-01",
                 Gender.MALE,
-                List.of(1, 2, 3)
+                List.of(1, 2, 3),
+                List.of("ADMIN")
         );
         underTest.insertUser(user);
 

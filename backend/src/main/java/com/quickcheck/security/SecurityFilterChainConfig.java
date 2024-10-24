@@ -34,14 +34,38 @@ public class SecurityFilterChainConfig {
                 .csrf(csrf -> csrf.disable())
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(auth -> auth
+
                     .requestMatchers(
                             HttpMethod.POST,
                             "/api/users",
-                            "/api/auth/login"
+                            "/api/auth/login",
+                            "/api/email/**"
                     )
                     .permitAll()
+
+
+
                         .requestMatchers(HttpMethod.GET,"/ping")
                         .permitAll()
+
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/classrooms"
+                        )
+                        .hasAuthority("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.DELETE,
+                                "/api/classrooms"
+                        )
+                        .hasAuthority("ADMIN")
+
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/classrooms"
+                        )
+                        .hasAuthority("ADMIN")
+
                     .anyRequest()
                     .authenticated()
                 )

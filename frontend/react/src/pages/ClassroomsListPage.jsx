@@ -1,9 +1,9 @@
 import {Box, Wrap, WrapItem} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
-import {getClassrooms} from "../services/classroom.js";
-import SideBar from "../shared/SideBar.jsx";
-import ClassroomCard from "../components/ClassroomCard.jsx";
-import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
+import {getClassrooms} from "../services/client.js";
+import SideBar from "../components/shared/SideBar.jsx";
+import ClassroomCard from "../components/classroom/ClassroomCard.jsx";
+import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 
 export default function ClassroomsListPage(){
 
@@ -28,7 +28,7 @@ export default function ClassroomsListPage(){
     }, []);
 
     return(
-        <HeaderFooterWrapper>
+        <HeaderFooter>
             <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
@@ -45,6 +45,6 @@ export default function ClassroomsListPage(){
                     </Wrap>
                 </Box>
             </Wrap>
-        </HeaderFooterWrapper>
+        </HeaderFooter>
     )
 }

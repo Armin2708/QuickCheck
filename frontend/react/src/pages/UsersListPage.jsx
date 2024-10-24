@@ -1,9 +1,9 @@
 import {Box, Wrap, WrapItem} from "@chakra-ui/react";
-import UserAdminCard from "../components/UserAdminCard.jsx";
+import UserAdminCard from "../components/user/UserAdminCard.jsx";
 import {useEffect, useState} from "react";
-import {getUsers} from "../services/user.js";
-import SideBar from "../shared/SideBar.jsx";
-import HeaderFooterWrapper from "../shared/HeaderFooterWrapper.jsx";
+import {getUsers} from "../services/client.js";
+import SideBar from "../components/shared/SideBar.jsx";
+import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 
 export default function UsersListPage(){
 
@@ -28,7 +28,7 @@ export default function UsersListPage(){
     }, []);
 
     return(
-        <HeaderFooterWrapper>
+        <HeaderFooter>
             <SideBar/>
             <Wrap justify={'center'}>
                 <Box p="4">
@@ -45,6 +45,6 @@ export default function UsersListPage(){
                     </Wrap>
                 </Box>
             </Wrap>
-        </HeaderFooterWrapper>
+        </HeaderFooter>
     )
 }

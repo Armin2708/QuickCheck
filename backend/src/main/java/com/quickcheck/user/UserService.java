@@ -41,6 +41,7 @@ public class UserService{
 
     public void addUser(UserRegistrationRequest request) throws SQLException {
         String email = request.email();
+        System.out.println(request);
         if (userDao.existUserWithEmail(email)) {
             throw new DuplicateResourceException("Email already exists");
         }
@@ -52,7 +53,9 @@ public class UserService{
                     passwordEncoder.encode(request.password()),
                     request.dateOfBirth(),
                     request.gender(),
-                    request.classesId()
+                    List.of(),
+                    /*request.role()*/
+                    request.roles()
             );
             userDao.insertUser(user);
     }

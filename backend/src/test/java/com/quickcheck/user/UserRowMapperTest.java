@@ -20,7 +20,8 @@ class UserRowMapperTest {
         UserRowMapper userRowMapper = new UserRowMapper();
 
         ResultSet resultSet = mock(ResultSet.class);
-        Array mockSqlArray = mock(Array.class);
+        Array mockClassesIdArray = mock(Array.class);
+        Array mockRoleArray = mock(Array.class);
 
         when(resultSet.getInt("id")).thenReturn(1);
         when(resultSet.getString("schoolname")).thenReturn("Test School");
@@ -32,23 +33,28 @@ class UserRowMapperTest {
         when(resultSet.getString("gender")).thenReturn("MALE");
 
         // Mocking the SQL Array for classesId (assumed as Integer[] in the database)
-        when(resultSet.getArray("classesid")).thenReturn(mockSqlArray);
-        when(mockSqlArray.getArray()).thenReturn(new Integer[]{101, 102, 103});
+        when(resultSet.getArray("classesid")).thenReturn(mockClassesIdArray);
+        when(mockClassesIdArray.getArray()).thenReturn(new Integer[]{101, 102, 103});
+
+        when(resultSet.getArray("roles")).thenReturn(mockRoleArray);
+        when(mockRoleArray.getArray()).thenReturn(new String[]{"ADMIN"});
 
         // When
         User actualUser = userRowMapper.mapRow(resultSet, 1);
 
         // Then
-        User expectedUser = new User();
-        expectedUser.setId(1);
-        expectedUser.setSchoolName("Test School");
-        expectedUser.setName("John Doe");
-        expectedUser.setAddress("123 Main St");
-        expectedUser.setEmail("john@example.com");
-        expectedUser.setPassword("password");
-        expectedUser.setDateOfBirth("2000-01-01");
-        expectedUser.setGender(Gender.MALE);
-        expectedUser.setClassesId(Arrays.asList(101, 102, 103)); // List of integers for classesId
+        User expectedUser = new User(
+                1,
+                "Test School",
+                "John Doe",
+                "123 Main St",
+                "john@example.com",
+                "password",
+                "2000-01-01",
+                Gender.MALE,
+                Arrays.asList(101, 102, 103),// List of integers for classesId
+                Arrays.asList("ROLE_ADMIN")
+        );
 
         assertThat(actualUser).isEqualTo(expectedUser);
     }

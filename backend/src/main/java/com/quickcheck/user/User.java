@@ -5,10 +5,8 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class User implements UserDetails {
     private Integer id;
@@ -20,11 +18,14 @@ public class User implements UserDetails {
     private String dateOfBirth;
     private Gender gender;
     private List<Integer> classesId;
+    private List<String> roles;
 
     public User() {
     }
 
-    public User(String schoolName, String name, String address, String email, String password, String dateOfBirth, Gender gender, List<Integer> classesId) {
+    public User(String schoolName, String name, String address, String email,
+                String password, String dateOfBirth, Gender gender, List<Integer> classesId,
+                List<String> roles) {
         this.schoolName = schoolName;
         this.name = name;
         this.address = address;
@@ -33,9 +34,12 @@ public class User implements UserDetails {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.classesId = classesId;
+        this.roles=roles;
     }
 
-    public User(Integer id, String schoolName, String name, String address, String email, String password, String dateOfBirth, Gender gender, List<Integer> classesId) {
+    public User(Integer id, String schoolName, String name, String address, String email,
+                String password, String dateOfBirth, Gender gender, List<Integer> classesId,
+                List<String> roles) {
         this.id = id;
         this.schoolName = schoolName;
         this.name = name;
@@ -45,6 +49,7 @@ public class User implements UserDetails {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.classesId = classesId;
+        this.roles=roles;
     }
 
     public Integer getId() {
@@ -85,9 +90,19 @@ public class User implements UserDetails {
         this.email = email;
     }
 
+    public List<String> getRoles() {
+        return roles;  // Getter for roles
+    }
+
+    public void setRoles(List<String> roles) {
+        this.roles = roles;  // Setter for roles
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+        return roles.stream()  // Stream the roles
+                .map(role -> new SimpleGrantedAuthority(role))  // Map each role to a GrantedAuthority with "ROLE_" prefix
+                .collect(Collectors.toList());  // Collect as a list of GrantedAuthority
     }
 
     public String getPassword() {
@@ -98,6 +113,7 @@ public class User implements UserDetails {
     public String getUsername() {
         return this.email;
     }
+
 
     @Override
     public boolean isAccountNonExpired() {
@@ -183,6 +199,7 @@ public class User implements UserDetails {
                 ", dateOfBirth=" + dateOfBirth + '\'' +
                 ", gender=" + gender +
                 ", classesId='" + classesId + '\'' +
+                ", roles =" + roles + '\'' +
                 '}';
     }
 

@@ -34,7 +34,7 @@ public class UserController {
     public ResponseEntity<?> registerUser(
             @RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
         userService.addUser(registrationRequest);
-        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),"ROLE_USER");
+        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),registrationRequest.roles());
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();
