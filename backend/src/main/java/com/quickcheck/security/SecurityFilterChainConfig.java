@@ -54,19 +54,19 @@ public class SecurityFilterChainConfig {
                                 "/api/classrooms",
                                 "/api/email/send"
                         )
-                        .hasAuthority("ADMIN")
+                        .hasAnyAuthority("ADMIN","INSTRUCTOR")
 
                         .requestMatchers(
                                 HttpMethod.DELETE,
                                 "/api/classrooms"
                         )
-                        .hasAuthority("ADMIN")
+                        .hasAnyAuthority("ADMIN","INSTRUCTOR")
 
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/classrooms"
                         )
-                        .hasAuthority("ADMIN")
+                        .hasAnyAuthority("ADMIN","INSTRUCTOR")
 
                     .anyRequest()
                     .authenticated()

@@ -57,7 +57,7 @@ public class AuthenticationIntegrationTest {
 
         // Convert Faker's birthday date directly to LocalDate
         LocalDate dateOfBirthLocalDate = faker.date().birthday().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-        Date dateOfBirth = Date.from(dateOfBirthLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+        LocalDate dateOfBirth = LocalDate.from(dateOfBirthLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
 
         Gender gender = RANDOM.nextInt(100) % 2 == 0 ? Gender.MALE : Gender.FEMALE;
         List<String> expectedRoles = List.of("USER");
@@ -98,7 +98,7 @@ public class AuthenticationIntegrationTest {
         UserDTO userDTO = authenticationResponse.userDTO();
 
         // Convert the Date in UserDTO to LocalDate for consistent comparison
-        LocalDate actualDateOfBirth = userDTO.dateOfBirth().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
+        LocalDate actualDateOfBirth = userDTO.dateOfBirth();
 
         // Assertions
         assertThat(jwtUtil.isTokenValid(jwtToken, userDTO.username())).isTrue();

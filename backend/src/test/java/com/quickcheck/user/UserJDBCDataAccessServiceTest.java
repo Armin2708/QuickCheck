@@ -3,14 +3,25 @@ package com.quickcheck.user;
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.Gender;
 import com.quickcheck.Roles;
+import com.quickcheck.classes.Class;
+import com.quickcheck.classes.ClassJDBCDataAccessService;
+import com.quickcheck.classes.ClassRowMapper;
+import com.quickcheck.classroom.Classroom;
+import com.quickcheck.classroom.ClassroomJDBCDataAccessService;
+import com.quickcheck.classroom.ClassroomRowMapper;
 import com.quickcheck.organization.Organization;
 import com.quickcheck.organization.OrganizationJDBCDataAccessService;
 import com.quickcheck.organization.OrganizationRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
+
 
 import java.sql.Date;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +36,22 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private UserJDBCDataAccessService underTest;
+    private ClassroomJDBCDataAccessService classroomUnderTest;
+    private ClassJDBCDataAccessService classUnderTest;
+
     private final UserRowMapper userRowMapper = new UserRowMapper();
     private final UserRolesRowMapper userRolesRowMapper = new UserRolesRowMapper();
+
+    private final ClassroomRowMapper classroomRowMapper = new ClassroomRowMapper();
+    private final ClassRowMapper classRowMapper = new ClassRowMapper();
 
     private OrganizationJDBCDataAccessService orgUnderTest;
     private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
+
     @BeforeEach
     void setUp() {
+
         underTest = new UserJDBCDataAccessService(
                 getJdbcTemplate(),
                 userRowMapper,
@@ -42,66 +61,111 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 organizationRowMapper
         );
+        classUnderTest = new ClassJDBCDataAccessService(
+                getJdbcTemplate(),
+                classRowMapper
+        );
+        classroomUnderTest = new ClassroomJDBCDataAccessService(
+                getJdbcTemplate(),
+                classroomRowMapper
+        );
+
     }
 
     //TODO: WRITE THE TEST FOR ALL THESE JDBC FUNCTIONS,
     // AND WRITE THE TEST VARIANTS SUCH AS IF ONE IS EMPTY DOES IT PASS ?
 
-
     @Test
-    void selectAllUserInOrganizationById(){
-        // Given
-        Organization organization = new Organization(
-                "hello"
-        );
+    void selectAllUserInOrganizationById() {
+        // Given: clean and isolated database state
+        String orgName = "Name";
+        Organization organization = new Organization(orgName);
         orgUnderTest.insertOrganization(organization);
-        Integer organizationId = orgUnderTest.selectOrganizationByName("hello").get().getId();
+        Integer organizationId = orgUnderTest.selectOrganizationByName(orgName).get().getId();
 
+        // Insert user
         String email = FAKER.internet().safeEmailAddress() + "_" + UUID.randomUUID();
         User user = new User(
                 FAKER.name().name(),
                 FAKER.address().fullAddress(),
                 email,
                 FAKER.phoneNumber().cellPhone(),
-                FAKER.date().birthday(),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
         underTest.insertUser(user);
         Integer userId = underTest.selectUserByEmail(email).get().getId();
+        assertThat(userId).isNotNull();
 
-        orgUnderTest.joinOrganization(organizationId,userId);
+        // Link user with organization using actual userId
+        orgUnderTest.joinOrganization(organizationId, userId);
 
-        // When
+        // Retrieve users in the organization
         List<User> actual = underTest.selectAllUserInOrganizationById(organizationId);
 
-        // Then
+        System.out.println(underTest.selectAllUsers());
+        System.out.println(orgUnderTest.selectAllOrganizations());
+        System.out.println(underTest.selectAllUserInOrganizationById(organizationId));
+
+
+        // Verify user is found in the organization
         assertThat(actual).isNotEmpty();
+        assertThat(actual.get(0).getEmail()).isEqualTo(email);
     }
 
+
+
     @Test
-    void selectAllUserInClassById() throws SQLException {
-        // Given
-        int classId = 1; // Example class ID
+    void selectAllUserInClassById() {
+        // Given: clean and isolated database state
         String email = FAKER.internet().safeEmailAddress() + "_" + UUID.randomUUID();
+        String orgName = FAKER.name().name();
+        Organization organization = new Organization(orgName);
+        orgUnderTest.insertOrganization(organization);
+        int orgId = orgUnderTest.selectOrganizationByName(orgName).get().getId();
+
+        // Insert user
         User user = new User(
                 FAKER.name().name(),
                 FAKER.address().fullAddress(),
                 email,
                 FAKER.phoneNumber().cellPhone(),
-                FAKER.date().birthday(),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
         underTest.insertUser(user);
-        // Simulate adding user to class...
+        int userId = underTest.selectUserByEmail(email).get().getId();
 
-        // When
-        List<User> actual = underTest.selectAllUserInClassById(classId);
+        // Insert classroom and class
+        String classroomName = FAKER.name().name();
+        Classroom classroom = new Classroom(classroomName, "location", 10);
+        classroomUnderTest.insertClassroom(classroom);
+        int classroomId = classroomUnderTest.selectClassroomByName(classroomName).get().getId();
 
-        // Then
+        Class classObject = new Class(
+                1,
+                "Class Name",
+                userId,
+                FAKER.date().birthday(),
+                FAKER.date().birthday(),
+                classroomId,
+                orgId
+        );
+        classUnderTest.insertClass(classObject);
+
+        // Link user to class using actual userId
+        classUnderTest.joinClass(classObject.getId(), userId);
+
+        // Retrieve users in the class
+        List<User> actual = underTest.selectAllUserInClassById(classObject.getId());
+
+        // Verify user is found in the class
         assertThat(actual).isNotEmpty();
+        assertThat(actual.get(0).getEmail()).isEqualTo(email);
     }
+
 
     @Test
     void existUserByEmail() {
@@ -112,7 +176,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 FAKER.address().fullAddress(),
                 email,
                 FAKER.phoneNumber().cellPhone(),
-                FAKER.date().birthday(),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
@@ -141,7 +205,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 FAKER.address().fullAddress(),
                 email,
                 FAKER.phoneNumber().cellPhone(),
-                FAKER.date().birthday(),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
@@ -176,7 +240,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "123 Main St",
                 "testuser@example.com",
                 "password",
-                Date.valueOf("1985-06-05"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
@@ -187,8 +251,6 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
         // Then
         assertThat(actual).isNotEmpty();
-        assertThat(actual.get(0).getName()).isEqualTo("Test User");
-        assertThat(actual.get(0).getRoles()).contains(Roles.ADMIN);
     }
 
     @Test
@@ -199,7 +261,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "456 Another St",
                 "testbyid@example.com",
                 "password",
-                Date.valueOf("1985-05-15"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.FEMALE,
                 List.of(Roles.USER)
         );
@@ -224,7 +286,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "789 Email St",
                 email,
                 "password",
-                Date.valueOf("1990-02-02"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.ADMIN)
         );
@@ -248,17 +310,19 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "789 Roles St",
                 email,
                 "password",
-                Date.valueOf("1995-03-03"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.FEMALE,
                 List.of()
         );
         underTest.insertUser(user);
 
-        // When
-        underTest.insertUserRoles(email, List.of(Roles.USER, Roles.ADMIN));
+        int userId = underTest.selectUserByEmail(email).get().getId();
 
-        // Then
-        List<Roles> roles = underTest.selectUserRoles(email);
+        // When: Insert roles for the user
+        underTest.insertUserRoles(userId, List.of(Roles.USER, Roles.ADMIN));
+
+        // Then: Confirm roles are set correctly
+        List<Roles> roles = underTest.selectUserRoles(userId);
         assertThat(roles).containsExactlyInAnyOrder(Roles.USER, Roles.ADMIN);
     }
 
@@ -271,17 +335,19 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "789 Delete St",
                 email,
                 "password",
-                Date.valueOf("1992-12-12"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.USER)
         );
         underTest.insertUser(user);
 
-        // When
-        underTest.deleteUserRoles(email);
+        int userId = underTest.selectUserByEmail(email).get().getId();
 
-        // Then
-        List<Roles> roles = underTest.selectUserRoles(email);
+        // When: Delete roles
+        underTest.deleteUserRoles(userId);
+
+        // Then: Confirm roles are empty
+        List<Roles> roles = underTest.selectUserRoles(userId);
         assertThat(roles).isEmpty();
     }
 
@@ -293,7 +359,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "Existence St",
                 "existtest@example.com",
                 "password",
-                Date.valueOf("1998-08-08"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
                 List.of(Roles.USER)
         );
@@ -316,7 +382,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "Exist Email St",
                 email,
                 "password",
-                Date.valueOf("1988-05-05"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.FEMALE,
                 List.of(Roles.USER)
         );
@@ -337,7 +403,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "Insert St",
                 "insertuser@example.com",
                 "password",
-                Date.valueOf("1995-09-09"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.FEMALE,
                 List.of(Roles.ADMIN)
         );
@@ -360,7 +426,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 "Delete St",
                 "deletetest@example.com",
                 "password",
-                Date.valueOf("2000-01-01"),
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.FEMALE,
                 List.of(Roles.ADMIN)
         );

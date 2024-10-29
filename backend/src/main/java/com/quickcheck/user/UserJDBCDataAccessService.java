@@ -25,35 +25,35 @@ public class UserJDBCDataAccessService implements UserDao {
         this.userRolesRowMapper = userRolesRowMapper;
     }
 
-    public List<Roles> selectUserRoles(String email) {
+    public List<Roles> selectUserRoles(Integer userId) {
         var sql = """
                 SELECT role
                 FROM user_roles
-                WHERE username = ?
+                WHERE user_id = ?
                 """;
-        return jdbcTemplate.query(sql, userRolesRowMapper, email);
+        return jdbcTemplate.query(sql, userRolesRowMapper, userId);
     }
 
 
     @Override
-    public void insertUserRoles(String email, List<Roles> roles) {
+    public void insertUserRoles(Integer userId, List<Roles> roles) {
         var roleSql = """
-            INSERT INTO user_roles (username, role)
+            INSERT INTO user_roles (user_id, role)
             VALUES (?, ?)
             """;
 
         for (Roles role : roles) {
-            jdbcTemplate.update(roleSql, email, role.name());
+            jdbcTemplate.update(roleSql, userId, role.name());
         }
     }
 
     @Override
-    public void deleteUserRoles(String email) {
+    public void deleteUserRoles(Integer userId) {
         var deleteRolesSql = """
             DELETE FROM user_roles
-            WHERE username = ?
+            WHERE user_id = ?
             """;
-        jdbcTemplate.update(deleteRolesSql, email);
+        jdbcTemplate.update(deleteRolesSql, userId);
     }
 
         @Override
@@ -63,7 +63,7 @@ public class UserJDBCDataAccessService implements UserDao {
                 FROM users
                 """;
             List<User> users = jdbcTemplate.query(sql, userRowMapper);
-            users.forEach(user -> user.setRoles(selectUserRoles(user.getEmail())));
+            users.forEach(user -> user.setRoles(selectUserRoles(user.getId())));
             return users;
         }
 
@@ -75,7 +75,7 @@ public class UserJDBCDataAccessService implements UserDao {
                 WHERE email = ?
                 """;
             Optional<User> user = jdbcTemplate.query(sql, userRowMapper, email).stream().findFirst();
-            user.ifPresent(u -> u.setRoles(selectUserRoles(u.getEmail())));
+            user.ifPresent(u -> u.setRoles(selectUserRoles(u.getId())));
             return user;
         }
 
@@ -84,14 +84,14 @@ public class UserJDBCDataAccessService implements UserDao {
         var sql = """
                 SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
                 FROM users JOIN organization_user ON (users.id = organization_user.user_id)
-                WHERE organization_user.user_id = ?
+                WHERE organization_user.organization_id = ?
                 """;
 
         List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
 
         // Set roles for each user
         users.forEach(user -> {
-            List<Roles> roles = selectUserRoles(user.getEmail());
+            List<Roles> roles = selectUserRoles(user.getId());
             user.setRoles(roles);
         });
 
@@ -110,7 +110,7 @@ public class UserJDBCDataAccessService implements UserDao {
 
         // Set roles for each user
         users.forEach(user -> {
-            List<Roles> roles = selectUserRoles(user.getEmail());
+            List<Roles> roles = selectUserRoles(user.getId());
             user.setRoles(roles);
         });
 
@@ -126,7 +126,7 @@ public class UserJDBCDataAccessService implements UserDao {
                 """;
         Optional<User> user = jdbcTemplate.query(sql, userRowMapper, id).stream().findFirst();
 
-        user.ifPresent(u -> u.setRoles(selectUserRoles(u.getEmail())));
+        user.ifPresent(u -> u.setRoles(selectUserRoles(u.getId())));
 
         return user;
     }
@@ -149,7 +149,9 @@ public class UserJDBCDataAccessService implements UserDao {
                     user.getGender().name()
             );
 
-            insertUserRoles(user.getEmail(), user.getRoles());
+            int userId = selectUserByEmail(user.getEmail()).get().getId();
+
+            insertUserRoles(userId, user.getRoles());
         }
 
         @Override
@@ -194,10 +196,12 @@ public class UserJDBCDataAccessService implements UserDao {
 
             jdbcTemplate.update(sqlBuilder.toString(), params.toArray());
 
+            int userId = selectUserByEmail(update.getEmail()).get().getId();
+
             // Update roles if they are provided
             if (update.getRoles() != null) {
-                deleteUserRoles(update.getEmail());
-                insertUserRoles(update.getEmail(), update.getRoles());
+                deleteUserRoles(userId);
+                insertUserRoles(userId, update.getRoles());
             }
         }
 
@@ -209,7 +213,7 @@ public class UserJDBCDataAccessService implements UserDao {
                 """;
             String email = jdbcTemplate.queryForObject(userEmailSql, String.class, id);
 
-            deleteUserRoles(email);
+            deleteUserRoles(id);
 
             var userDeleteSql = """
                 DELETE FROM users

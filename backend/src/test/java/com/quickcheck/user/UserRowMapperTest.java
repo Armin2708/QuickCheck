@@ -7,8 +7,7 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Date;
-import java.util.Arrays;
-import java.util.List;
+import java.time.LocalDate;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -26,8 +25,8 @@ class UserRowMapperTest {
         Array mockClassesIdArray = mock(Array.class);
         Array mockRoleArray = mock(Array.class);
 
-        // Setting up expected date of birth as java.sql.Date
-        Date dateOfBirth = Date.valueOf("1985-06-05");
+        // Set up a valid date to avoid null issues
+        Date dateOfBirth = Date.valueOf(LocalDate.of(2000, 1, 1));
 
         // Configuring mock ResultSet
         when(resultSet.getInt("id")).thenReturn(1);
@@ -35,12 +34,8 @@ class UserRowMapperTest {
         when(resultSet.getString("address")).thenReturn("123 Main St");
         when(resultSet.getString("email")).thenReturn("john@example.com");
         when(resultSet.getString("password")).thenReturn("password");
-        when(resultSet.getDate("date_of_birth")).thenReturn(dateOfBirth);
+        when(resultSet.getDate("date_of_birth")).thenReturn(dateOfBirth); // Mock a valid date
         when(resultSet.getString("gender")).thenReturn("MALE");
-
-        // Mocking classesId and role arrays (currently unused in UserRowMapper)
-        when(resultSet.getArray("classes_id")).thenReturn(mockClassesIdArray);
-        when(mockClassesIdArray.getArray()).thenReturn(new Integer[]{1, 2, 3});
         when(resultSet.getArray("roles")).thenReturn(mockRoleArray);
         when(mockRoleArray.getArray()).thenReturn(new String[]{"USER"});
 
@@ -54,9 +49,9 @@ class UserRowMapperTest {
                 "123 Main St",
                 "john@example.com",
                 "password",
-                dateOfBirth,
+                dateOfBirth.toLocalDate(),  // Ensure it matches the mocked date
                 Gender.MALE,
-                null // Set roles to null for now as per UserRowMapper implementation
+                null // Set roles to null as per UserRowMapper implementation
         );
 
         assertThat(actualUser).isEqualTo(expectedUser);

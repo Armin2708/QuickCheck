@@ -1,7 +1,7 @@
-/*
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
+import com.quickcheck.Roles;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
@@ -13,8 +13,8 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,22 +52,20 @@ class UserServiceTest {
         int userId = 10;
         User user = new User(
                 10,
-                "Test School",
                 "John Doe",
                 "123 Main St",
                 "john@example.com",
                 "password",
-                "2000-01-01",
+                Date.valueOf("2000-01-01").toLocalDate(),
                 Gender.MALE,
-                Arrays.asList(1, 2, 3),
-                List.of("ADMIN")
+                List.of(Roles.ADMIN)
         );
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(user));
 
         UserDTO expected = userDTOMapper.apply(user);
 
         // When
-        UserDTO actual = underTest.getUser(userId);
+        UserDTO actual = underTest.getUserById(userId);
 
         // Then
         assertThat(actual).isEqualTo(expected);
@@ -82,7 +80,7 @@ class UserServiceTest {
 
         // When
         // Then
-        assertThatThrownBy(() -> underTest.getUser(userId))
+        assertThatThrownBy(() -> underTest.getUserById(userId))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("user with id [%s] not found".formatted(userId));
     }
@@ -91,9 +89,9 @@ class UserServiceTest {
     void addUser() throws SQLException {
         // Given
         UserRegistrationRequest request = new UserRegistrationRequest(
-                "Test School", "John Doe", "123 Main St",
-                "john@example.com", "password", "2000-01-01",
-                Gender.MALE, List.of("ADMIN")
+                "John Doe", "123 Main St",
+                "john@example.com", "password", Date.valueOf("2000-01-01").toLocalDate(),
+                Gender.MALE
         );
 
         String passwordHash="!@#&*jbsfhhsd";
@@ -120,10 +118,9 @@ class UserServiceTest {
     void willThrowWhenEmailExistsWhileAddingUser() throws SQLException {
         // Given
         UserRegistrationRequest request = new UserRegistrationRequest(
-                "Test School", "John Doe", "123 Main St",
-                "john@example.com", "password", "2000-01-01",
-                Gender.MALE,
-                List.of("ADMIN")
+                 "John Doe", "123 Main St",
+                "john@example.com", "password", Date.valueOf("2000-01-01").toLocalDate(),
+                Gender.MALE
         );
 
         when(userDao.existUserWithEmail(request.email())).thenReturn(true);
@@ -172,16 +169,16 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe",
+                10, "John Doe",
                 "123 Main St", "john@example.com", "password",
-                "2000-01-01", Gender.MALE, Arrays.asList(1, 2, 3),
-                List.of("ADMIN")
+                Date.valueOf("2000-01-01").toLocalDate(), Gender.MALE,
+                List.of(Roles.USER)
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                "New School", "Johnny", "New Address",
-                "johnny@example.com", "newpassword", "2000-05-05",
-                Gender.MALE, Arrays.asList(4, 5)
+                "Johnny", "New Address",
+                "johnny@example.com", "newpassword", Date.valueOf("2000-01-05").toLocalDate(),
+                Gender.MALE,List.of(Roles.ADMIN)
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -195,9 +192,13 @@ class UserServiceTest {
         verify(userDao).updateUser(userArgumentCaptor.capture());
 
         User capturedUser = userArgumentCaptor.getValue();
-        assertThat(capturedUser.getEmail()).isEqualTo(updateRequest.email());
         assertThat(capturedUser.getName()).isEqualTo(updateRequest.name());
-        assertThat(capturedUser.getSchoolName()).isEqualTo(updateRequest.schoolName());
+        assertThat(capturedUser.getAddress()).isEqualTo(updateRequest.address());
+        assertThat(capturedUser.getEmail()).isEqualTo(updateRequest.email());
+        assertThat(capturedUser.getDateOfBirth()).isEqualTo(updateRequest.dateOfBirth());
+        assertThat(capturedUser.getGender()).isEqualTo(updateRequest.gender());
+        assertThat(capturedUser.getRoles()).isEqualTo(updateRequest.roles());
+
     }
 
     @Test
@@ -205,15 +206,16 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe", "123 Main St",
-                "john@example.com", "password", "2000-01-01",
-                Gender.MALE, Arrays.asList(1, 2, 3),
-                List.of("ADMIN")
+                10,  "John Doe", "123 Main St",
+                "john@example.com", "password", Date.valueOf("2000-01-01").toLocalDate(),
+                Gender.MALE,
+                List.of(Roles.USER)
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                existingUser.getSchoolName(), existingUser.getName(), existingUser.getAddress(), existingUser.getEmail(),
-                existingUser.getPassword(), existingUser.getDateOfBirth(), existingUser.getGender(), existingUser.getClassesId()
+                existingUser.getName(), existingUser.getAddress(), existingUser.getEmail(),
+                existingUser.getPassword(), existingUser.getDateOfBirth(), existingUser.getGender(),
+                existingUser.getRoles()
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -232,16 +234,16 @@ class UserServiceTest {
         // Given
         int userId = 10;
         User existingUser = new User(
-                10, "Test School", "John Doe", "123 Main St",
-                "john@example.com", "password", "2000-01-01",
-                Gender.MALE, Arrays.asList(1, 2, 3),
-                List.of("ADMIN")
+                10, "John Doe", "123 Main St",
+                "john@example.com", "password", Date.valueOf("2000-01-01").toLocalDate(),
+                Gender.MALE,
+                List.of(Roles.USER)
         );
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                "Test School", "Johnny", "New Address",
+                "Johnny", "New Address",
                 "existingemail@example.com", "newpassword",
-                "2000-05-05", Gender.MALE, Arrays.asList(4, 5)
+                Date.valueOf("2000-01-05").toLocalDate(), Gender.MALE, List.of(Roles.ADMIN)
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -255,5 +257,120 @@ class UserServiceTest {
         // Then
         verify(userDao, never()).updateUser(any());
     }
+
+    @Test
+    void getUsersInClass() {
+        // Given
+        int classId = 1;
+        User user = new User(
+                1, "John Doe", "123 Main St",
+                "john@example.com", "password",
+                Date.valueOf("2000-01-01").toLocalDate(), Gender.MALE,
+                List.of(Roles.ADMIN)
+        );
+
+        when(userDao.selectAllUserInClassById(classId)).thenReturn(List.of(user));
+
+        UserDTO expectedUserDTO = userDTOMapper.apply(user);
+
+        // When
+        List<UserDTO> actual = underTest.getUsersInClass(classId);
+
+        // Then
+        assertThat(actual).containsExactly(expectedUserDTO);
+    }
+
+    @Test
+    void getUsersInClassEmpty() {
+        // Given
+        int classId = 1;
+        when(userDao.selectAllUserInClassById(classId)).thenReturn(List.of());
+
+        // When
+        List<UserDTO> actual = underTest.getUsersInClass(classId);
+
+        // Then
+        assertThat(actual).isEmpty();
+    }
+
+    @Test
+    void getUserByEmail() {
+        // Given
+        String email = "john@example.com";
+        User user = new User(
+                1, "John Doe", "123 Main St",
+                email, "password",
+                Date.valueOf("2000-01-01").toLocalDate(), Gender.MALE,
+                List.of(Roles.USER)
+        );
+
+        when(userDao.selectUserByEmail(email)).thenReturn(Optional.of(user));
+        UserDTO expected = userDTOMapper.apply(user);
+
+        // When
+        UserDTO actual = underTest.getUserByEmail(email);
+
+        // Then
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    void willThrowWhenUserByEmailNotFound() {
+        // Given
+        String email = "nonexistent@example.com";
+        when(userDao.selectUserByEmail(email)).thenReturn(Optional.empty());
+
+        // When / Then
+        assertThatThrownBy(() -> underTest.getUserByEmail(email))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("user with id [%s] not found".formatted(email));
+    }
+
+    @Test
+    void addUserAssignsAdminRoleForAdminEmail() throws SQLException {
+        // Given
+        UserRegistrationRequest request = new UserRegistrationRequest(
+                "Admin User", "Admin St",
+                "quickcheckteam@gmail.com", "adminPassword",
+                Date.valueOf("2000-01-01").toLocalDate(), Gender.MALE
+        );
+
+        String encodedPassword = "!@#&*jbsfhhsd";
+        when(passwordEncoder.encode(request.password())).thenReturn(encodedPassword);
+        when(userDao.existUserWithEmail(request.email())).thenReturn(false);
+
+        // When
+        underTest.addUser(request);
+
+        // Then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userDao).insertUser(userArgumentCaptor.capture());
+
+        User capturedUser = userArgumentCaptor.getValue();
+        assertThat(capturedUser.getRoles()).containsExactly(Roles.ADMIN);
+    }
+
+    @Test
+    void addUserAssignsUserRoleByDefault() throws SQLException {
+        // Given
+        UserRegistrationRequest request = new UserRegistrationRequest(
+                "John Doe", "123 Main St",
+                "john@example.com", "password", Date.valueOf("2000-01-01").toLocalDate(),
+                Gender.MALE
+        );
+
+        String encodedPassword = "!@#&*encodedpassword";
+        when(passwordEncoder.encode(request.password())).thenReturn(encodedPassword);
+        when(userDao.existUserWithEmail(request.email())).thenReturn(false);
+
+        // When
+        underTest.addUser(request);
+
+        // Then
+        ArgumentCaptor<User> userArgumentCaptor = ArgumentCaptor.forClass(User.class);
+        verify(userDao).insertUser(userArgumentCaptor.capture());
+
+        User capturedUser = userArgumentCaptor.getValue();
+        assertThat(capturedUser.getRoles()).containsExactly(Roles.USER);
+    }
 }
-*/

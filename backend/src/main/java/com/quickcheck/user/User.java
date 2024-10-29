@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ public class User implements UserDetails {
     private String address;
     private String email;
     private String password;
-    private Date dateOfBirth;
+    private LocalDate dateOfBirth;
     private Gender gender;
     private List<Roles> roles;
 
@@ -23,7 +24,7 @@ public class User implements UserDetails {
     }
 
     public User(String name, String address, String email,
-                String password, Date dateOfBirth, Gender gender, List<Roles> roles) {
+                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -34,7 +35,7 @@ public class User implements UserDetails {
     }
 
     public User(Integer id, String name, String address, String email,
-                String password, Date dateOfBirth, Gender gender, List<Roles> roles) {
+                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -125,11 +126,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public Date getDateOfBirth() {
+    public LocalDate getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(Date dateOfBirth) {
+    public void setDateOfBirth(LocalDate dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 

@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +65,7 @@ public class UserService{
         if (email.equals("quickcheckteam@gmail.com")){
             role = Roles.ADMIN;
         }
+
             User user = new User(
                     request.name(),
                     request.address(),
@@ -103,7 +105,6 @@ public class UserService{
 
         if (userUpdateRequest.password() != null && !userUpdateRequest.password().equals(user.getPassword())) {
             String newPassword = passwordEncoder.encode(userUpdateRequest.password());
-            System.out.println(newPassword);
             user.setPassword(newPassword);
             changes = true;
         }
@@ -119,10 +120,10 @@ public class UserService{
         }
 
         if (userUpdateRequest.roles() != null && !userUpdateRequest.roles().equals(user.getRoles())) {
-            userDao.deleteUserRoles(userUpdateRequest.email()); // Delete existing roles
+            userDao.deleteUserRoles(userId); // Delete existing roles
 
             // Insert updated roles
-            userDao.insertUserRoles(userUpdateRequest.email(), userUpdateRequest.roles());
+            userDao.insertUserRoles(userId, userUpdateRequest.roles());
 
             user.setRoles(userUpdateRequest.roles()); // Update user object roles
             changes = true;

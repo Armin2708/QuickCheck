@@ -14,9 +14,9 @@ public interface UserDao {
 
     List<User> selectAllUserInClassById(Integer classId);
 
-    void insertUserRoles(String email, List<Roles> roles);
+    void insertUserRoles(Integer userId, List<Roles> roles);
 
-    void deleteUserRoles(String email);
+    void deleteUserRoles(Integer userId);
 
     Optional<User> selectUserById(Integer id);
     Optional<User> selectUserByEmail(String email);

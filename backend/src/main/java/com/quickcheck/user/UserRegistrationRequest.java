@@ -2,6 +2,7 @@ package com.quickcheck.user;
 
 import com.quickcheck.Gender;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -10,7 +11,7 @@ public record UserRegistrationRequest(
          String address,
          String email,
          String password,
-         Date dateOfBirth,
+         LocalDate dateOfBirth,
          Gender gender
 ) {
 }

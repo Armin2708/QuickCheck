@@ -32,7 +32,7 @@ CREATE TABLE classes (
 
 CREATE TABLE user_roles(
                         id BIGSERIAL NOT NULL PRIMARY KEY,
-                        username VARCHAR(255) NOT NULL REFERENCES users(email),
+                        user_id INT NOT NULL REFERENCES users(id),
                         role TEXT NOT NULL
 );
 

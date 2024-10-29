@@ -34,7 +34,7 @@ public class AuthenticationService {
         ResponseBodyHandlers.FileDownloadBodyHandler userDTOMapper;
 */
         UserDTO userDTO = userDTOMapper.apply(principal);
-        String token = jwtUtil.issueToken(userDTO.username(), userDTO.roles());
+        String token = jwtUtil.issueToken(userDTO.username(), userDTO.roles().toString());
         return new AuthenticationResponse(token, userDTO);
     }
 }
