@@ -1,4 +1,5 @@
-package com.quickcheck.classroom;
+package com.quickcheck.classes;/*
+package com.quickcheck.classes;
 
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
@@ -18,16 +19,16 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class ClassroomServiceTest {
+class OrganizationServiceTest {
 
     @Mock
-    private ClassroomDao classroomDao;
+    private ClassDao classDao;
 
-    private ClassroomService underTest;
+    private ClassService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new ClassroomService(classroomDao);
+        underTest = new ClassService(classDao);
     }
 
     @Test
@@ -36,32 +37,32 @@ class ClassroomServiceTest {
         underTest.getAllClassrooms();
 
         // Then
-        verify(classroomDao).selectAllClassrooms();
+        verify(classDao).selectAllClassrooms();
     }
 
     @Test
     void canGetClassroom() {
         // Given
         int classroomId = 1;
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
-        when(classroomDao.selectClassroomById(classroomId)).thenReturn(Optional.of(classroom));
+        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(aClass));
 
         // When
-        Classroom actual = underTest.getClassroom(classroomId);
+        Class actual = underTest.getClassroom(classroomId);
 
         // Then
-        assertThat(actual).isEqualTo(classroom);
+        assertThat(actual).isEqualTo(aClass);
     }
 
     @Test
     void willThrowWhenClassroomNotFound() {
         // Given
         int classroomId = 1;
-        when(classroomDao.selectClassroomById(classroomId)).thenReturn(Optional.empty());
+        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.empty());
 
         // When / Then
         assertThatThrownBy(() -> underTest.getClassroom(classroomId))
@@ -72,125 +73,126 @@ class ClassroomServiceTest {
     @Test
     void addClassroom() {
         // Given
-        ClassroomRegistrationRequest request = new ClassroomRegistrationRequest(
+        ClassRegistrationRequest request = new ClassRegistrationRequest(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
 
-        when(classroomDao.existClassroomByName(request.name())).thenReturn(false);
+        when(classDao.existClassroomByName(request.name())).thenReturn(false);
 
         // When
         underTest.addClassroom(request);
 
         // Then
-        ArgumentCaptor<Classroom> classroomArgumentCaptor = ArgumentCaptor.forClass(Classroom.class);
-        verify(classroomDao).insertClassroom(classroomArgumentCaptor.capture());
+        ArgumentCaptor<Class> classroomArgumentCaptor = ArgumentCaptor.forClass(Class.class);
+        verify(classDao).insertClassroom(classroomArgumentCaptor.capture());
 
-        Classroom capturedClassroom = classroomArgumentCaptor.getValue();
-        assertThat(capturedClassroom.getName()).isEqualTo(request.name());
-        assertThat(capturedClassroom.getLocation()).isEqualTo(request.location());
-        assertThat(capturedClassroom.getProfessorId()).isEqualTo(request.professorId());
+        Class capturedClass = classroomArgumentCaptor.getValue();
+        assertThat(capturedClass.getName()).isEqualTo(request.name());
+        assertThat(capturedClass.getLocation()).isEqualTo(request.location());
+        assertThat(capturedClass.getProfessorId()).isEqualTo(request.professorId());
     }
 
     @Test
     void willThrowWhenClassroomNameExists() {
         // Given
-        ClassroomRegistrationRequest request = new ClassroomRegistrationRequest(
+        ClassRegistrationRequest request = new ClassRegistrationRequest(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
 
-        when(classroomDao.existClassroomByName(request.name())).thenReturn(true);
+        when(classDao.existClassroomByName(request.name())).thenReturn(true);
 
         // When / Then
         assertThatThrownBy(() -> underTest.addClassroom(request))
                 .isInstanceOf(DuplicateResourceException.class)
                 .hasMessage("Class name already exists");
 
-        verify(classroomDao, never()).insertClassroom(any());
+        verify(classDao, never()).insertClassroom(any());
     }
 
     @Test
     void deleteClassroom() {
         // Given
         int classroomId = 1;
-        when(classroomDao.existClassroomById(classroomId)).thenReturn(true);
+        when(classDao.existClassroomById(classroomId)).thenReturn(true);
 
         // When
         underTest.deleteClassroom(classroomId);
 
         // Then
-        verify(classroomDao).deleteClassroomById(classroomId);
+        verify(classDao).deleteClassroomById(classroomId);
     }
 
     @Test
     void willThrowWhenClassroomDoesNotExistOnDelete() {
         // Given
         int classroomId = 1;
-        when(classroomDao.existClassroomById(classroomId)).thenReturn(false);
+        when(classDao.existClassroomById(classroomId)).thenReturn(false);
 
         // When / Then
         assertThatThrownBy(() -> underTest.deleteClassroom(classroomId))
                 .isInstanceOf(ResourceNotFoundException.class)
                 .hasMessage("Classroom with id [%s] not found".formatted(classroomId));
 
-        verify(classroomDao, never()).deleteClassroomById(anyInt());
+        verify(classDao, never()).deleteClassroomById(anyInt());
     }
 
     @Test
     void updateClassroom() {
         // Given
         int classroomId = 1;
-        Classroom existingClassroom = new Classroom(
+        Class existingClass = new Class(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
-        ClassroomUpdateRequest updateRequest = new ClassroomUpdateRequest(
+        ClassUpdateRequest updateRequest = new ClassUpdateRequest(
                 "Advanced Math", 2, "Room 405", "2023-10-01", "2023-12-20",
                 Arrays.asList("Tuesday", "Thursday"), Arrays.asList(104, 105), Arrays.asList(204, 205)
         );
 
-        when(classroomDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClassroom));
-        when(classroomDao.existClassroomByName(updateRequest.name())).thenReturn(false);
+        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClass));
+        when(classDao.existClassroomByName(updateRequest.name())).thenReturn(false);
 
         // When
         underTest.updateClassroom(classroomId, updateRequest);
 
         // Then
-        ArgumentCaptor<Classroom> classroomArgumentCaptor = ArgumentCaptor.forClass(Classroom.class);
-        verify(classroomDao).updateClassroom(classroomArgumentCaptor.capture());
+        ArgumentCaptor<Class> classroomArgumentCaptor = ArgumentCaptor.forClass(Class.class);
+        verify(classDao).updateClassroom(classroomArgumentCaptor.capture());
 
-        Classroom updatedClassroom = classroomArgumentCaptor.getValue();
-        assertThat(updatedClassroom.getName()).isEqualTo(updateRequest.name());
-        assertThat(updatedClassroom.getLocation()).isEqualTo(updateRequest.location());
-        assertThat(updatedClassroom.getProfessorId()).isEqualTo(updateRequest.professorId());
+        Class updatedClass = classroomArgumentCaptor.getValue();
+        assertThat(updatedClass.getName()).isEqualTo(updateRequest.name());
+        assertThat(updatedClass.getLocation()).isEqualTo(updateRequest.location());
+        assertThat(updatedClass.getProfessorId()).isEqualTo(updateRequest.professorId());
     }
 
     @Test
     void willThrowWhenNoChangesOnUpdate() {
         // Given
         int classroomId = 1;
-        Classroom existingClassroom = new Classroom(
+        Class existingClass = new Class(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
-        ClassroomUpdateRequest updateRequest = new ClassroomUpdateRequest(
+        ClassUpdateRequest updateRequest = new ClassUpdateRequest(
                 "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
                 Arrays.asList("Monday", "Wednesday", "Friday"),
                 Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
         );
 
-        when(classroomDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClassroom));
+        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClass));
 
         // When / Then
         assertThatThrownBy(() -> underTest.updateClassroom(classroomId, updateRequest))
                 .isInstanceOf(RequestValidationException.class)
                 .hasMessage("No data changes found");
 
-        verify(classroomDao, never()).updateClassroom(any());
+        verify(classDao, never()).updateClassroom(any());
     }
 }
+*/

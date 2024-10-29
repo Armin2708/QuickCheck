@@ -1,7 +1,7 @@
 import PresentationSection from "../components/homePage/PresentationSection.jsx";
 import SupportedBy from "../components/homePage/SupportedBy.jsx";
 import SneakPeek from "../components/homePage/SneakPeek.jsx";
-import { Center, Divider, Spinner } from "@chakra-ui/react";
+import {Center, Divider, Spinner, Stack} from "@chakra-ui/react";
 import AdvantageTabs from "../components/homePage/AdvantageTabs.jsx";
 import EfficiencySection from "../components/homePage/EfficiencySection.jsx";
 import JoinQuickCheck from "../components/homePage/JoinQuickCheck.jsx";
@@ -34,14 +34,16 @@ export default function HomePage() {
 
     return (
         <HeaderFooter>
-            <PresentationSection />
-            <Divider />
-            <SupportedBy />
-            <SneakPeek />
-            <CommunityComments />
-            <AdvantageTabs />
-            <EfficiencySection />
-            <JoinQuickCheck />
+            <Stack direction={"column"}>
+                <PresentationSection />
+                <Divider />
+                <SupportedBy />
+                <SneakPeek />
+                <CommunityComments />
+                <AdvantageTabs />
+                <EfficiencySection />
+                <JoinQuickCheck />
+            </Stack>
         </HeaderFooter>
     );
 }

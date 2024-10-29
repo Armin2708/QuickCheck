@@ -20,27 +20,29 @@ public class ClassroomService {
         return classroomDao.selectAllClassrooms();
     }
 
-    public Classroom getClassroom(Integer classroomId) {
+    public Classroom getClassroomById(Integer classroomId) {
         return classroomDao.selectClassroomById(classroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Classroom with id [%s] not found".formatted(classroomId)
                 ));
     }
 
+    public Classroom getClassroomByName(String roomName) {
+        return classroomDao.selectClassroomByName(roomName)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Classroom with id [%s] not found".formatted(roomName)
+                ));
+    }
+
     public void addClassroom(ClassroomRegistrationRequest request) {
-        String name = request.name();
+        String name = request.roomName();
         if (classroomDao.existClassroomByName(name)) {
-            throw new DuplicateResourceException("Class name already exists");
+            throw new DuplicateResourceException("Classroom with name [%s] already exists".formatted(name));
         }
         Classroom classroom = new Classroom(
-                request.name(),
-                request.professorId(),
+                request.roomName(),
                 request.location(),
-                request.startDate(),
-                request.endDate(),
-                request.classDays(),
-                request.studentsId(),
-                request.adminsId()
+                request.capacity()
         );
         classroomDao.insertClassroom(classroom);
     }
@@ -53,17 +55,11 @@ public class ClassroomService {
         boolean changes = false;
 
         // Check and update name
-        if (classroomUpdateRequest.name() != null && !classroomUpdateRequest.name().equals(classroom.getName())) {
-            if (classroomDao.existClassroomByName(classroomUpdateRequest.name())) {
+        if (classroomUpdateRequest.roomName() != null && !classroomUpdateRequest.roomName().equals(classroom.getRoomName())) {
+            if (classroomDao.existClassroomByName(classroomUpdateRequest.roomName())) {
                 throw new DuplicateResourceException("Classroom name already taken");
             }
-            classroom.setName(classroomUpdateRequest.name());
-            changes = true;
-        }
-
-        // Check and update professorId
-        if (classroomUpdateRequest.professorId() != null && !classroomUpdateRequest.professorId().equals(classroom.getProfessorId())) {
-            classroom.setProfessorId(classroomUpdateRequest.professorId());
+            classroom.setRoomName(classroomUpdateRequest.roomName());
             changes = true;
         }
 
@@ -74,32 +70,8 @@ public class ClassroomService {
         }
 
         // Check and update startDate
-        if (classroomUpdateRequest.startDate() != null && !classroomUpdateRequest.startDate().equals(classroom.getStartDate())) {
-            classroom.setStartDate(classroomUpdateRequest.startDate());
-            changes = true;
-        }
-
-        // Check and update endDate
-        if (classroomUpdateRequest.endDate() != null && !classroomUpdateRequest.endDate().equals(classroom.getEndDate())) {
-            classroom.setEndDate(classroomUpdateRequest.endDate());
-            changes = true;
-        }
-
-        // Check and update classDays
-        if (classroomUpdateRequest.classDays() != null && !classroomUpdateRequest.classDays().equals(classroom.getClassDays())) {
-            classroom.setClassDays(classroomUpdateRequest.classDays());
-            changes = true;
-        }
-
-        // Check and update studentsId
-        if (classroomUpdateRequest.studentsId() != null && !classroomUpdateRequest.studentsId().equals(classroom.getStudentsId())) {
-            classroom.setStudentsId(classroomUpdateRequest.studentsId());
-            changes = true;
-        }
-
-        // Check and update adminsId
-        if (classroomUpdateRequest.adminsId() != null && !classroomUpdateRequest.adminsId().equals(classroom.getAdminsId())) {
-            classroom.setAdminsId(classroomUpdateRequest.adminsId());
+        if (classroomUpdateRequest.capacity() != null && !classroomUpdateRequest.capacity().equals(classroom.getCapacity())) {
+            classroom.setCapacity(classroomUpdateRequest.capacity());
             changes = true;
         }
 
@@ -111,7 +83,6 @@ public class ClassroomService {
         // Update the classroom in the database
         classroomDao.updateClassroom(classroom);
     }
-
 
     public void deleteClassroom(Integer classroomId) {
         if (!classroomDao.existClassroomById(classroomId)){

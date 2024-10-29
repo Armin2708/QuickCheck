@@ -4,7 +4,7 @@ import{
     useEffect,
     useState
 } from "react";
-import {login as performLogin} from "../../services/client.js";
+import {getClassroomById, getUserById, getUserByEmail, login as performLogin} from "../../services/client.js";
 import {jwtDecode} from "jwt-decode";
 
 const AuthContext = createContext({})
@@ -12,17 +12,37 @@ const AuthContext = createContext({})
 const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
+    const [fullUser, setFullUser] = useState([]);
 
     const setUserFromToken = () =>{
         let token = localStorage.getItem("access_token");
-        if (token){
-            token = jwtDecode(token);
+        if (token) {
+            // Decode token to get the user info
+            const decodedToken = jwtDecode(token);
+
+            // Set the user information from the token
             setUser({
-                username: token.sub,
-                roles: token.scopes
-            })
+                username: decodedToken.sub,
+                roles: decodedToken.scopes
+            });
+
+            // Use decodedToken.sub for the API call to fetch full user details
+            getUserByEmail(decodedToken.sub)
+                .then(res => {
+                    if (res.data) {
+                        setFullUser(res.data);
+                    } else {
+                        console.error('Expected user data but got:', res.data);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching user:', error);
+                });
+        } else {
+            console.warn("No token found in localStorage.");
         }
     }
+
 
     useEffect(() => {
         setUserFromToken()
@@ -42,6 +62,18 @@ const AuthProvider = ({ children }) => {
                 })
                 console.log(user)
 
+                getUserByEmail(decodedToken.sub)
+                    .then(res => {
+                        if (res.data) {
+                            setFullUser(res.data);
+                        } else {
+                            console.error('Expected user data but got:', res.data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching user:', error);
+                    });
+
                 resolve(res);
             }).catch(err => {
                 reject(err);
@@ -52,6 +84,7 @@ const AuthProvider = ({ children }) => {
     const logOut = () => {
         localStorage.removeItem("access_token");
         setUser(null);
+        setFullUser(null);
     }
 
     const isUserAuthenticated =() => {
@@ -74,7 +107,6 @@ const AuthProvider = ({ children }) => {
         }
         const decodedToken = jwtDecode(token);
         const scopes = Array.isArray(decodedToken.scopes[0]) ? decodedToken.scopes.flat() : decodedToken.scopes;
-        console.log(scopes)
 
         if (!scopes.includes('ADMIN')) {
             return false;
@@ -85,6 +117,7 @@ const AuthProvider = ({ children }) => {
     return(
         <AuthContext.Provider value={{
             user,
+            fullUser,
             login,
             logOut,
             isUserAuthenticated,

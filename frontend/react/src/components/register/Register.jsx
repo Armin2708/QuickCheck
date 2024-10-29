@@ -11,7 +11,7 @@ const Register = () => {
 
     useEffect(() => {
         if (user) {
-            navigate("/users");
+            navigate("/dashboard");
         }
     }, [user, navigate]);
 
@@ -27,7 +27,7 @@ const Register = () => {
                     _hover={{ background: "transparent" }}
                     onClick={() => navigate("/")}
                 >
-                    <Image src={"././QuickCheckTransparent.png"} />
+                    <Image src={"/QuickCheckTransparent.png"} />
                 </Button>
                 <Button
                     fontFamily="Inter"
@@ -53,7 +53,7 @@ const Register = () => {
                     <RegisterForm onSuccess={(token) => {
                         localStorage.setItem("access_token",token);
                         setUserFromToken();
-                        navigate("/users")
+                        navigate("/dashboard")
                     }}/>
                 </Stack>
             </Flex>

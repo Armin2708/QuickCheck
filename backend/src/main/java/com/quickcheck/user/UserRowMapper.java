@@ -1,6 +1,7 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
+import com.quickcheck.Roles;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -14,17 +15,15 @@ import java.util.List;
 public class UserRowMapper implements RowMapper<User> {
     @Override
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
-        User user = new User(
-        rs.getInt("id"),
-        rs.getString("schoolname"),
-        rs.getString("name"),
-        rs.getString("address"),
-        rs.getString("email"),
-        rs.getString("password"),
-        rs.getString("dateofbirth"),
-        Gender.valueOf(rs.getString("gender")),
-        Arrays.asList((Integer[])rs.getArray("classesid").getArray()),
-        Arrays.asList((String[])rs.getArray("roles").getArray())
+                User user = new User(
+                rs.getInt("id"),
+                rs.getString("name"),
+                rs.getString("address"),
+                rs.getString("email"),
+                rs.getString("password"),
+                rs.getDate("date_of_birth"),
+                Gender.valueOf(rs.getString("gender")),
+                        null
         );
         return user;
     }

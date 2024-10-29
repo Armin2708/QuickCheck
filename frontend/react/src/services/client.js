@@ -6,6 +6,42 @@ const getAuthConfig = () => ({
     }
 })
 
+export const login = async (usernameAndPassword) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
+            usernameAndPassword
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const verifyEmail = async (email) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify?email=${email}`
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const verifyCode = async (verifyCodeRequest) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify/code`,
+            verifyCodeRequest
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+
+
+//User
+
 export const getUsers= async () => {
     try {
         return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users`,
@@ -14,9 +50,28 @@ export const getUsers= async () => {
         throw e;
     }
 }
-export const getUser= async (userId) => {
+
+export const getUserById= async (userId) => {
     try {
-        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}`,
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/id/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getUserByEmail= async (email) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/email/${email}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getUsersInClass= async (classId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/class/${classId}`,
             getAuthConfig())
     }catch (e){
         throw e;
@@ -58,19 +113,109 @@ export const deleteUser = async (userId) => {
     }
 }
 
-export const login = async (usernameAndPassword) => {
+
+
+//Organization
+
+export const getOrganizations= async () => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/organizations`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getOrganizationById= async (organizationId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/organizations/id/${organizationId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getOrganizationByName= async (name) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/organizations/name/${name}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getOrganizationsOfUser= async (userId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/organizations/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const saveOrganizations = async (organization) => {
     try{
         return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/auth/login`,
-            usernameAndPassword
+            `${import.meta.env.VITE_API_BASE_URL}/api/organizations`,
+            organization,
+            getAuthConfig()
         )
     }catch (e){
         throw e;
     }
 }
 
+export const joinOrganization = async (organizationId,userId) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/organizations/join/${organizationId}/${userId}`,
+            null,
+            getAuthConfig()
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const leaveOrganization = async (userId,organizationId) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/organizations/leave/${organizationId}/${userId}`,
+            null,
+            getAuthConfig()
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const updateOrganizations = async (organizationsId, updateRequest) => {
+    try {
+        console.log(updateRequest)
+        return await axios.put(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/${organizationsId}`,
+            updateRequest,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const deleteOrganization = async (organizationId) => {
+    try {
+        return await axios.delete(
+            `${import.meta.env.VITE_API_BASE_URL}/api/organizations/${organizationId}`,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
 
 
+
+//Classroom
 
 export const getClassrooms= async () => {
     try {
@@ -80,9 +225,19 @@ export const getClassrooms= async () => {
         throw e;
     }
 }
-export const getClassroom= async (classroomId) => {
+
+export const getClassroomByName= async (classroomName) => {
     try {
-        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/${classroomId}`,
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/name/${classroomName}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getClassroomById= async (classroomId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/id/${classroomId}`,
             getAuthConfig())
     }catch (e){
         throw e;
@@ -93,7 +248,32 @@ export const saveClassroom = async (classroom) => {
     try{
         return await axios.post(
             `${import.meta.env.VITE_API_BASE_URL}/api/classrooms`,
-            classroom
+            classroom,
+            getAuthConfig()
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const joinClass = async (classId,userId) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes/join/${classId}/${userId}`,
+            null,
+            getAuthConfig()
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const leaveClass = async (classId,userId) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes/leave/${classId}/${userId}`,
+            null,
+            getAuthConfig()
         )
     }catch (e){
         throw e;
@@ -124,22 +304,80 @@ export const deleteClassroom = async (classroomId) => {
     }
 }
 
-export const verifyEmail = async (email) => {
+
+
+//Class
+
+export const getClasses= async () => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getOrganizationClasses= async (name) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes/organization/${name}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getClassesOfUserInOrganization= async (userId,orgName) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes/organization/${orgName}/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getClassById= async (classId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes/id/${classId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const saveClass = async (classObject) => {
     try{
         return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify?email=${email}`
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes`,
+            classObject,
+            getAuthConfig()
         )
     }catch (e){
         throw e;
     }
 }
-export const verifyCode = async (verifyCodeRequest) => {
-    try{
-        return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify/code`,
-            verifyCodeRequest
+
+export const updateClass = async (classId, updateRequest) => {
+    try {
+        console.log(updateRequest)
+        return await axios.put(
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes/${classId}`,
+            updateRequest,
+            getAuthConfig()
         )
-    }catch (e){
+    } catch (e) {
         throw e;
     }
 }
+
+export const deleteClass = async (classId) => {
+    try {
+        return await axios.delete(
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes/${classId}`,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+

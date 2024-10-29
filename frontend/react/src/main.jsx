@@ -7,11 +7,16 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Login from "./components/login/Login.jsx";
 import AuthProvider from "./components/context/AuthContext.jsx";
-import UsersListPage from "./pages/UsersListPage.jsx";
-import ProtectedRoute from "./components/shared/ProtectedRoute.jsx";
-import ClassroomsListPage from "./pages/ClassroomsListPage.jsx";
+import OrganizationUsersListPage from "./pages/OrganizationUsersListPage.jsx";
+import ProtectedRoute from "./components/shared/protectedRoutes/ProtectedRoute.jsx";
+import OrganizationUserClassListPage from "./pages/OrganizationUserClassListPage.jsx";
 import Register from "./components/register/Register.jsx";
-import AdminProtectedRoute from "./components/shared/AdminProtectedRoute.jsx";
+import BrowseOrganizationClassListPage from "./pages/BrowseOrganizationClassListPage.jsx";
+import ClassPage from "./pages/ClassPage.jsx";
+import Dashboard from "./pages/Dashboard.jsx";
+import UserProfilePage from "./pages/UserProfilePage.jsx";
+import BrowseOrganizationListPage from "./pages/BrowseOrganizationListPage.jsx";
+import AdminProtectedRoute from "./components/shared/protectedRoutes/AdminProtectedRoute.jsx";
 
 const { ToastContainer } = createStandaloneToast();
 const router = createBrowserRouter([
@@ -28,18 +33,53 @@ const router = createBrowserRouter([
         element: <Register/>
     },
     {
-        path:"/users",
+        path:`/dashboard`,
         element:
             <ProtectedRoute>
-                <UsersListPage/>
+                <Dashboard/>
             </ProtectedRoute>
     },
     {
-        path:"/classrooms",
+        path:`/dashboard/organizations`,
+        element:
+            <ProtectedRoute>
+                <BrowseOrganizationListPage/>
+            </ProtectedRoute>
+    },
+    {
+        path:`/organization/:name`,
+        element:
+            <ProtectedRoute>
+                <OrganizationUserClassListPage/>
+            </ProtectedRoute>
+    },
+    {
+        path:"/users",
         element:
             <AdminProtectedRoute>
-                <ClassroomsListPage/>
+                <OrganizationUsersListPage/>
             </AdminProtectedRoute>
+    },
+    {
+        path:"/profile",
+        element:
+            <ProtectedRoute>
+                <UserProfilePage/>
+            </ProtectedRoute>
+    },
+    {
+        path:"/organization/:name/classes",
+        element:
+            <ProtectedRoute>
+                <BrowseOrganizationClassListPage/>
+            </ProtectedRoute>
+    },
+    {
+        path:`/organization/:name/class/:id`,
+        element:
+            <ProtectedRoute>
+                <ClassPage/>
+            </ProtectedRoute>
     }
 ])
 

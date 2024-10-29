@@ -12,13 +12,11 @@ public class UserDTOMapper implements Function<User, UserDTO> {
     public UserDTO apply(User user) {
         return new UserDTO(
                 user.getId(),
-                user.getSchoolName(),
                 user.getName(),
                 user.getAddress(),
                 user.getEmail(),
                 user.getDateOfBirth(),
                 user.getGender(),
-                user.getClassesId(),
                 user.getAuthorities()
                         .stream()
                         .map(GrantedAuthority::getAuthority)

@@ -1,17 +1,18 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
+import com.quickcheck.Roles;
 
+import java.util.Date;
 import java.util.List;
 
 public record UserUpdateRequest(
-        String schoolName,
         String name,
         String address,
         String email,
         String password,
-        String dateOfBirth,
+        Date dateOfBirth,
         Gender gender,
-        List<Integer> classesId
+        List<Roles> roles
 ) {
 }

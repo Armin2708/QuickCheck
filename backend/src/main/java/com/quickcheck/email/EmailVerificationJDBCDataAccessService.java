@@ -21,7 +21,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
 
         var sql= """
                 SELECT id, email, code
-                FROM "emailcheck"
+                FROM email_check
                 WHERE email= ?
                 """;
 
@@ -34,7 +34,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     public boolean existCodeWithEmail(String email) {
         var sql = """
                 SELECT count(id)
-                FROM "emailcheck"
+                FROM email_check
                 WHERE email=?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class,email);
@@ -45,7 +45,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     public void saveCodeAndEmail(EmailCodeObject request) {
 
         var sql= """
-                INSERT INTO "emailcheck"(email, code)
+                INSERT INTO email_check(email, code)
                 VALUES(?,?)
                 """;
 
@@ -61,7 +61,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     @Override
     public void updateCodeByEmail(EmailCodeObject update) {
             String sql = """
-                    UPDATE "emailcheck" 
+                    UPDATE email_check 
                     SET code = ? 
                     WHERE email = ?
                     """;
@@ -79,7 +79,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
 
         var sql = """
                 DELETE
-                FROM "emailcheck"
+                FROM email_check
                 WHERE email=?
                 """;
         Integer result = jdbcTemplate.update(sql, email);

@@ -25,16 +25,28 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping("{userId}")
-    public UserDTO getUser(@PathVariable("userId") Integer userId){
-        return userService.getUser(userId);
+
+    @GetMapping("/id/{userId}")
+    public UserDTO getUserById(@PathVariable("userId") Integer userId){
+        return userService.getUserById(userId);
     }
+
+    @GetMapping("/email/{email}")
+    public UserDTO getUserByEmail(@PathVariable("email") String email){
+        return userService.getUserByEmail(email);
+    }
+
+    @GetMapping("/class/{classId}")
+    public List<UserDTO> getUsersInClass(@PathVariable("classId") Integer classId){
+        return userService.getUsersInClass(classId);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> registerUser(
             @RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
         userService.addUser(registrationRequest);
-        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),registrationRequest.roles());
+        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),List.of("ADMIN"));
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();

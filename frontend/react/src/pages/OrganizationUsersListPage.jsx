@@ -1,30 +1,30 @@
 import {Box, Wrap, WrapItem} from "@chakra-ui/react";
 import {useEffect, useState} from "react";
-import {getClassrooms} from "../services/client.js";
+import {getUsers} from "../services/client.js";
 import SideBar from "../components/shared/SideBar.jsx";
-import ClassroomCard from "../components/classroom/ClassroomCard.jsx";
 import HeaderFooter from "../components/shared/HeaderFooter.jsx";
+import UserProfileCard from "../components/userProfile/UserProfileCard.jsx";
 
-export default function ClassroomsListPage(){
+export default function OrganizationUsersListPage(){
 
-    const [classrooms, setClassrooms] = useState([]);
+    const [users, setUsers] = useState([]);
 
-    const fetchClassrooms = () => {
-        getClassrooms()
+    const fetchUsers = () => {
+        getUsers()
             .then(res => {
                 if (Array.isArray(res.data)) {
-                    setClassrooms(res.data); // Set the admins state
+                    setUsers(res.data); // Set the users state
                 } else {
                     console.error('Expected an array but got:', res.data);
                 }
             })
             .catch(error => {
-                console.error('Error fetching admins:', error); // Log any errors
+                console.error('Error fetching users:', error); // Log any errors
             });
     };
 
     useEffect(() => {
-        fetchClassrooms();
+        fetchUsers();
     }, []);
 
     return(
@@ -33,14 +33,14 @@ export default function ClassroomsListPage(){
             <Wrap justify={'center'}>
                 <Box p="4">
                     <Wrap justify={"center"} spacing={"30px"}>
-                        {Array.isArray(classrooms) && classrooms.length > 0 ? (
-                            classrooms.map(classroom => (
-                                <WrapItem key={classroom.id}>
-                                    <ClassroomCard {...classroom} />
+                        {Array.isArray(users) && users.length > 0 ? (
+                            users.map(user => (
+                                <WrapItem key={user.id}>
+                                    <UserProfileCard {...user} />
                                 </WrapItem>
                             ))
                         ) : (
-                            <WrapItem>No admins found.</WrapItem> // Fallback message
+                            <WrapItem>No users found.</WrapItem> // Fallback message
                         )}
                     </Wrap>
                 </Box>

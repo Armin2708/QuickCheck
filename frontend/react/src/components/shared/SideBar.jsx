@@ -11,10 +11,11 @@ import {
 import { HiOutlineHome } from 'react-icons/hi';
 import React from 'react';
 import { FiUsers } from "react-icons/fi";
-import { RiLoginBoxLine, RiShieldUserLine } from "react-icons/ri";
-import { LuBookOpen, LuSettings } from "react-icons/lu";
+import { RiLoginBoxLine } from "react-icons/ri";
+import {LuSettings } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
+import {MdOutlineSpaceDashboard} from "react-icons/md";
 
 export default function SideBar({ isOpen, onClose, finalFocusRef }) {
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
@@ -23,7 +24,7 @@ export default function SideBar({ isOpen, onClose, finalFocusRef }) {
         return () => navigate(to); // Return a function that navigates to the specified path
     };
 
-    const {logOut} = useAuth();
+    const {logOut,isUserAdmin} = useAuth();
 
     return (
         <Drawer
@@ -37,7 +38,7 @@ export default function SideBar({ isOpen, onClose, finalFocusRef }) {
                 <DrawerCloseButton />
                 <DrawerHeader>
                     <Box width="78px" height="auto">
-                        <Image src={"././QuickCheckTransparent.png"} />
+                        <Image src={"/QuickCheckTransparent.png"} />
                     </Box>
                 </DrawerHeader>
                 <Divider />
@@ -51,19 +52,22 @@ export default function SideBar({ isOpen, onClose, finalFocusRef }) {
                             </ButtonText>
                         </SideBarPageButton>
 
-                        <SideBarPageButton handleNavigate={handleNavigate("/users")}>
-                            <FiUsers size="24px" />
+                        <SideBarPageButton handleNavigate={handleNavigate("/dashboard")}>
+                            <MdOutlineSpaceDashboard size={"24px"} />
+
+                            <ButtonText>
+                                Dash Board
+                            </ButtonText>
+                        </SideBarPageButton>
+
+                        {isUserAdmin() &&
+                            <SideBarPageButton handleNavigate={handleNavigate("/users")}>
+                            <FiUsers size="24px"/>
                             <ButtonText>
                                 Users
                             </ButtonText>
                         </SideBarPageButton>
-
-                        <SideBarPageButton handleNavigate={handleNavigate("/classrooms")}>
-                            <LuBookOpen size="24px" />
-                            <ButtonText>
-                                Classrooms
-                            </ButtonText>
-                        </SideBarPageButton>
+                        }
 
                     </ButtonWrapper>
                 </DrawerBody>

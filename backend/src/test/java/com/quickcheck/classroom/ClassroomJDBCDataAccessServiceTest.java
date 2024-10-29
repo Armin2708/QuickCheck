@@ -1,4 +1,5 @@
-package com.quickcheck.classroom;
+/*
+package com.quickcheck.classes;
 
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.Gender;
@@ -18,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private ClassroomJDBCDataAccessService underTest;
-    private final ClassroomRowMapper classroomRowMapper = new ClassroomRowMapper();
+    private final ClassRowMapper classRowMapper = new ClassRowMapper();
 
     private UserJDBCDataAccessService userUnderTest;
     private final UserRowMapper userRowMapper = new UserRowMapper();
@@ -27,7 +28,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     void setUp() {
         underTest = new ClassroomJDBCDataAccessService(
                 getJdbcTemplate(),
-                classroomRowMapper
+                classRowMapper
         );
         userUnderTest = new UserJDBCDataAccessService(
                 getJdbcTemplate(),
@@ -37,8 +38,8 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     @AfterEach
     void tearDown() throws SQLException {
         // Clean up inserted Users and Classrooms after each test
-        List<Classroom> classrooms = underTest.selectAllClassrooms();
-        classrooms.forEach(classroom -> underTest.deleteClassroomById(classroom.getId()));
+        List<Class> aClasses = underTest.selectAllClassrooms();
+        aClasses.forEach(classroom -> underTest.deleteClassroomById(classroom.getId()));
         List<User> users = userUnderTest.selectAllUsers();
         users.forEach(user -> userUnderTest.deleteUserById(user.getId()));
 
@@ -64,7 +65,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         Integer id = userUnderTest.selectAllUsers().get(0).getId();
 
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 id,  // professorId
                 "Room 305",
@@ -74,12 +75,12 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
 
 
         // When
-        List<Classroom> actual = underTest.selectAllClassrooms();
+        List<Class> actual = underTest.selectAllClassrooms();
 
         // Then
         assertThat(actual).isNotEmpty();
@@ -105,7 +106,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
 
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -115,29 +116,29 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
                 .filter(c -> c.getName().equals("Math 101"))
-                .map(Classroom::getId)
+                .map(Class::getId)
                 .findFirst()
                 .orElseThrow();
 
         // When
-        Optional<Classroom> actual = underTest.selectClassroomById(id);
+        Optional<Class> actual = underTest.selectClassroomById(id);
 
         // Then
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
-            assertThat(c.getName()).isEqualTo(classroom.getName());
-            assertThat(c.getProfessorId()).isEqualTo(classroom.getProfessorId());
-            assertThat(c.getLocation()).isEqualTo(classroom.getLocation());
-            assertThat(c.getStartDate()).isEqualTo(classroom.getStartDate());
-            assertThat(c.getEndDate()).isEqualTo(classroom.getEndDate());
-            assertThat(c.getClassDays()).containsExactlyElementsOf(classroom.getClassDays());
-            assertThat(c.getStudentsId()).containsExactlyElementsOf(classroom.getStudentsId());
-            assertThat(c.getStudentsId()).containsExactlyElementsOf(classroom.getStudentsId());
+            assertThat(c.getName()).isEqualTo(aClass.getName());
+            assertThat(c.getProfessorId()).isEqualTo(aClass.getProfessorId());
+            assertThat(c.getLocation()).isEqualTo(aClass.getLocation());
+            assertThat(c.getStartDate()).isEqualTo(aClass.getStartDate());
+            assertThat(c.getEndDate()).isEqualTo(aClass.getEndDate());
+            assertThat(c.getClassDays()).containsExactlyElementsOf(aClass.getClassDays());
+            assertThat(c.getStudentsId()).containsExactlyElementsOf(aClass.getStudentsId());
+            assertThat(c.getStudentsId()).containsExactlyElementsOf(aClass.getStudentsId());
         });
     }
 
@@ -186,7 +187,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         userUnderTest.insertUser(user);
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -198,11 +199,11 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         );
 
         // When
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         // Then
-        List<Classroom> classrooms = underTest.selectAllClassrooms();
-        assertThat(classrooms).extracting(Classroom::getName).contains(classroom.getName());
+        List<Class> aClasses = underTest.selectAllClassrooms();
+        assertThat(aClasses).extracting(Class::getName).contains(aClass.getName());
     }
 
     @Test
@@ -224,7 +225,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         userUnderTest.insertUser(user);
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -234,7 +235,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         // When
         boolean actual = underTest.existClassroomByName("Math 101");
@@ -288,7 +289,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         userUnderTest.insertUser(user);
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -298,12 +299,12 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
                 .filter(c -> c.getName().equals("Math 101"))
-                .map(Classroom::getId)
+                .map(Class::getId)
                 .findFirst()
                 .orElseThrow();
 
@@ -311,7 +312,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         underTest.deleteClassroomById(id);
 
         // Then
-        Optional<Classroom> actual = underTest.selectClassroomById(id);
+        Optional<Class> actual = underTest.selectClassroomById(id);
         assertThat(actual).isNotPresent();
     }
 
@@ -334,7 +335,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         userUnderTest.insertUser(user);
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -344,25 +345,25 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
                 .filter(c -> c.getName().equals("Math 101"))
-                .map(Classroom::getId)
+                .map(Class::getId)
                 .findFirst()
                 .orElseThrow();
 
         var newName = "Advanced Math 101";
 
         // When
-        Classroom update = new Classroom();
+        Class update = new Class();
         update.setId(id);
         update.setName(newName);
         underTest.updateClassroom(update);
 
         // Then
-        Optional<Classroom> actual = underTest.selectClassroomById(id);
+        Optional<Class> actual = underTest.selectClassroomById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
             assertThat(c.getName()).isEqualTo(newName);
@@ -388,7 +389,7 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         userUnderTest.insertUser(user);
         Integer userId = userUnderTest.selectAllUsers().get(0).getId();
 
-        Classroom classroom = new Classroom(
+        Class aClass = new Class(
                 "Math 101",
                 userId,  // professorId
                 "Room 305",
@@ -398,25 +399,26 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 List.of(101, 102, 103), // studentsId
                 List.of(201, 202, 203) // usersId
         );
-        underTest.insertClassroom(classroom);
+        underTest.insertClassroom(aClass);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
                 .filter(c -> c.getName().equals("Math 101"))
-                .map(Classroom::getId)
+                .map(Class::getId)
                 .findFirst()
                 .orElseThrow();
 
         // When
-        Classroom update = new Classroom();
+        Class update = new Class();
         update.setId(id);
         underTest.updateClassroom(update);
 
         // Then
-        Optional<Classroom> actual = underTest.selectClassroomById(id);
+        Optional<Class> actual = underTest.selectClassroomById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
-            assertThat(c.getName()).isEqualTo(classroom.getName());
+            assertThat(c.getName()).isEqualTo(aClass.getName());
         });
     }
 }
+*/

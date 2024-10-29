@@ -2,13 +2,13 @@ import { Box, Text, Stack, Button } from "@chakra-ui/react";
 import { LiaAwardSolid } from "react-icons/lia";
 import PresentationButton from "./PresentationButton.jsx";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext.jsx";
 
 export default function PresentationSection() {
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
-    const handleNavigate = (to) => {
-        return () => navigate(to); // Return a function that navigates to the specified path
-    };
+    const {isUserAuthenticated} = useAuth()
+
     return (
         <Stack
             justify="flex-start"
@@ -70,7 +70,10 @@ export default function PresentationSection() {
                                 color={"#7E3BB5"}
                                 hoverColor={"#6C33A1"}
                                 clickColor={"#6C33A1"}
-                                handleNavigate={handleNavigate("/login")}
+                                handleNavigate={()=>{
+                                    isUserAuthenticated ? navigate("/dashboard") :
+                                        navigate("/login")
+                                }}
 
                             >
                                 <Text

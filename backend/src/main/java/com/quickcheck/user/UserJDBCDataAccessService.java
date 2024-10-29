@@ -1,9 +1,14 @@
 package com.quickcheck.user;
 
+import com.quickcheck.Gender;
+import com.quickcheck.Roles;
+import com.quickcheck.organization.Organization;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.sql.SQLException;
+import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,210 +17,227 @@ public class UserJDBCDataAccessService implements UserDao {
 
     private final JdbcTemplate jdbcTemplate;
     private final UserRowMapper userRowMapper;
+    private final UserRolesRowMapper userRolesRowMapper;
 
-    public UserJDBCDataAccessService(JdbcTemplate jdbcTemplate, UserRowMapper userRowMapper) {
+    public UserJDBCDataAccessService(JdbcTemplate jdbcTemplate, UserRowMapper userRowMapper, UserRolesRowMapper userRolesRowMapper) {
         this.jdbcTemplate = jdbcTemplate;
         this.userRowMapper = userRowMapper;
+        this.userRolesRowMapper = userRolesRowMapper;
+    }
+
+    public List<Roles> selectUserRoles(String email) {
+        var sql = """
+                SELECT role
+                FROM user_roles
+                WHERE username = ?
+                """;
+        return jdbcTemplate.query(sql, userRolesRowMapper, email);
+    }
+
+
+    @Override
+    public void insertUserRoles(String email, List<Roles> roles) {
+        var roleSql = """
+            INSERT INTO user_roles (username, role)
+            VALUES (?, ?)
+            """;
+
+        for (Roles role : roles) {
+            jdbcTemplate.update(roleSql, email, role.name());
+        }
     }
 
     @Override
-    public List<User> selectAllUsers() {
-        var sql= """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
-                FROM "user"
+    public void deleteUserRoles(String email) {
+        var deleteRolesSql = """
+            DELETE FROM user_roles
+            WHERE username = ?
+            """;
+        jdbcTemplate.update(deleteRolesSql, email);
+    }
+
+        @Override
+        public List<User> selectAllUsers() {
+            var sql = """
+                SELECT id, name, address, email, password, date_of_birth, gender
+                FROM users
                 """;
-        return jdbcTemplate.query(sql,userRowMapper);
+            List<User> users = jdbcTemplate.query(sql, userRowMapper);
+            users.forEach(user -> user.setRoles(selectUserRoles(user.getEmail())));
+            return users;
+        }
+
+        @Override
+        public Optional<User> selectUserByEmail(String email) {
+            var sql = """
+                SELECT id, name, address, email, password, date_of_birth, gender
+                FROM users
+                WHERE email = ?
+                """;
+            Optional<User> user = jdbcTemplate.query(sql, userRowMapper, email).stream().findFirst();
+            user.ifPresent(u -> u.setRoles(selectUserRoles(u.getEmail())));
+            return user;
+        }
+
+    @Override
+    public List<User> selectAllUserInOrganizationById(Integer id) {
+        var sql = """
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                FROM users JOIN organization_user ON (users.id = organization_user.user_id)
+                WHERE organization_user.user_id = ?
+                """;
+
+        List<User> users = jdbcTemplate.query(sql, userRowMapper, id);
+
+        // Set roles for each user
+        users.forEach(user -> {
+            List<Roles> roles = selectUserRoles(user.getEmail());
+            user.setRoles(roles);
+        });
+
+        return users;
+    }
+
+    @Override
+    public List<User> selectAllUserInClassById(Integer classId) {
+        var sql = """
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                FROM users JOIN class_user ON (users.id = class_user.user_id)
+                WHERE class_user.class_id = ?
+                """;
+
+        List<User> users = jdbcTemplate.query(sql, userRowMapper, classId);
+
+        // Set roles for each user
+        users.forEach(user -> {
+            List<Roles> roles = selectUserRoles(user.getEmail());
+            user.setRoles(roles);
+        });
+
+        return users;
     }
 
     @Override
     public Optional<User> selectUserById(Integer id) {
         var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
-                FROM "user"
-                WHERE id= ?
+                SELECT id, name, address, email, password, date_of_birth, gender
+                FROM users
+                WHERE id = ?
                 """;
-        return jdbcTemplate.query(sql,userRowMapper,id)
-                .stream()
-                .findFirst();
+        Optional<User> user = jdbcTemplate.query(sql, userRowMapper, id).stream().findFirst();
+
+        user.ifPresent(u -> u.setRoles(selectUserRoles(u.getEmail())));
+
+        return user;
     }
 
-    @Override
-    public void insertUser(User user) throws SQLException {
-        var sql= """
-                INSERT INTO "user"(schoolname, name, address, email, password, dateofbirth, gender, classesid,roles)
-                VALUES(?,?,?,?,?,?,?,?,?)
+        @Override
+        @Transactional
+        public void insertUser(User user) {
+            var userSql = """
+                INSERT INTO users (name, address, email, password, date_of_birth, gender)
+                VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
-        int result = jdbcTemplate.update(
-                sql,
-                user.getSchoolName(),
-                user.getName(),
-                user.getAddress(),
-                user.getEmail(),
-                user.getPassword(),
-                java.sql.Date.valueOf(user.getDateOfBirth()),
-                user.getGender().name(),
-                user.getClassesId().toArray(new Integer[0]),
-                user.getRoles().toArray(new String[0])
-        );
-        System.out.println("jdbcTemplate.result = "+result);
+            jdbcTemplate.update(
+                    userSql,
+                    user.getName(),
+                    user.getAddress(),
+                    user.getEmail(),
+                    user.getPassword(),
+                    user.getDateOfBirth(),
+                    user.getGender().name()
+            );
 
+            insertUserRoles(user.getEmail(), user.getRoles());
+        }
+
+        @Override
+        @Transactional
+        public void updateUser(User update) {
+            StringBuilder sqlBuilder = new StringBuilder("UPDATE users SET ");
+            List<Object> params = new ArrayList<>();
+
+            if (update.getName() != null) {
+                sqlBuilder.append("name = ?, ");
+                params.add(update.getName());
+            }
+            if (update.getAddress() != null) {
+                sqlBuilder.append("address = ?, ");
+                params.add(update.getAddress());
+            }
+            if (update.getEmail() != null) {
+                sqlBuilder.append("email = ?, ");
+                params.add(update.getEmail());
+            }
+            if (update.getPassword() != null) {
+                sqlBuilder.append("password = ?, ");
+                params.add(update.getPassword());
+            }
+            if (update.getDateOfBirth() != null) {
+                sqlBuilder.append("date_of_birth = ?, ");
+                params.add(update.getDateOfBirth());
+            }
+            if (update.getGender() != null) {
+                sqlBuilder.append("gender = ?, ");
+                params.add(update.getGender().name());
+            }
+
+            if (params.isEmpty()) {
+                System.out.println("No fields to update for user with ID: " + update.getId());
+                return;
+            }
+
+            sqlBuilder.setLength(sqlBuilder.length() - 2);
+            sqlBuilder.append(" WHERE id = ?");
+            params.add(update.getId());
+
+            jdbcTemplate.update(sqlBuilder.toString(), params.toArray());
+
+            // Update roles if they are provided
+            if (update.getRoles() != null) {
+                deleteUserRoles(update.getEmail());
+                insertUserRoles(update.getEmail(), update.getRoles());
+            }
+        }
+
+        @Override
+        @Transactional
+        public void deleteUserById(Integer id) {
+            var userEmailSql = """
+                SELECT email FROM users WHERE id = ?
+                """;
+            String email = jdbcTemplate.queryForObject(userEmailSql, String.class, id);
+
+            deleteUserRoles(email);
+
+            var userDeleteSql = """
+                DELETE FROM users
+                WHERE id = ?
+                """;
+            jdbcTemplate.update(userDeleteSql, id);
+        }
+
+    @Override
+    public boolean existUserById(Integer id) {
+        var sql = """
+                SELECT count(id)
+                FROM users
+                WHERE id = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, id);
+        return count != null && count > 0;
     }
 
     @Override
     public boolean existUserWithEmail(String email) {
         var sql = """
                 SELECT count(id)
-                FROM "user"
-                WHERE email=?
+                FROM users
+                WHERE email = ?
                 """;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,email);
-        return count != null &&count>0;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
+        return count != null && count > 0;
     }
 
-
-    @Override
-    public void deleteUserById(Integer id) {
-        var sql = """
-                DELETE
-                FROM "user"
-                WHERE id=?
-                """;
-        Integer result = jdbcTemplate.update(sql, id);
-        System.out.println("deleteUserById result = "+ result);
-    }
-
-    @Override
-    public boolean existUserById(Integer id) {
-        var sql = """
-                SELECT count(id)
-                FROM "user"
-                WHERE id=?
-                """;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,id);
-        return count != null &&count>0;
-    }
-
-    @Override
-    public void updateUser(User update) {
-        if(update.getSchoolName()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET schoolname = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getSchoolName(),
-                    update.getId()
-            );
-            System.out.println("update user schoolName result = " +result);
-        }
-        if(update.getName()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET name = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getName(),
-                    update.getId()
-            );
-            System.out.println("update user name result = " +result);
-        }
-
-        if(update.getAddress()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET address = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getAddress(),
-                    update.getId()
-            );
-            System.out.println("update user address result = " +result);
-        }
-
-        if(update.getEmail()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET email = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getEmail(),
-                    update.getId()
-            );
-            System.out.println("update user email result = " +result);
-        }
-
-        if(update.getPassword()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET password = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getPassword(),
-                    update.getId()
-            );
-            System.out.println("update user password result = " +result);
-        }
-        if(update.getDateOfBirth()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET dateofbirth = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    java.sql.Date.valueOf(update.getDateOfBirth()),
-                    update.getId()
-            );
-            System.out.println("update user dateOfBirth result = " +result);
-        }
-        if(update.getGender()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET gender = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getGender().name(),
-                    update.getId()
-            );
-            System.out.println("update user gender result = " +result);
-        }
-        if(update.getClassesId()!=null){
-            String sql = """
-                    UPDATE "user" 
-                    SET classesid = ? 
-                    WHERE id = ?
-                    """;
-            int result = jdbcTemplate.update(
-                    sql,
-                    update.getClassesId().toArray(new Integer[0]),
-                    update.getId()
-            );
-            System.out.println("update user classesId result = " +result);
-        }
-    }
-
-    @Override
-    public Optional<User> selectUserByEmail(String email) {
-        var sql = """
-                SELECT id,schoolname,name,address,email,password,dateofbirth,gender,classesid,roles
-                FROM "user"
-                WHERE email= ?
-                """;
-        return jdbcTemplate.query(sql,userRowMapper,email)
-                .stream()
-                .findFirst();
-    }
 }

@@ -20,9 +20,14 @@ public class ClassroomController {
         return classroomService.getAllClassrooms();
     }
 
-    @GetMapping("{classroomId}")
-    public Classroom getClassroom(@PathVariable("classroomId") Integer classroomId){
-        return classroomService.getClassroom(classroomId);
+    @GetMapping("/id/{classroomId}")
+    public Classroom getClassroomById(@PathVariable("classroomId") Integer classroomId){
+        return classroomService.getClassroomById(classroomId);
+    }
+
+    @GetMapping("/name/{classroomName}")
+    public Classroom getClassroomByName(@PathVariable("classroomName") String classroomName){
+        return classroomService.getClassroomByName(classroomName);
     }
 
     @PostMapping

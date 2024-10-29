@@ -16,8 +16,8 @@ import React from "react";
 
 import {useNavigate} from "react-router-dom";
 import {FiBell, FiChevronDown} from "react-icons/fi";
-import {useAuth} from "../context/AuthContext.jsx";
-import SideBar from "../shared/SideBar.jsx";
+import {useAuth} from "../../context/AuthContext.jsx";
+import SideBar from "../SideBar.jsx";
 
 export default function Header() {
     const {isOpen, onOpen, onClose} = useDisclosure()
@@ -29,7 +29,7 @@ export default function Header() {
         return () => navigate(to); // Return a function that navigates to the specified path
     };
 
-    const {logOut, user} = useAuth();
+    const {logOut, user, isUserAuthenticated} = useAuth();
 
     const handleLogOut = () => {
         logOut();
@@ -86,7 +86,7 @@ export default function Header() {
                             _hover={{background: "transparent"}}
                             onClick={handleNavigate("/")}
                         >
-                            <Image src={"././QuickCheckTransparent.png"}/>
+                            <Image src={"/QuickCheckTransparent.png"}/>
                         </Button>
                         <Button
                             fontFamily="Inter"
@@ -105,53 +105,68 @@ export default function Header() {
                 </Stack>
 
                 {/* Right Section with Login Icon */}
-                <HStack spacing={{base: '0', md: '6'}}>
-                    <IconButton
-                        size="lg"
-                        variant="ghost"
-                        aria-label="open menu"
-                        icon={<FiBell/>}
-                    />
+                <HStack spacing={{ base: '0', md: '6' }}>
                     <Flex alignItems={'center'}>
                         <Menu>
                             <MenuButton
                                 py={2}
                                 transition="all 0.3s"
-                                _focus={{boxShadow: 'none'}}>
+                                _focus={{ boxShadow: 'none' }}
+                                _hover={{
+                                    transform: 'scale(1.1)', // Increased scale
+                                    transition: 'transform 0.2s ease-in-out' // Longer transition duration
+                                }}
+                            >
                                 <HStack>
-                                    <Avatar
-                                        size={'sm'}
-                                        src={
-                                            'https://images.unsplash.com/photo-1619946794135-5bc917a27793?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9'
-                                        }
-                                    />
+                                        <Avatar
+                                            size={'md'}
+                                            backgroundColor={"gray"}
+                                        />
                                     <VStack
-                                        display={{base: 'none', md: 'flex'}}
+                                        display={{ base: 'none', md: 'flex' }}
                                         alignItems="flex-start"
                                         spacing="1px"
-                                        ml="2">
-                                        <Text fontSize="sm">{user?.username}</Text>
+                                        ml="2"
+                                    >
+                                        <Text fontSize="sm" color={"#313131"} fontFamily="Inter" fontWeight="semibold">{user?.username}</Text>
                                         {user?.roles.map((role, id) => (
-                                            <Text key={id} fontSize="xs" color="gray.600">
+                                            <Text key={id} fontSize="xs" color={"#313131"}>
                                                 {role}
                                             </Text>
                                         ))}
                                     </VStack>
-                                    <Box display={{base: 'none', md: 'flex'}}>
-                                        <FiChevronDown/>
-                                    </Box>
                                 </HStack>
                             </MenuButton>
                             <MenuList
-                                bg={useColorModeValue('white', 'gray.900')}
-                                borderColor={useColorModeValue('gray.200', 'gray.700')}>
-                                <MenuItem>Profile</MenuItem>
-                                <MenuItem>Settings</MenuItem>
-                                <MenuItem>Billing</MenuItem>
-                                <MenuDivider/>
-                                <MenuItem onClick={handleLogOut}>
-                                    Sign out
+                                color={"#313131"}
+                                borderRadius={"6px"}
+                                borderColor={"transparent"}
+                                boxShadow={'2xl'}
+                            >
+                                <MenuItem
+                                    fontFamily="Inter"
+                                    fontWeight="semibold"
+                                    onClick={()=>{navigate("/profile")}}
+                                >
+                                    Profile
                                 </MenuItem>
+                                <MenuItem fontFamily="Inter" fontWeight="semibold">Settings</MenuItem>
+                                <MenuItem fontFamily="Inter" fontWeight="semibold">Billing</MenuItem>
+                                <MenuDivider />
+                                {
+                                    !isUserAuthenticated() ? (
+                                        <MenuItem onClick={()=>{navigate("/login")}} fontFamily="Inter" fontWeight="semibold">
+                                            Login
+                                        </MenuItem>
+                                    ): (
+                                        <MenuItem onClick={()=>{
+                                            handleLogOut()
+                                            navigate("/login")
+                                        }} fontFamily="Inter" fontWeight="semibold">
+                                            Sign Out
+                                        </MenuItem>
+                                    )
+                                }
                             </MenuList>
                         </Menu>
                     </Flex>

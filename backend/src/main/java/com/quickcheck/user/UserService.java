@@ -1,5 +1,6 @@
 package com.quickcheck.user;
 
+import com.quickcheck.Roles;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
@@ -31,7 +32,14 @@ public class UserService{
                 .collect(Collectors.toList());
     }
 
-    public UserDTO getUser(Integer userId){
+    public List<UserDTO> getUsersInClass(Integer classId){
+        return userDao.selectAllUserInClassById(classId)
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public UserDTO getUserById(Integer userId){
         return userDao.selectUserById(userId)
                 .map(userDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -39,23 +47,31 @@ public class UserService{
                 ));
     }
 
+    public UserDTO getUserByEmail(String email){
+        return userDao.selectUserByEmail(email)
+                .map(userDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user with id [%s] not found".formatted(email)
+                ));
+    }
+
     public void addUser(UserRegistrationRequest request) throws SQLException {
         String email = request.email();
-        System.out.println(request);
         if (userDao.existUserWithEmail(email)) {
             throw new DuplicateResourceException("Email already exists");
         }
+        Roles role = Roles.USER;
+        if (email.equals("quickcheckteam@gmail.com")){
+            role = Roles.ADMIN;
+        }
             User user = new User(
-                    request.schoolName(),
                     request.name(),
                     request.address(),
                     request.email(),
                     passwordEncoder.encode(request.password()),
                     request.dateOfBirth(),
                     request.gender(),
-                    List.of(),
-                    /*request.role()*/
-                    request.roles()
+                    List.of(role)
             );
             userDao.insertUser(user);
     }
@@ -66,11 +82,6 @@ public class UserService{
                         "user with id [%s] not found".formatted(userId)
                 ));
         boolean changes = false;
-
-        if (userUpdateRequest.schoolName() != null && !userUpdateRequest.schoolName().equals(user.getSchoolName())) {
-            user.setSchoolName(userUpdateRequest.schoolName());
-            changes = true;
-        }
 
         if (userUpdateRequest.name() != null && !userUpdateRequest.name().equals(user.getName())) {
             user.setName(userUpdateRequest.name());
@@ -91,7 +102,9 @@ public class UserService{
         }
 
         if (userUpdateRequest.password() != null && !userUpdateRequest.password().equals(user.getPassword())) {
-            user.setPassword(userUpdateRequest.password());
+            String newPassword = passwordEncoder.encode(userUpdateRequest.password());
+            System.out.println(newPassword);
+            user.setPassword(newPassword);
             changes = true;
         }
 
@@ -105,8 +118,13 @@ public class UserService{
             changes = true;
         }
 
-        if (userUpdateRequest.classesId() != null && !userUpdateRequest.classesId().equals(user.getClassesId())) {
-            user.setClassesId(userUpdateRequest.classesId());
+        if (userUpdateRequest.roles() != null && !userUpdateRequest.roles().equals(user.getRoles())) {
+            userDao.deleteUserRoles(userUpdateRequest.email()); // Delete existing roles
+
+            // Insert updated roles
+            userDao.insertUserRoles(userUpdateRequest.email(), userUpdateRequest.roles());
+
+            user.setRoles(userUpdateRequest.roles()); // Update user object roles
             changes = true;
         }
 

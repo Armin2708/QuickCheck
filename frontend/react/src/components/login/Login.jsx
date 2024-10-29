@@ -19,7 +19,7 @@ const Login = () => {
 
     useEffect(() => {
         if (user) {
-            navigate("/users");
+            navigate("/dashboard");
         }
     })
 
@@ -35,7 +35,7 @@ const Login = () => {
                     _hover={{ background: "transparent" }}
                     onClick={() => navigate("/")}
                 >
-                    <Image src={"././QuickCheckTransparent.png"} />
+                    <Image src={"/QuickCheckTransparent.png"} />
                 </Button>
                 <Button
                     fontFamily="Inter"

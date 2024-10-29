@@ -39,7 +39,8 @@ public class SecurityFilterChainConfig {
                             HttpMethod.POST,
                             "/api/users",
                             "/api/auth/login",
-                            "/api/email/**"
+                            "/api/email/verify",
+                            "/api/email/verify/code"
                     )
                     .permitAll()
 
@@ -50,7 +51,8 @@ public class SecurityFilterChainConfig {
 
                         .requestMatchers(
                                 HttpMethod.POST,
-                                "/api/classrooms"
+                                "/api/classrooms",
+                                "/api/email/send"
                         )
                         .hasAuthority("ADMIN")
 

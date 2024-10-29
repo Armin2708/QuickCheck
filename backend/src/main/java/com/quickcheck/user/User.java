@@ -1,6 +1,7 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
+import com.quickcheck.Roles;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -10,46 +11,38 @@ import java.util.stream.Collectors;
 
 public class User implements UserDetails {
     private Integer id;
-    private String schoolName;
     private String name;
     private String address;
     private String email;
     private String password;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private Gender gender;
-    private List<Integer> classesId;
-    private List<String> roles;
+    private List<Roles> roles;
 
     public User() {
     }
 
-    public User(String schoolName, String name, String address, String email,
-                String password, String dateOfBirth, Gender gender, List<Integer> classesId,
-                List<String> roles) {
-        this.schoolName = schoolName;
+    public User(String name, String address, String email,
+                String password, Date dateOfBirth, Gender gender, List<Roles> roles) {
         this.name = name;
         this.address = address;
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.classesId = classesId;
-        this.roles=roles;
+        this.roles = roles;
     }
 
-    public User(Integer id, String schoolName, String name, String address, String email,
-                String password, String dateOfBirth, Gender gender, List<Integer> classesId,
-                List<String> roles) {
+    public User(Integer id, String name, String address, String email,
+                String password, Date dateOfBirth, Gender gender, List<Roles> roles) {
         this.id = id;
-        this.schoolName = schoolName;
         this.name = name;
         this.address = address;
         this.email = email;
         this.password = password;
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
-        this.classesId = classesId;
-        this.roles=roles;
+        this.roles = roles;
     }
 
     public Integer getId() {
@@ -57,14 +50,6 @@ public class User implements UserDetails {
     }
 
     public void setId(Integer id){this.id=id;}
-
-    public String getSchoolName() {
-        return schoolName;
-    }
-
-    public void setSchoolName(String schoolName) {
-        this.schoolName = schoolName;
-    }
 
     public String getName() {
         return name;
@@ -90,18 +75,19 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public List<String> getRoles() {
+    public List<Roles> getRoles() {
         return roles;  // Getter for roles
     }
 
-    public void setRoles(List<String> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;  // Setter for roles
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+
         return roles.stream()  // Stream the roles
-                .map(role -> new SimpleGrantedAuthority(role))  // Map each role to a GrantedAuthority with "ROLE_" prefix
+                .map(role -> new SimpleGrantedAuthority(role.name()))  // Map each role to a GrantedAuthority with "ROLE_" prefix
                 .collect(Collectors.toList());  // Collect as a list of GrantedAuthority
     }
 
@@ -139,11 +125,11 @@ public class User implements UserDetails {
         this.password = password;
     }
 
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
@@ -155,15 +141,6 @@ public class User implements UserDetails {
         this.gender = gender;
     }
 
-    public List<Integer> getClassesId() {
-        return classesId;
-    }
-
-    public void setClassesId(List<Integer> classId) {
-        this.classesId = classId;
-    }
-
-
 
     @Override
     public boolean equals(Object o) {
@@ -171,19 +148,18 @@ public class User implements UserDetails {
         if (o == null || getClass() != o.getClass()) return false;
         User user = (User) o;
         return Objects.equals(id, user.id) &&
-                Objects.equals(schoolName, user.schoolName) &&
                 Objects.equals(name, user.name) &&
                 Objects.equals(address, user.address) &&
                 Objects.equals(email, user.email) &&
                 Objects.equals(password, user.password) &&
                 Objects.equals(dateOfBirth, user.dateOfBirth) &&
-                Objects.equals(gender, user.gender)&&
-                Objects.equals(classesId, user.classesId);
+                Objects.equals(gender, user.gender) &&
+                Objects.equals(roles, user.roles) ;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, schoolName, name, address, email, password, dateOfBirth, gender, classesId);
+        return Objects.hash(id, name, address, email, password, dateOfBirth, gender, roles);
     }
 
     @Override
@@ -191,15 +167,13 @@ public class User implements UserDetails {
 
         return "User{" +
                 "id=" + id +
-                ", schoolName='" + schoolName + '\'' +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", dateOfBirth=" + dateOfBirth + '\'' +
-                ", gender=" + gender +
-                ", classesId='" + classesId + '\'' +
-                ", roles =" + roles + '\'' +
+                ", gender=" + gender + '\'' +
+                ", roles=" + roles + '\'' +
                 '}';
     }
 

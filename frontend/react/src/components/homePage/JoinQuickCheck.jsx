@@ -7,13 +7,13 @@ import TitleWrapper from "./TitleWrapper.jsx";
 import TitleText from "./TitleText.jsx";
 import TitleDescription from "./TitleDescription.jsx";
 import {useNavigate} from "react-router-dom";
+import {useAuth} from "../context/AuthContext.jsx";
 
 export default function JoinQuickCheck() {
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
-    const handleNavigate = (to) => {
-        return () => navigate(to); // Return a function that navigates to the specified path
-    };
+    const {isUserAuthenticated} = useAuth()
+
     return (
         <Stack
             paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Responsive padding
@@ -344,7 +344,10 @@ export default function JoinQuickCheck() {
                                 maxWidth="100%"
                                 background="#7E3BB5"
                                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                onClick={handleNavigate("/login")}
+                                onClick={()=>{
+                                    isUserAuthenticated ? navigate("/dashboard") :
+                                        navigate("/login")
+                                }}
                             >
                                 <Text
                                     fontFamily="Inter"
