@@ -12,7 +12,7 @@ cors:
 spring:
   datasource:
     url: jdbc:postgresql://localhost:5333/quickcheck
-    username: admin
+    username: quickcheck
     password: password
   mail:
     host: smtp.gmail.com

@@ -16,7 +16,7 @@ public class Class {
     public Class() {
     }
 
-    public Class(String name, Integer professorId, Date startDate, Date endDate, Integer classroomId,Integer organizationId) {
+    public Class(String name, Integer professorId, Date startDate, Date endDate, Integer classroomId, Integer organizationId) {
         this.name = name;
         this.professorId = professorId;
         this.startDate = startDate;

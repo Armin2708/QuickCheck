@@ -20,8 +20,7 @@ public class User implements UserDetails {
     private Gender gender;
     private List<Roles> roles;
 
-    public User() {
-    }
+    public User() {}
 
     public User(String name, String address, String email,
                 String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles) {
@@ -177,5 +176,4 @@ public class User implements UserDetails {
                 ", roles=" + roles + '\'' +
                 '}';
     }
-
 }

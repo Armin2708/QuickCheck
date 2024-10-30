@@ -1,7 +1,6 @@
 package com.quickcheck.journey;
 
 import com.github.javafaker.Faker;
-import com.github.javafaker.Name;
 import com.quickcheck.Gender;
 import com.quickcheck.authentication.AuthenticationRequest;
 import com.quickcheck.authentication.AuthenticationResponse;
@@ -25,13 +24,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 import java.time.LocalDate;
 import java.time.ZoneId;
-
-import java.time.LocalDate;
 import java.time.ZoneOffset;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
 
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 public class AuthenticationIntegrationTest {

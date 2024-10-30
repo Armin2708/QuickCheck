@@ -4,13 +4,6 @@ import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import com.quickcheck.Gender;
 import com.quickcheck.Roles;
-import com.quickcheck.authentication.AuthenticationRequest;
-import com.quickcheck.authentication.AuthenticationResponse;
-import com.quickcheck.classes.ClassRegistrationRequest;
-import com.quickcheck.classroom.Classroom;
-import com.quickcheck.classroom.ClassroomRegistrationRequest;
-import com.quickcheck.organization.Organization;
-import com.quickcheck.organization.OrganizationRegistrationRequest;
 import com.quickcheck.user.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
@@ -41,12 +33,9 @@ public class UserIntegrationTest {
     private static final Random RANDOM = new Random();
     private static final Faker FAKER = new Faker();
     private static final String USER_PATH = "/api/users";
-    private static final String CLASS_PATH = "/api/classes";
-    private static final String CLASSROOM_PATH = "/api/classrooms";
-    private static final String ORGANIZATION_PATH = "/api/organizations";
 
     @Test
-    void canRegisterUser() throws SQLException {
+    void canRegisterUser() {
         // create registration request
         Faker faker = new Faker();
         Name fakerName = faker.name();

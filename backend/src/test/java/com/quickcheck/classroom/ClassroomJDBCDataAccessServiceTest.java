@@ -1,16 +1,11 @@
-/*
-package com.quickcheck.classes;
+package com.quickcheck.classroom;
 
 import com.quickcheck.AbstractTestContainer;
-import com.quickcheck.Gender;
-import com.quickcheck.user.User;
-import com.quickcheck.user.UserJDBCDataAccessService;
-import com.quickcheck.user.UserRowMapper;
-import org.junit.jupiter.api.AfterEach;
+import com.quickcheck.organization.OrganizationJDBCDataAccessService;
+import com.quickcheck.organization.OrganizationRowMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,148 +14,78 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private ClassroomJDBCDataAccessService underTest;
-    private final ClassRowMapper classRowMapper = new ClassRowMapper();
+    private final ClassroomRowMapper classroomRowMapper = new ClassroomRowMapper();
 
-    private UserJDBCDataAccessService userUnderTest;
-    private final UserRowMapper userRowMapper = new UserRowMapper();
+    private OrganizationJDBCDataAccessService organizationUnderTest;
+    private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
     @BeforeEach
     void setUp() {
         underTest = new ClassroomJDBCDataAccessService(
                 getJdbcTemplate(),
-                classRowMapper
+                classroomRowMapper
         );
-        userUnderTest = new UserJDBCDataAccessService(
-                getJdbcTemplate(),
-                userRowMapper
-        );
-    }
-    @AfterEach
-    void tearDown() throws SQLException {
-        // Clean up inserted Users and Classrooms after each test
-        List<Class> aClasses = underTest.selectAllClassrooms();
-        aClasses.forEach(classroom -> underTest.deleteClassroomById(classroom.getId()));
-        List<User> users = userUnderTest.selectAllUsers();
-        users.forEach(user -> userUnderTest.deleteUserById(user.getId()));
 
+        organizationUnderTest = new OrganizationJDBCDataAccessService(
+                getJdbcTemplate(),
+                organizationRowMapper
+        );
     }
 
     @Test
-    void selectAllClassrooms() throws SQLException {
+    void selectAllClassrooms() {
         // Given
-
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        Classroom classroom = new Classroom(
+                FAKER.name().name(),
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
-        userUnderTest.insertUser(user);
 
-        Integer id = userUnderTest.selectAllUsers().get(0).getId();
-
-
-        Class aClass = new Class(
-                "Math 101",
-                id,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
-        );
-        underTest.insertClassroom(aClass);
-
-
+        underTest.insertClassroom(classroom);
 
         // When
-        List<Class> actual = underTest.selectAllClassrooms();
+        List<Classroom> actual = underTest.selectAllClassrooms();
 
         // Then
         assertThat(actual).isNotEmpty();
     }
 
     @Test
-    void selectClassroomById() throws SQLException {
+    void selectClassroomById() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
-
-        userUnderTest.insertUser(user);
-
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
-
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
-        );
-        underTest.insertClassroom(aClass);
+        underTest.insertClassroom(classroom);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
-                .filter(c -> c.getName().equals("Math 101"))
-                .map(Class::getId)
+                .filter(c -> c.getRoomName().equals(roomName))
+                .map(Classroom::getId)
                 .findFirst()
                 .orElseThrow();
 
         // When
-        Optional<Class> actual = underTest.selectClassroomById(id);
+        Optional<Classroom> actual = underTest.selectClassroomById(id);
 
         // Then
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
-            assertThat(c.getName()).isEqualTo(aClass.getName());
-            assertThat(c.getProfessorId()).isEqualTo(aClass.getProfessorId());
-            assertThat(c.getLocation()).isEqualTo(aClass.getLocation());
-            assertThat(c.getStartDate()).isEqualTo(aClass.getStartDate());
-            assertThat(c.getEndDate()).isEqualTo(aClass.getEndDate());
-            assertThat(c.getClassDays()).containsExactlyElementsOf(aClass.getClassDays());
-            assertThat(c.getStudentsId()).containsExactlyElementsOf(aClass.getStudentsId());
-            assertThat(c.getStudentsId()).containsExactlyElementsOf(aClass.getStudentsId());
+            assertThat(c.getRoomName()).isEqualTo(classroom.getRoomName());
+            assertThat(c.getLocation()).isEqualTo(classroom.getLocation());
+            assertThat(c.getCapacity()).isEqualTo(classroom.getCapacity());
         });
     }
 
     @Test
-    void willReturnEmptyWhenSelectClassroomById() throws SQLException {
+    void willReturnEmptyWhenSelectClassroomById() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
-        );
-
-        userUnderTest.insertUser(user);
-        int id = 0;
-
+        Integer id = 1000;
         // When
         var actual = underTest.selectClassroomById(id);
 
@@ -169,98 +94,79 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     }
 
     @Test
-    void insertClassroom() throws SQLException {
+    void selectClassroomByName() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
+        underTest.insertClassroom(classroom);
 
-        userUnderTest.insertUser(user);
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
-
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
-        );
-
-        // When
-        underTest.insertClassroom(aClass);
+        Optional<Classroom> actual = underTest.selectClassroomByName(roomName);
 
         // Then
-        List<Class> aClasses = underTest.selectAllClassrooms();
-        assertThat(aClasses).extracting(Class::getName).contains(aClass.getName());
+        assertThat(actual).isPresent().hasValueSatisfying(c -> {
+            assertThat(c.getRoomName()).isEqualTo(classroom.getRoomName());
+            assertThat(c.getLocation()).isEqualTo(classroom.getLocation());
+            assertThat(c.getCapacity()).isEqualTo(classroom.getCapacity());
+        });
     }
 
     @Test
-    void existClassroomByName() throws SQLException {
+    void willReturnEmptyWhenSelectClassroomByName() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
-        );
+        String roomName = FAKER.name().name();
+        // When
+        var actual = underTest.selectClassroomByName(roomName);
 
-        userUnderTest.insertUser(user);
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
+        // Then
+        assertThat(actual).isEmpty();
+    }
 
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
+    @Test
+    void insertClassroom() {
+        // Given
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
-        underTest.insertClassroom(aClass);
 
         // When
-        boolean actual = underTest.existClassroomByName("Math 101");
+        underTest.insertClassroom(classroom);
+
+        // Then
+        List<Classroom> classrooms = underTest.selectAllClassrooms();
+        assertThat(classrooms).extracting(Classroom::getRoomName).contains(classroom.getRoomName());
+    }
+
+    @Test
+    void existClassroomByName() {
+        // Given
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
+        );
+        underTest.insertClassroom(classroom);
+
+        // When
+        boolean actual = underTest.existClassroomByName(roomName);
 
         // Then
         assertThat(actual).isTrue();
     }
 
     @Test
-    void existClassroomByNameReturnsFalseWhenDoesNotExist() throws SQLException {
+    void existClassroomByNameReturnsFalseWhenDoesNotExist() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
-        );
-
-        userUnderTest.insertUser(user);
         String name = "Non-existent Classroom";
 
         // When
@@ -271,154 +177,118 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
     }
 
     @Test
-    void deleteClassroomById() throws SQLException {
+    void existClassroomById() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
+        underTest.insertClassroom(classroom);
 
-        userUnderTest.insertUser(user);
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
+        Integer id = underTest.selectClassroomByName(roomName).get().getId();
 
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
+        // When
+        boolean actual = underTest.existClassroomById(id);
+
+        // Then
+        assertThat(actual).isTrue();
+    }
+
+    @Test
+    void existClassroomByIdReturnsFalseWhenDoesNotExist() {
+        // Given
+
+        Integer id = 200000;
+
+        // When
+        boolean actual = underTest.existClassroomById(id);
+
+        // Then
+        assertThat(actual).isFalse();
+    }
+
+    @Test
+    void deleteClassroomById(){
+        // Given
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
-        underTest.insertClassroom(aClass);
+        underTest.insertClassroom(classroom);
 
-        int id = underTest.selectAllClassrooms()
-                .stream()
-                .filter(c -> c.getName().equals("Math 101"))
-                .map(Class::getId)
-                .findFirst()
-                .orElseThrow();
+        int id = underTest.selectClassroomByName(roomName).get().getId();
 
         // When
         underTest.deleteClassroomById(id);
 
         // Then
-        Optional<Class> actual = underTest.selectClassroomById(id);
+        Optional<Classroom> actual = underTest.selectClassroomById(id);
         assertThat(actual).isNotPresent();
     }
 
     @Test
-    void updateClassroom() throws SQLException {
+    void updateClassroom() {
         // Given
 
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
-
-        userUnderTest.insertUser(user);
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
-
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
-        );
-        underTest.insertClassroom(aClass);
+        underTest.insertClassroom(classroom);
 
         int id = underTest.selectAllClassrooms()
                 .stream()
-                .filter(c -> c.getName().equals("Math 101"))
-                .map(Class::getId)
+                .filter(c -> c.getRoomName().equals(roomName))
+                .map(Classroom::getId)
                 .findFirst()
                 .orElseThrow();
 
-        var newName = "Advanced Math 101";
+        String newRoomName = "Advanced Math 101";
 
         // When
-        Class update = new Class();
+        Classroom update = new Classroom();
         update.setId(id);
-        update.setName(newName);
+        update.setRoomName(newRoomName);
         underTest.updateClassroom(update);
 
         // Then
-        Optional<Class> actual = underTest.selectClassroomById(id);
+        Optional<Classroom> actual = underTest.selectClassroomById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
-            assertThat(c.getName()).isEqualTo(newName);
+            assertThat(c.getRoomName()).isEqualTo(newRoomName);
         });
     }
 
     @Test
-    void willNotUpdateWhenNothingToUpdate() throws SQLException {
+    void willNotUpdateWhenNothingToUpdate() {
         // Given
-
-        User user = new User(
-                "CSULA",
-                "User user",
-                "address",
-                "email@email.com",
-                "password",
-                "2000-10-10",
-                Gender.MALE,
-                List.of(1,2,3),
-                List.of("ADMIN")
+        String roomName = FAKER.name().name();
+        Classroom classroom = new Classroom(
+                roomName,
+                FAKER.address().longitude(),
+                FAKER.number().randomDigit()
         );
+        underTest.insertClassroom(classroom);
 
-        userUnderTest.insertUser(user);
-        Integer userId = userUnderTest.selectAllUsers().get(0).getId();
-
-        Class aClass = new Class(
-                "Math 101",
-                userId,  // professorId
-                "Room 305",
-                "2023-09-01",
-                "2023-12-15",
-                List.of("Monday", "Wednesday", "Friday"), // classDays
-                List.of(101, 102, 103), // studentsId
-                List.of(201, 202, 203) // usersId
-        );
-        underTest.insertClassroom(aClass);
-
-        int id = underTest.selectAllClassrooms()
-                .stream()
-                .filter(c -> c.getName().equals("Math 101"))
-                .map(Class::getId)
-                .findFirst()
-                .orElseThrow();
+        int id = underTest.selectClassroomByName(roomName).get().getId();
 
         // When
-        Class update = new Class();
+        Classroom update = new Classroom();
         update.setId(id);
         underTest.updateClassroom(update);
 
         // Then
-        Optional<Class> actual = underTest.selectClassroomById(id);
+        Optional<Classroom> actual = underTest.selectClassroomById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
-            assertThat(c.getName()).isEqualTo(aClass.getName());
+            assertThat(c.getRoomName()).isEqualTo(classroom.getRoomName());
         });
     }
 }
-*/

@@ -1,9 +1,10 @@
-package com.quickcheck.organization;/*
-package com.quickcheck.classes;
+package com.quickcheck.organization;
 
+import com.github.javafaker.Faker;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.user.UserDao;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +12,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Arrays;
+import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,177 +23,218 @@ import static org.mockito.Mockito.*;
 class OrganizationServiceTest {
 
     @Mock
-    private ClassDao classDao;
+    private OrganizationDao organizationDao;
 
-    private ClassService underTest;
+    @Mock
+    private UserDao userDao;
+
+    private OrganizationService underTest;
 
     @BeforeEach
     void setUp() {
-        underTest = new ClassService(classDao);
-    }
-
-    @Test
-    void getAllClassrooms() {
-        // When
-        underTest.getAllClassrooms();
-
-        // Then
-        verify(classDao).selectAllClassrooms();
-    }
-
-    @Test
-    void canGetClassroom() {
-        // Given
-        int classroomId = 1;
-        Class aClass = new Class(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
+        underTest = new OrganizationService(
+                organizationDao,
+                userDao
         );
-        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(aClass));
-
-        // When
-        Class actual = underTest.getClassroom(classroomId);
-
-        // Then
-        assertThat(actual).isEqualTo(aClass);
     }
 
     @Test
-    void willThrowWhenClassroomNotFound() {
+    void getAllOrganizations() {
+        // When
+        underTest.getAllOrganizations();
+
+        // Then
+        verify(organizationDao).selectAllOrganizations();
+    }
+
+    @Test
+    void canGetOrganizationById() {
         // Given
-        int classroomId = 1;
-        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.empty());
+        int orgId = 1;
+        Organization aOrganization = new Organization(
+                "ORG1233"
+        );
+        when(organizationDao.selectOrganizationById(orgId)).thenReturn(Optional.of(aOrganization));
+
+        // When
+        Organization actual = underTest.getOrganizationById(orgId);
+
+        // Then
+        assertThat(actual).isEqualTo(aOrganization);
+    }
+
+    @Test
+    void willThrowWhenOrganizationNotFoundById() {
+        // Given
+        int orgId = 1;
+        when(organizationDao.selectOrganizationById(orgId)).thenReturn(Optional.empty());
 
         // When / Then
-        assertThatThrownBy(() -> underTest.getClassroom(classroomId))
+        assertThatThrownBy(() -> underTest.getOrganizationById(orgId))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Classroom with id [%s] not found".formatted(classroomId));
+                .hasMessage("Organization with id [%s] not found".formatted(orgId));
     }
 
     @Test
-    void addClassroom() {
+    void canGetOrganizationByName() {
         // Given
-        ClassRegistrationRequest request = new ClassRegistrationRequest(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
+        Faker FAKER = new Faker();
+        String orgName = FAKER.name().name();
+        Organization aOrganization = new Organization(
+                orgName
         );
-
-        when(classDao.existClassroomByName(request.name())).thenReturn(false);
+        when(organizationDao.selectOrganizationByName(orgName)).thenReturn(Optional.of(aOrganization));
 
         // When
-        underTest.addClassroom(request);
+        Organization actual = underTest.getOrganizationByName(orgName);
 
         // Then
-        ArgumentCaptor<Class> classroomArgumentCaptor = ArgumentCaptor.forClass(Class.class);
-        verify(classDao).insertClassroom(classroomArgumentCaptor.capture());
+        assertThat(actual).isEqualTo(aOrganization);
+    }
 
-        Class capturedClass = classroomArgumentCaptor.getValue();
+    @Test
+    void willThrowWhenOrganizationNotFoundByName() {
+        // Given
+        Faker FAKER = new Faker();
+        String orgName = FAKER.name().name();
+
+        when(organizationDao.selectOrganizationByName(orgName)).thenReturn(Optional.empty());
+
+        // When / Then
+        assertThatThrownBy(() -> underTest.getOrganizationByName(orgName))
+                .isInstanceOf(ResourceNotFoundException.class)
+                .hasMessage("Organization with id [%s] not found".formatted(orgName));
+    }
+
+    @Test
+    void addOrganization() {
+        // Given
+        Faker FAKER = new Faker();
+        String orgName = FAKER.name().name();
+        OrganizationRegistrationRequest request = new OrganizationRegistrationRequest(
+                orgName
+        );
+
+        when(organizationDao.existOrganizationByName(request.name())).thenReturn(false);
+
+        // When
+        underTest.addOrganization(request);
+
+        // Then
+        ArgumentCaptor<Organization> organizationArgumentCaptor = ArgumentCaptor.forClass(Organization.class);
+        verify(organizationDao).insertOrganization(organizationArgumentCaptor.capture());
+
+        Organization capturedClass = organizationArgumentCaptor.getValue();
         assertThat(capturedClass.getName()).isEqualTo(request.name());
-        assertThat(capturedClass.getLocation()).isEqualTo(request.location());
-        assertThat(capturedClass.getProfessorId()).isEqualTo(request.professorId());
     }
 
     @Test
-    void willThrowWhenClassroomNameExists() {
+    void willThrowWhenOrganizationNameExists() {
         // Given
-        ClassRegistrationRequest request = new ClassRegistrationRequest(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
+        Faker FAKER = new Faker();
+        String orgName = FAKER.name().name();
+
+        OrganizationRegistrationRequest request = new OrganizationRegistrationRequest(
+                orgName
         );
 
-        when(classDao.existClassroomByName(request.name())).thenReturn(true);
-
+        when(organizationDao.existOrganizationByName(orgName)).thenReturn(true);
         // When / Then
-        assertThatThrownBy(() -> underTest.addClassroom(request))
+        assertThatThrownBy(() -> underTest.addOrganization(request))
                 .isInstanceOf(DuplicateResourceException.class)
-                .hasMessage("Class name already exists");
+                .hasMessage("Organization name already exists");
 
-        verify(classDao, never()).insertClassroom(any());
+        verify(organizationDao, never()).insertOrganization(any());
     }
 
     @Test
-    void deleteClassroom() {
+    void deleteOrganization() {
         // Given
-        int classroomId = 1;
-        when(classDao.existClassroomById(classroomId)).thenReturn(true);
+        int orgId = 1000;
+        when(organizationDao.existOrganizationById(orgId)).thenReturn(true);
 
         // When
-        underTest.deleteClassroom(classroomId);
+        underTest.deleteOrganization(orgId);
 
         // Then
-        verify(classDao).deleteClassroomById(classroomId);
+        verify(organizationDao).deleteOrganizationById(orgId);
     }
 
     @Test
-    void willThrowWhenClassroomDoesNotExistOnDelete() {
+    void willThrowWhenOrganizationDoesNotExistOnDelete() {
         // Given
-        int classroomId = 1;
-        when(classDao.existClassroomById(classroomId)).thenReturn(false);
+        int orgId = 1000;
+        when(organizationDao.existOrganizationById(orgId)).thenReturn(false);
 
         // When / Then
-        assertThatThrownBy(() -> underTest.deleteClassroom(classroomId))
+        assertThatThrownBy(() -> underTest.deleteOrganization(orgId))
                 .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("Classroom with id [%s] not found".formatted(classroomId));
+                .hasMessage("Organization with id [%s] not found".formatted(orgId));
 
-        verify(classDao, never()).deleteClassroomById(anyInt());
+        verify(organizationDao, never()).deleteOrganizationById(anyInt());
     }
 
     @Test
-    void updateClassroom() {
+    void updateOrganization() {
         // Given
-        int classroomId = 1;
-        Class existingClass = new Class(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
-        );
-        ClassUpdateRequest updateRequest = new ClassUpdateRequest(
-                "Advanced Math", 2, "Room 405", "2023-10-01", "2023-12-20",
-                Arrays.asList("Tuesday", "Thursday"), Arrays.asList(104, 105), Arrays.asList(204, 205)
+        Faker FAKER = new Faker();
+        int orgId = 1000;
+        String orgName = FAKER.name().name();
+        Organization existingOrganization = new Organization(
+                orgId, orgName
         );
 
-        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClass));
-        when(classDao.existClassroomByName(updateRequest.name())).thenReturn(false);
+        OrganizationUpdateRequest updateRequest = new OrganizationUpdateRequest(
+                "newName"
+        );
+
+        when(organizationDao.selectOrganizationById(orgId)).thenReturn(Optional.of(existingOrganization));
+        when(organizationDao.existOrganizationByName(updateRequest.name())).thenReturn(false);
 
         // When
-        underTest.updateClassroom(classroomId, updateRequest);
+        underTest.updateOrganization(orgId, updateRequest);
 
         // Then
-        ArgumentCaptor<Class> classroomArgumentCaptor = ArgumentCaptor.forClass(Class.class);
-        verify(classDao).updateClassroom(classroomArgumentCaptor.capture());
+        ArgumentCaptor<Organization> organizationArgumentCaptor = ArgumentCaptor.forClass(Organization.class);
+        verify(organizationDao).updateOrganization(organizationArgumentCaptor.capture());
 
-        Class updatedClass = classroomArgumentCaptor.getValue();
-        assertThat(updatedClass.getName()).isEqualTo(updateRequest.name());
-        assertThat(updatedClass.getLocation()).isEqualTo(updateRequest.location());
-        assertThat(updatedClass.getProfessorId()).isEqualTo(updateRequest.professorId());
+        Organization updatedOrganization = organizationArgumentCaptor.getValue();
+        assertThat(updatedOrganization.getName()).isEqualTo(updateRequest.name());
     }
 
     @Test
     void willThrowWhenNoChangesOnUpdate() {
         // Given
-        int classroomId = 1;
-        Class existingClass = new Class(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
-        );
-        ClassUpdateRequest updateRequest = new ClassUpdateRequest(
-                "Math 101", 1, "Room 305", "2023-09-01", "2023-12-15",
-                Arrays.asList("Monday", "Wednesday", "Friday"),
-                Arrays.asList(101, 102, 103), Arrays.asList(201, 202, 203)
+        Faker FAKER = new Faker();
+        int orgId = 1000;
+        String orgName = FAKER.name().name();
+        Organization existingOrganization = new Organization(
+                orgId, orgName
         );
 
-        when(classDao.selectClassroomById(classroomId)).thenReturn(Optional.of(existingClass));
+        OrganizationUpdateRequest updateRequest = new OrganizationUpdateRequest(
+                orgName
+        );
+
+        when(organizationDao.selectOrganizationById(orgId)).thenReturn(Optional.of(existingOrganization));
 
         // When / Then
-        assertThatThrownBy(() -> underTest.updateClassroom(classroomId, updateRequest))
+        assertThatThrownBy(() -> underTest.updateOrganization(orgId, updateRequest))
                 .isInstanceOf(RequestValidationException.class)
                 .hasMessage("No data changes found");
 
-        verify(classDao, never()).updateClassroom(any());
+        verify(organizationDao, never()).updateOrganization(any());
+    }
+
+    @Test
+    void getOrganizationsOfUser()  {
+    }
+
+    @Test
+    void joinOrganization() {
+    }
+
+    @Test
+    void leaveOrganization() {
     }
 }
-*/

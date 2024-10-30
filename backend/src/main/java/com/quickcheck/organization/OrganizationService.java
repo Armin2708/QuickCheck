@@ -49,7 +49,7 @@ public class OrganizationService {
     public void addOrganization(OrganizationRegistrationRequest request) {
         String name = request.name();
         if (organizationDao.existOrganizationByName(name)) {
-            throw new DuplicateResourceException("Class name already exists");
+            throw new DuplicateResourceException("Organization name already exists");
         }
         Organization organization = new Organization(
                 request.name()
@@ -86,7 +86,6 @@ public class OrganizationService {
         organizationDao.leaveOrganization(organizationId,userId);
     }
 
-
     public void updateOrganization(Integer organizationId, OrganizationUpdateRequest organizationUpdateRequest) {
         Organization organization = organizationDao.selectOrganizationById(organizationId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -111,7 +110,6 @@ public class OrganizationService {
         // Update the organization in the database
         organizationDao.updateOrganization(organization);
     }
-
 
     public void deleteOrganization(Integer organizationId) {
         if (!organizationDao.existOrganizationById(organizationId)){
