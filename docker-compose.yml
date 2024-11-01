@@ -14,6 +14,29 @@ services:
       - db
     restart: unless-stopped
 
+  quickcheck-api:
+    container_name: quickcheck-api
+    image: armine27/quickcheck-api
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/quickcheck
+    ports:
+      - "8088:8080"
+    networks:
+      - db
+    depends_on:
+      - db
+    restart: unless-stopped
+  quickcheck-react:
+    container_name: quickcheck-react
+    image: armine27/quickcheck-react
+    build:
+      context: frontend/react
+    ports:
+      - "3000:5173"
+    depends_on:
+      - quickcheck-api
+    restart: unless-stopped
+
 networks:
   db:
     driver: bridge
