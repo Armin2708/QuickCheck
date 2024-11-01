@@ -68,6 +68,12 @@ public class SecurityFilterChainConfig {
                         )
                         .hasAnyAuthority("ADMIN","INSTRUCTOR")
 
+                        .requestMatchers(
+                                HttpMethod.PUT,
+                                "/api/users/roles/"
+                        )
+                        .hasAuthority("ADMIN")
+
                     .anyRequest()
                     .authenticated()
                 )

@@ -13,7 +13,6 @@ public record UserUpdateRequest(
         String email,
         String password,
         LocalDate dateOfBirth,
-        Gender gender,
-        List<Roles> roles
+        Gender gender
 ) {
 }

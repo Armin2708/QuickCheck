@@ -17,12 +17,17 @@ import Dashboard from "./pages/Dashboard.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
 import BrowseOrganizationListPage from "./pages/BrowseOrganizationListPage.jsx";
 import AdminProtectedRoute from "./components/shared/protectedRoutes/AdminProtectedRoute.jsx";
+import Test from "./pages/Test.jsx";
 
 const { ToastContainer } = createStandaloneToast();
 const router = createBrowserRouter([
     {
         path:"/",
         element: <HomePage/>
+    },
+    {
+        path:"/test",
+        element: <Test/>
     },
     {
         path:"/login",

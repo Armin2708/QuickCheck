@@ -1,0 +1,79 @@
+{
+  "AWSEBDockerrunVersion": 2,
+  "containerDefinitions": [
+    {
+      "name": "quickcheck-api",
+      "image": "armine27/quickcheck-api:latest",
+      "essential": true,
+      "memory": 512,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "containerPort": 8080
+        }
+      ],
+      "environment": [
+        {
+          "name": "SPRING_DATASOURCE_URL",
+          "value": "jdbc:postgresql://awseb-e-envipe6pqv-stack-awsebrdsdatabase-qaviu9juutvo.cpq0mm06rdoh.us-west-1.rds.amazonaws.com:5432/quickcheck"
+        },
+        {
+          "name": "SPRING_DATASOURCE_USERNAME",
+          "value": "quickcheck"
+        },
+        {
+          "name": "SPRING_DATASOURCE_PASSWORD",
+          "value": "password"
+        },
+        {
+          "name": "SERVER_PORT",
+          "value": "8080"
+        },
+        {
+          "name": "SPRING_MAIL_HOST",
+          "value": "smtp.gmail.com"
+        },
+        {
+          "name": "SPRING_MAIL_PORT",
+          "value": "587"
+        },
+        {
+          "name": "SPRING_MAIL_USERNAME",
+          "value": "quickcheckteam@gmail.com"
+        },
+        {
+          "name": "SPRING_MAIL_PASSWORD",
+          "value": "pcxx bjbt ugbs wwkw"
+        },
+        {
+          "name": "SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH",
+          "value": "true"
+        },
+        {
+          "name": "SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE",
+          "value": "true"
+        },
+        {
+          "name": "SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_REQUIRED",
+          "value": "true"
+        },
+        {
+          "name": "CORS_ALLOWED_ORIGINS",
+          "value": "*"
+        },
+        {
+          "name": "CORS_ALLOWED_METHODS",
+          "value": "*"
+        },
+        {
+          "name": "CORS_ALLOWED_HEADERS",
+          "value": "*"
+        },
+        {
+          "name": "CORS_EXPOSED_HEADERS",
+          "value": "*"
+        }
+      ]
+    }
+  ]
+}

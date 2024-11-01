@@ -2,6 +2,7 @@ package com.quickcheck.user;
 
 import com.quickcheck.Gender;
 import com.quickcheck.Roles;
+import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
@@ -29,12 +30,14 @@ class UserServiceTest {
     private UserDao userDao;
     @Mock
     private PasswordEncoder passwordEncoder;
+    @Mock
+    private AttendanceDao attendanceDao;
     private UserService underTest;
     private final UserDTOMapper userDTOMapper = new UserDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userDao,passwordEncoder,userDTOMapper);
+        underTest = new UserService(userDao,attendanceDao,passwordEncoder,userDTOMapper);
     }
 
     @Test
@@ -178,7 +181,7 @@ class UserServiceTest {
         UserUpdateRequest updateRequest = new UserUpdateRequest(
                 "Johnny", "New Address",
                 "johnny@example.com", "newpassword", Date.valueOf("2000-01-05").toLocalDate(),
-                Gender.MALE,List.of(Roles.ADMIN)
+                Gender.MALE
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -197,7 +200,6 @@ class UserServiceTest {
         assertThat(capturedUser.getEmail()).isEqualTo(updateRequest.email());
         assertThat(capturedUser.getDateOfBirth()).isEqualTo(updateRequest.dateOfBirth());
         assertThat(capturedUser.getGender()).isEqualTo(updateRequest.gender());
-        assertThat(capturedUser.getRoles()).isEqualTo(updateRequest.roles());
 
     }
 
@@ -214,8 +216,7 @@ class UserServiceTest {
 
         UserUpdateRequest updateRequest = new UserUpdateRequest(
                 existingUser.getName(), existingUser.getAddress(), existingUser.getEmail(),
-                existingUser.getPassword(), existingUser.getDateOfBirth(), existingUser.getGender(),
-                existingUser.getRoles()
+                existingUser.getPassword(), existingUser.getDateOfBirth(), existingUser.getGender()
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));
@@ -243,7 +244,7 @@ class UserServiceTest {
         UserUpdateRequest updateRequest = new UserUpdateRequest(
                 "Johnny", "New Address",
                 "existingemail@example.com", "newpassword",
-                Date.valueOf("2000-01-05").toLocalDate(), Gender.MALE, List.of(Roles.ADMIN)
+                Date.valueOf("2000-01-05").toLocalDate(), Gender.MALE
         );
 
         when(userDao.selectUserById(userId)).thenReturn(Optional.of(existingUser));

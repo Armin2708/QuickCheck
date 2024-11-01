@@ -1,8 +1,21 @@
 import HeaderFooter from "../shared/HeaderFooter.jsx";
-import {Avatar, Badge, Box, Button, Center, Heading, Stack, Text, useColorModeValue, WrapItem} from "@chakra-ui/react";
+import {
+    Avatar,
+    Badge,
+    Box,
+    Button,
+    Center,
+    Heading,
+    HStack,
+    Stack,
+    Text,
+    useColorModeValue,
+    WrapItem
+} from "@chakra-ui/react";
 import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
 import {useNavigate} from "react-router-dom";
 import UpdateUserButton from "./UpdateUserButton.jsx";
+import UpdateUserRolesButton from "./UpdateUserRolesButton.jsx";
 
 export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles,onSuccess, returnButton, userProfile}){
 
@@ -98,11 +111,15 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                             email={email} dateOfBirth={dateOfBirth}
                             gender={gender} onSuccess={onSuccess}
                         />
-                            : <UpdateUserButton
-                                userId={id} name={name} address={address}
-                                email={email} dateOfBirth={dateOfBirth}
-                                gender={gender} roles={roles} onSuccess={onSuccess}
-                            />
+                            :
+                            (<HStack>
+                                <UpdateUserButton
+                                    userId={id} name={name} address={address}
+                                    email={email} dateOfBirth={dateOfBirth}
+                                    gender={gender} onSuccess={onSuccess}
+                                />
+                                <UpdateUserRolesButton userId={id} roles={roles}/>
+                            </HStack>)
                         }
                     </Stack>
                 </Box>

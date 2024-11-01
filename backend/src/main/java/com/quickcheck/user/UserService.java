@@ -1,6 +1,7 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Roles;
+import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
@@ -17,17 +18,29 @@ import java.util.stream.Collectors;
 public class UserService{
 
     private final UserDao userDao;
+    private final AttendanceDao attendanceDao;
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
 
-    public UserService(UserDao userDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper) {
+    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper) {
         this.userDao = userDao;
+        this.attendanceDao = attendanceDao;
         this.passwordEncoder = passwordEncoder;
         this.userDTOMapper = userDTOMapper;
     }
 
     public List<UserDTO> getAllUsers(){
         return userDao.selectAllUsers()
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getUsersOfAttendance(String attendanceTag){
+        if (attendanceTag.isEmpty() || !attendanceDao.existAttendanceWithTag(attendanceTag)){
+            throw new ResourceNotFoundException("Attendance with tag [%s] not found".formatted(attendanceTag));
+        }
+        return userDao.selectAllUsersOfAttendance(attendanceTag)
                 .stream()
                 .map(userDTOMapper)
                 .collect(Collectors.toList());
@@ -119,22 +132,33 @@ public class UserService{
             changes = true;
         }
 
-        if (userUpdateRequest.roles() != null && !userUpdateRequest.roles().equals(user.getRoles())) {
-            userDao.deleteUserRoles(userId); // Delete existing roles
-
-            // Insert updated roles
-            userDao.insertUserRoles(userId, userUpdateRequest.roles());
-
-            user.setRoles(userUpdateRequest.roles()); // Update user object roles
-            changes = true;
-        }
-
         if (!changes) {
             throw new RequestValidationException("No data changes found");
         }
 
         userDao.updateUser(user);
     }
+
+    public void updateUserRoles(Integer userId, UserRolesUpdateRequest updateRequest){
+        User user = userDao.selectUserById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user with id [%s] not found".formatted(userId)
+                ));
+        boolean changes = false;
+        if (updateRequest.roles() != null && !updateRequest.roles().equals(user.getRoles())) {
+            userDao.deleteUserRoles(userId); // Delete existing roles
+
+            // Insert updated roles
+            userDao.insertUserRoles(userId, updateRequest.roles());
+
+            user.setRoles(updateRequest.roles()); // Update user object roles
+            changes = true;
+        }
+        if (!changes) {
+            throw new RequestValidationException("No data changes found");
+        }
+    }
+
     public void deleteUser(Integer userId){
         if (!userDao.existUserById(userId)){
             throw new ResourceNotFoundException("User with id [%s] not found".formatted(userId));

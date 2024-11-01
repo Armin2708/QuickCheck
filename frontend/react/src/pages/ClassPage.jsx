@@ -1,78 +1,89 @@
+import {useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import {
-    Box,
-    SimpleGrid,
-    Stat,
-    StatLabel,
-    StatNumber,
-    chakra,
-    useColorModeValue, Button,
-} from "@chakra-ui/react";
-import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
-import {FaArrowLeft} from "react-icons/fa";
-import {getClassById, getClassroomById, getUserById, getUsersInClass} from "../services/client.js";
+    getClassById,
+    getClassroomById,
+    getUserById,
+    getUsersInClass,
+    getValidRadius,
+} from "../services/client.js";
+import {useAuth} from "../components/context/AuthContext.jsx";
+import AdminAttendanceCard from "../components/attendance/instructorAttendance/AdminAttendanceCard.jsx";
+import UserAttendanceCard from "../components/attendance/userAttendance/UserAttendanceCard.jsx";
+import {Box} from "@chakra-ui/react";
 
-function StatsCard({ title, stat }) {
-    return (
-        <Stat
-            px={{ base: 4, md: 8 }}
-            py={'5'}
-            shadow={'xl'}
-            border={'1px solid'}
-            borderColor={useColorModeValue('gray.800', 'gray.500')}
-            rounded={'lg'}>
-            <StatLabel fontWeight={'medium'} isTruncated>
-                {title}
-            </StatLabel>
-            <StatNumber fontSize={'2xl'} fontWeight={'medium'}>
-                {stat}
-            </StatNumber>
-        </Stat>
-    );
-}
-
-export default function ClassPage() {
-
+export default function ClassPage(){
     const [classroom, setClassroom] = useState({});
     const [classObject, setClassObject] = useState({});
     const [professor, setProfessor] = useState({});
     const [usersInClass,setUsersInClass] = useState([]);
-
+    const [validRadius, setValidRadius] = useState(null);
+    const [radius,setRadius] = useState();
+    const [attendanceRequest, setAttendanceRequest] = useState({
+        date: new Date().toISOString().split('T')[0],
+        professorId: null,
+        classId: null,
+        radius: null,
+    });
     const { name: orgName, id: classId } = useParams();
-    const navigate = useNavigate();
+    const {fullUser,isUserAdmin,isUserUser} = useAuth()
+
+    const tag = `${classId}_${new Date().toISOString().split('T')[0]}`
+
+
 
     const fetchData = async () => {
         try {
+            // Fetch class data
             const classResponse = await getClassById(classId);
             if (classResponse.data) {
                 setClassObject(classResponse.data);
+                setAttendanceRequest((prev) => ({
+                    ...prev,
+                    classId: classResponse.data.id,
+                }));
 
-                // Directly use classResponse.data instead of relying on the classObject state
+
+                // Fetch professor data
                 const professorResponse = await getUserById(classResponse.data.professorId);
                 if (professorResponse.data) {
                     setProfessor(professorResponse.data);
+                    setAttendanceRequest((prev) => ({
+                        ...prev,
+                        professorId: professorResponse.data.id,
+                    }));
                 } else {
                     console.error('Expected an object for professor but got:', professorResponse.data);
                 }
 
+                // Fetch classroom data
                 const classroomResponse = await getClassroomById(classResponse.data.classroomId);
                 if (classroomResponse.data) {
                     setClassroom(classroomResponse.data);
                 } else {
                     console.error('Expected an object for classroom but got:', classroomResponse.data);
                 }
-
             } else {
                 console.error('Expected an object for class but got:', classResponse.data);
             }
+
+            // Fetch users in class
+            const userInClass = await getUsersInClass(classId);
+            if (userInClass.data) {
+                setUsersInClass(userInClass.data);
+            } else {
+                console.error('Expected an object for users in class but got:', userInClass.data);
+            }
+
+            // Fetch valid radius
+            const classRadius = await getValidRadius(tag);
+            if (typeof classRadius.data === 'number') {
+                setValidRadius(classRadius.data);
+            } else {
+                console.error('Expected a number for validRadius but got:', classRadius.data);
+            }
         } catch (error) {
             console.error('Error fetching data:', error);
-        }
-        const userInClass = await getUsersInClass(classId);
-        if (userInClass.data) {
-            setUsersInClass(userInClass.data);
-        } else {
-            console.error('Expected an object for users in clas but got:', userInClass.data);
         }
     };
 
@@ -80,19 +91,34 @@ export default function ClassPage() {
         fetchData();
     }, [classId]);
 
+    useEffect(() => {
+        setAttendanceRequest((prev) => ({
+            ...prev,
+            radius: radius,
+        }));
+    }, [radius]);
+
+    const commonProps = {
+        classObject,
+        classroom,
+        professor,
+        usersInClass,
+        validRadius,
+        orgName,
+        classId,
+        fullUser,
+        attendanceRequest,
+        tag
+    };
+
     return (
-        <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-            <Button leftIcon={<FaArrowLeft />} onClick={() => navigate(`/organization/${orgName}`)}>
-                Back
-            </Button>
-            <chakra.h1 textAlign={'center'} fontSize={'4xl'} py={10} fontWeight={'bold'}>
-                {classObject?.name}
-            </chakra.h1>
-            <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
-                <StatsCard title={'Students'} stat={usersInClass?.length || 0} />
-                <StatsCard title={'Professor Contact'} stat={professor?.email || "N/A"} />
-                <StatsCard title={'Location'} stat={classroom?.roomName || "N/A"} />
-            </SimpleGrid>
-        </Box>
-    );
+        <>
+            {(isUserAdmin()) ?
+                <AdminAttendanceCard {...commonProps} setRadius={setRadius} tag={tag} radius={radius}/>
+                :
+                isUserUser ? <UserAttendanceCard {...commonProps} />
+                    : <Box>Error</Box>
+            }
+        </>
+    )
 }

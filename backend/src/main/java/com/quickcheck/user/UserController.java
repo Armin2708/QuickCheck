@@ -41,6 +41,12 @@ public class UserController {
         return userService.getUsersInClass(classId);
     }
 
+    @GetMapping("/attendance/{attendanceTag}")
+    public List<UserDTO> getUsersOfAttendance(
+            @PathVariable("attendanceTag") String attendanceTag) {
+        return userService.getUsersOfAttendance(attendanceTag);
+    }
+
 
     @PostMapping
     public ResponseEntity<?> registerUser(
@@ -57,6 +63,13 @@ public class UserController {
             @PathVariable("userId") Integer userId,
             @RequestBody UserUpdateRequest updateRequest){
         userService.updateUser(userId,updateRequest);
+    }
+
+    @PutMapping("/roles/{userId}")
+    public void updateUserRoles(
+            @PathVariable("userId") Integer userId,
+            @RequestBody UserRolesUpdateRequest updateRequest){
+        userService.updateUserRoles(userId,updateRequest);
     }
 
     @DeleteMapping("{userId}")

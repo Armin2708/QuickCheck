@@ -62,7 +62,7 @@ public class EmailService {
     public void verifyEmail(String email){
         Random random = new Random();
         // Generate a random number between 100000 and 999999 (inclusive)
-        String code = String.valueOf(100000 + random.nextInt(999999));
+        String code = String.valueOf(100000 + random.nextInt(900000));
 
         EmailCodeObject emailCodeObject = new EmailCodeObject(email, code);
         EmailRequest request = new EmailRequest(email,"Quick Check email verification","Verify your email with "+code);

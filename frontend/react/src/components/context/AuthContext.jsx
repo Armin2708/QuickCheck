@@ -113,6 +113,19 @@ const AuthProvider = ({ children }) => {
         }
         return true;
     }
+    const isUserUser =() => {
+        const token = localStorage.getItem("access_token");
+        if (!token){
+            return false;
+        }
+        const decodedToken = jwtDecode(token);
+        const scopes = Array.isArray(decodedToken.scopes[0]) ? decodedToken.scopes.flat() : decodedToken.scopes;
+
+        if (!scopes.includes('USER')) {
+            return false;
+        }
+        return true;
+    }
 
     return(
         <AuthContext.Provider value={{
@@ -122,6 +135,7 @@ const AuthProvider = ({ children }) => {
             logOut,
             isUserAuthenticated,
             isUserAdmin,
+            isUserUser,
             setUserFromToken
         }}>
             {children}

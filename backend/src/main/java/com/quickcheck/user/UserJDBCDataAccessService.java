@@ -244,4 +244,26 @@ public class UserJDBCDataAccessService implements UserDao {
         return count != null && count > 0;
     }
 
+    @Override
+    public List<User> selectAllUsersOfAttendance(String attendanceTag) {
+        var sql = """
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                FROM users JOIN attendance_user ON users.id = attendance_user.user_id
+                WHERE attendance_user.attendance_id = (
+                    SELECT id
+                    FROM attendance
+                    WHERE tag = ?
+                    )
+                """;
+        List<User> users = jdbcTemplate.query(sql, userRowMapper, attendanceTag);
+
+        // Set roles for each user
+        users.forEach(user -> {
+            List<Roles> roles = selectUserRoles(user.getId());
+            user.setRoles(roles);
+        });
+
+        return users;
+    }
+
 }

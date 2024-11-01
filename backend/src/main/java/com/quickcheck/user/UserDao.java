@@ -14,6 +14,8 @@ public interface UserDao {
 
     List<User> selectAllUserInClassById(Integer classId);
 
+    List<User> selectAllUsersOfAttendance(String attendanceTag);
+
     void insertUserRoles(Integer userId, List<Roles> roles);
 
     void deleteUserRoles(Integer userId);

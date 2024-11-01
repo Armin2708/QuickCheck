@@ -11,6 +11,7 @@ import {
 import MySelect from "../shared/form/MySelect.jsx";
 import MyTextInput from "../shared/form/MyText.jsx";
 import {useParams} from "react-router-dom";
+import MapButton from "../map/MapButton.jsx";
 
 // Multi-Step Form Component
 export default function CreateClassForm() {
@@ -22,6 +23,7 @@ export default function CreateClassForm() {
     const [existClassroom, setExistingClassroom] = useState(false);
     const [classrooms,setClassrooms] = useState([])
     const [classroom,setClassroom] = useState({})
+
 
 
 
@@ -76,6 +78,7 @@ export default function CreateClassForm() {
                 })
             }
             onSubmit={async (values, actions) => {
+
                 const classroomData = {
                     roomName: values.roomName,
                     location: values.location,
@@ -187,7 +190,9 @@ export default function CreateClassForm() {
                                 ) : (
                                     <>
                                         <MyTextInput name="roomName" type="text" placeholder="Room Name" />
-                                        <MyTextInput name="location" type="text" placeholder="Class Location" />
+                                        <MapButton onLocationSelect={(lat, lng) => {
+                                            setFieldValue("location", `${lat}, ${lng}`);
+                                        }}/>
                                         <MyTextInput name="capacity" type="number" placeholder="Class Capacity" />
                                     </>
                                 )}

@@ -249,7 +249,7 @@ public class UserIntegrationTest {
         // update user
         String newName = "Updated Name";
         UserUpdateRequest updateRequest = new UserUpdateRequest(
-                newName, "Updated Address", null, null, null, null, null
+                newName, "Updated Address", null, null, null, null
         );
 
         webTestClient.put()

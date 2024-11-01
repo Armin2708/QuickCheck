@@ -17,6 +17,7 @@ import org.springframework.test.web.reactive.server.EntityExchangeResult;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.sql.Date;
 import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -50,8 +51,8 @@ public class AuthenticationIntegrationTest {
         String password = "password";
 
         // Convert Faker's birthday date directly to LocalDate
-        LocalDate dateOfBirthLocalDate = faker.date().birthday().toInstant().atZone(ZoneOffset.UTC).toLocalDate();
-        LocalDate dateOfBirth = LocalDate.from(dateOfBirthLocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+
+        LocalDate dateOfBirth = Date.valueOf("2000-01-01").toLocalDate();
 
         Gender gender = RANDOM.nextInt(100) % 2 == 0 ? Gender.MALE : Gender.FEMALE;
         List<String> expectedRoles = List.of("USER");
@@ -99,7 +100,7 @@ public class AuthenticationIntegrationTest {
         assertThat(userDTO.name()).isEqualTo(name);
         assertThat(userDTO.address()).isEqualTo(address);
         assertThat(userDTO.email()).isEqualTo(email);
-        assertThat(actualDateOfBirth).isEqualTo(dateOfBirthLocalDate); // Date comparison
+        assertThat(actualDateOfBirth).isEqualTo(dateOfBirth); // Date comparison
         assertThat(userDTO.gender()).isEqualTo(gender);
         assertThat(userDTO.roles()).isEqualTo(expectedRoles);
         assertThat(userDTO.username()).isEqualTo(email);

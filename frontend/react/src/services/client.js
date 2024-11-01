@@ -102,6 +102,19 @@ export const updateUser = async (userId, updateRequest) => {
     }
 }
 
+export const updateUserRoles = async (userId, updateRequest) => {
+    try {
+        console.log(updateRequest)
+        return await axios.put(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/roles/${userId}`,
+            updateRequest,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
 export const deleteUser = async (userId) => {
     try {
         return await axios.delete(
@@ -373,6 +386,88 @@ export const deleteClass = async (classId) => {
     try {
         return await axios.delete(
             `${import.meta.env.VITE_API_BASE_URL}/api/classes/${classId}`,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+
+/*ATTENDANCE*/
+
+export const getUsersOfAttendance = async (tag) => {
+    try {
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/attendance/${tag}`,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const getValidRadius = async (tag) => {
+    try {
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances/radius/${tag}`,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const verifyAttendance = async (userId,attendanceData) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances/verify/${userId}`,
+            attendanceData,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const createAttendance = async (request) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances`,
+            request,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+export const openAttendance = async (tag,) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances/open/${tag}`,
+            null,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+export const closeAttendance = async (tag) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances/close/${tag}`,
+            null,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}
+
+export const getAttendance = async (tag) =>{
+    try {
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/attendances/id/${tag}`,
             getAuthConfig()
         )
     } catch (e) {

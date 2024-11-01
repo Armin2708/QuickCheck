@@ -10,9 +10,8 @@ import MyCheckbox from "../shared/form/MyCheckbox.jsx";
 
 
 // And now we can use these
-const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender,roles}) => {
+const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
 
-    console.log(roles)
     return (
         <>
             <Formik
@@ -22,8 +21,7 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender,roles})
                     email: email,
                     password: null,
                     dateOfBirth: dateOfBirth,
-                    gender: gender,
-                    roles: roles || []
+                    gender: gender
             }}
 
                 validationSchema={Yup.object({
@@ -37,8 +35,7 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender,roles})
                         .required('Required'),
                     gender: Yup.string()
                         .oneOf(['MALE', 'FEMALE'], 'Invalid gender')
-                        .required('Required'),
-                    roles: Yup.array().min(1, 'Select at least one role')
+                        .required('Required')
                 })}
 
                 onSubmit={(updatedProfile, {setSubmitting}) => {
@@ -72,20 +69,6 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender,roles})
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                             </MySelect>
-                            <Box >
-                                <Text>
-                                    <Field type="checkbox" name="roles" value="USER"/>
-                                    User
-                                </Text>
-                                <Text>
-                                    <Field type="checkbox" name="roles" value="INSTRUCTOR"/>
-                                    Instructor
-                                </Text>
-                                <Text>
-                                    <Field type="checkbox" name="roles" value="ADMIN"/>
-                                    Admin
-                                </Text>
-                            </Box>
 
 
                             <Button disabled={!(isValid && dirty) || isSubmitting} type="submit">Submit</Button>

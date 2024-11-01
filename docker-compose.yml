@@ -1,23 +1,22 @@
 services:
   db:
-    container_name: QuickCheckDB
+    container_name: postgres
     image: postgres:15.2
     environment:
       POSTGRES_USER: quickcheck
       POSTGRES_PASSWORD: password
-      POSTGRES_DB: quickcheck
-      PGDATA: /data/quickcheck
+      PGDATA: /data/postgres
+      POSTGRES_EXTRA_OPTS: "-c max_connections=200"
     volumes:
-      - db:/data/quickcheck
+      - db:/data/postgres
     ports:
       - "5333:5432"
     networks:
-      - postgres
+      - db
     restart: unless-stopped
 
-
 networks:
-  postgres:
+  db:
     driver: bridge
 
 volumes:

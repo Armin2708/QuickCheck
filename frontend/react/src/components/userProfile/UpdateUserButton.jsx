@@ -15,7 +15,7 @@ import UpdateUserForm from "./UpdateUserForm.jsx";
 
 const CloseIcon = () => "x";
 
-const UpdateUserButton = ({userId,name,address,email,dateOfBirth,gender,roles,onSuccess}) => {
+const UpdateUserButton = ({userId,name,address,email,dateOfBirth,gender,onSuccess}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return <>
         <Button
@@ -44,7 +44,7 @@ const UpdateUserButton = ({userId,name,address,email,dateOfBirth,gender,roles,on
                 <DrawerHeader>Update my profile</DrawerHeader>
 
                 <DrawerBody>
-                    <UpdateUserForm id={userId} name={name} address={address} email={email} dateOfBirth={dateOfBirth} gender={gender} roles={roles}/>
+                    <UpdateUserForm id={userId} name={name} address={address} email={email} dateOfBirth={dateOfBirth} gender={gender}/>
                 </DrawerBody>
 
                 <DrawerFooter>
