@@ -3,6 +3,7 @@ package com.quickcheck;
 import com.github.javafaker.Faker;
 import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -27,6 +28,12 @@ public abstract class AbstractTestContainer {
         ).locations("classpath:db/migration")
                 .load();
         flyway.migrate();
+    }
+    @AfterAll
+    static void afterAll() {
+        if (postgreSQLContainer.isRunning()) {
+            postgreSQLContainer.stop();
+        }
     }
 
     @Container
