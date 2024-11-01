@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: quickcheck
       POSTGRES_PASSWORD: password
       PGDATA: /data/postgres
-      POSTGRES_EXTRA_OPTS: "-c max_connections=200"
+    command: postgres -c 'max_connections=1000'
     volumes:
       - db:/data/postgres
     ports:
