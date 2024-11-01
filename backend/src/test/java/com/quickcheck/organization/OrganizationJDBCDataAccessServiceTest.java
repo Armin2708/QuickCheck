@@ -8,9 +8,16 @@ import com.quickcheck.user.User;
 import com.quickcheck.user.UserJDBCDataAccessService;
 import com.quickcheck.user.UserRolesRowMapper;
 import com.quickcheck.user.UserRowMapper;
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.List;
@@ -18,6 +25,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
+@Rollback
 public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private OrganizationJDBCDataAccessService underTest;
@@ -38,6 +47,13 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
                 userRowMapper,
                 userRolesRowMapper
         );
+    }
+    @AfterEach
+    void tearDown() {
+        DataSource dataSource = getDataSource();
+        if (dataSource instanceof HikariDataSource) {
+            ((HikariDataSource) dataSource).close();
+        }
     }
 
     @Test
@@ -379,6 +395,7 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
     void leaveOrganizationWillThrowWhenNotJoined() {
     }*/
 
+    @DirtiesContext
     @Test
     void existUserInOrganization() {
         String orgName = FAKER.name().name();

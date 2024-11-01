@@ -12,13 +12,17 @@ import com.quickcheck.classroom.ClassroomRowMapper;
 import com.quickcheck.organization.Organization;
 import com.quickcheck.organization.OrganizationJDBCDataAccessService;
 import com.quickcheck.organization.OrganizationRowMapper;
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
 
 
+import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -33,6 +37,8 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Transactional
+@Rollback
 public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private UserJDBCDataAccessService underTest;
@@ -69,7 +75,14 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 classroomRowMapper
         );
+    }
 
+    @AfterEach
+    void tearDown() {
+        DataSource dataSource = getDataSource();
+        if (dataSource instanceof HikariDataSource) {
+            ((HikariDataSource) dataSource).close();
+        }
     }
 
     //TODO: WRITE THE TEST FOR ALL THESE JDBC FUNCTIONS,

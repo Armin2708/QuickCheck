@@ -38,6 +38,7 @@ class OrganizationServiceTest {
         );
     }
 
+
     @Test
     void getAllOrganizations() {
         // When

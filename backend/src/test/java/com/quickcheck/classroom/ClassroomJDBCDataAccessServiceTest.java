@@ -3,14 +3,22 @@ package com.quickcheck.classroom;
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.organization.OrganizationJDBCDataAccessService;
 import com.quickcheck.organization.OrganizationRowMapper;
+import com.zaxxer.hikari.HikariDataSource;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Transactional
+@Rollback
 public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private ClassroomJDBCDataAccessService underTest;
@@ -30,6 +38,13 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 organizationRowMapper
         );
+    }
+    @AfterEach
+    void tearDown() {
+        DataSource dataSource = getDataSource();
+        if (dataSource instanceof HikariDataSource) {
+            ((HikariDataSource) dataSource).close();
+        }
     }
 
     @Test

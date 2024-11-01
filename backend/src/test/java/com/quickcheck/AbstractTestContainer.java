@@ -1,6 +1,7 @@
 package com.quickcheck;
 
 import com.github.javafaker.Faker;
+import com.zaxxer.hikari.HikariDataSource;
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -33,7 +34,8 @@ public abstract class AbstractTestContainer {
             new PostgreSQLContainer<>("postgres:16")
                     .withDatabaseName("quickcheck-dao-unit-test")
                     .withUsername("quickcheck")
-                    .withPassword("password");
+                    .withPassword("password")
+                    .withEnv("POSTGRES_MAX_CONNECTIONS", "50");
 
     @DynamicPropertySource
     private static void registerDataSourceProperties(DynamicPropertyRegistry registry){
@@ -51,13 +53,16 @@ public abstract class AbstractTestContainer {
         );
     }
 
-    private static DataSource getDataSource(){
-        return DataSourceBuilder.create()
-                .driverClassName(postgreSQLContainer.getDriverClassName())
-                .url(postgreSQLContainer.getJdbcUrl())
-                .username(postgreSQLContainer.getUsername())
-                .password(postgreSQLContainer.getPassword())
-                .build();
+    protected static DataSource getDataSource() {
+        HikariDataSource dataSource = new HikariDataSource();
+        dataSource.setDriverClassName(postgreSQLContainer.getDriverClassName());
+        dataSource.setJdbcUrl(postgreSQLContainer.getJdbcUrl());
+        dataSource.setUsername(postgreSQLContainer.getUsername());
+        dataSource.setPassword(postgreSQLContainer.getPassword());
+        dataSource.setMaximumPoolSize(10); // Set pool size here
+        dataSource.setConnectionTimeout(30000); // 30 seconds
+        dataSource.setIdleTimeout(600000); // 10 minutes
+        return dataSource;
     }
 
     protected static JdbcTemplate getJdbcTemplate(){
