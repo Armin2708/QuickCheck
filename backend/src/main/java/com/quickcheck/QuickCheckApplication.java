@@ -9,5 +9,6 @@ public class QuickCheckApplication {
     public static void main(String[] args) {
         SpringApplication.run(QuickCheckApplication.class, args);
     }
+    //Test
 
 }
