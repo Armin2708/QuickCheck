@@ -17,7 +17,7 @@ management:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5333/quickcheck
+    url: jdbc:postgresql://awseb-e-9uyxma8zaw-stack-awsebrdsdatabase-xq4ii2zho2p8.cpq0mm06rdoh.us-west-1.rds.amazonaws.com:5432/ebdb
     username: quickcheck
     password: password
 

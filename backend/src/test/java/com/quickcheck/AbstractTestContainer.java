@@ -7,8 +7,11 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.TestPropertySources;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -17,6 +20,7 @@ import javax.sql.DataSource;
 
 
 @Testcontainers
+@TestPropertySource(properties = "spring.datasource.url=jdbc:tc:postgresql:16:///quickcheck-dao-unit-test")
 public abstract class AbstractTestContainer {
 
     @BeforeAll
@@ -41,8 +45,7 @@ public abstract class AbstractTestContainer {
             new PostgreSQLContainer<>("postgres:16")
                     .withDatabaseName("quickcheck-dao-unit-test")
                     .withUsername("quickcheck")
-                    .withPassword("password")
-                    .withEnv("POSTGRES_MAX_CONNECTIONS", "50");
+                    .withPassword("password");
 
     @DynamicPropertySource
     private static void registerDataSourceProperties(DynamicPropertyRegistry registry){
