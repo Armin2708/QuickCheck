@@ -17,6 +17,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,8 +38,7 @@ import java.util.concurrent.Executors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@Transactional
-@Rollback
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private final UserRowMapper userRowMapper = new UserRowMapper();
@@ -50,25 +50,12 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
-    private UserJDBCDataAccessService underTest= new UserJDBCDataAccessService(
-            getJdbcTemplate(),
-            userRowMapper,
-            userRolesRowMapper
-    );
-    private OrganizationJDBCDataAccessService orgUnderTest= new OrganizationJDBCDataAccessService(
-            getJdbcTemplate(),
-            organizationRowMapper
-    );
-    private ClassJDBCDataAccessService classUnderTest= new ClassJDBCDataAccessService(
-            getJdbcTemplate(),
-            classRowMapper
-    );
-    private ClassroomJDBCDataAccessService classroomUnderTest= new ClassroomJDBCDataAccessService(
-            getJdbcTemplate(),
-            classroomRowMapper
-    );
+    private UserJDBCDataAccessService underTest;
+    private OrganizationJDBCDataAccessService orgUnderTest;
+    private ClassJDBCDataAccessService classUnderTest;
+    private ClassroomJDBCDataAccessService classroomUnderTest;
 
-    /*@BeforeEach
+    @BeforeEach
     void setUp() {
 
         underTest = new UserJDBCDataAccessService(
@@ -88,15 +75,15 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 classroomRowMapper
         );
-    }*/
+    }
 
-    /*@AfterEach
+    @AfterEach
     void tearDown() {
         DataSource dataSource = getDataSource();
         if (dataSource instanceof HikariDataSource) {
             ((HikariDataSource) dataSource).close();
         }
-    }*/
+    }
 
     //TODO: WRITE THE TEST FOR ALL THESE JDBC FUNCTIONS,
     // AND WRITE THE TEST VARIANTS SUCH AS IF ONE IS EMPTY DOES IT PASS ?

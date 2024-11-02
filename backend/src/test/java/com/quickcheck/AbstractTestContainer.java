@@ -37,6 +37,7 @@ public abstract class AbstractTestContainer {
     static void afterAll() {
         if (postgreSQLContainer.isRunning()) {
             postgreSQLContainer.close();
+
         }
     }
 

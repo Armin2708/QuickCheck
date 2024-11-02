@@ -8,6 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,8 +18,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-@Rollback
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private ClassroomJDBCDataAccessService underTest;
@@ -32,11 +32,6 @@ public class ClassroomJDBCDataAccessServiceTest extends AbstractTestContainer {
         underTest = new ClassroomJDBCDataAccessService(
                 getJdbcTemplate(),
                 classroomRowMapper
-        );
-
-        organizationUnderTest = new OrganizationJDBCDataAccessService(
-                getJdbcTemplate(),
-                organizationRowMapper
         );
     }
     @AfterEach

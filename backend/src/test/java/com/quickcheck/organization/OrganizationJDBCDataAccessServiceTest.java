@@ -25,24 +25,18 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
     private final UserRowMapper userRowMapper = new UserRowMapper();
     private final UserRolesRowMapper userRolesRowMapper = new UserRolesRowMapper();
-    private UserJDBCDataAccessService userUnderTest = new UserJDBCDataAccessService(
-            getJdbcTemplate(),
-            userRowMapper,
-            userRolesRowMapper
-    );
-    private OrganizationJDBCDataAccessService underTest = new OrganizationJDBCDataAccessService(
-            getJdbcTemplate(),
-            organizationRowMapper
-    );
+    private UserJDBCDataAccessService userUnderTest;
+    private OrganizationJDBCDataAccessService underTest;
 
 
-    /*@BeforeEach
+    @BeforeEach
     void setUp() {
         underTest = new OrganizationJDBCDataAccessService(
                 getJdbcTemplate(),
@@ -54,12 +48,13 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
                 userRolesRowMapper
         );
     }
-    *//*@AfterEach
+    @AfterEach
     void tearDown() {
         DataSource dataSource = getDataSource();
-        dataSource.();
+        if (dataSource instanceof HikariDataSource) {
+            ((HikariDataSource) dataSource).close();
         }
-    }*/
+    }
 
     @Test
     void selectAllOrganizations() {
