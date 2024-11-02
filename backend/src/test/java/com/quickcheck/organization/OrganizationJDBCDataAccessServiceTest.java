@@ -27,12 +27,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer {
 
-    private OrganizationJDBCDataAccessService underTest;
     private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
-    private UserJDBCDataAccessService userUnderTest;
     private final UserRowMapper userRowMapper = new UserRowMapper();
     private final UserRolesRowMapper userRolesRowMapper = new UserRolesRowMapper();
+    private UserJDBCDataAccessService userUnderTest;
+    private OrganizationJDBCDataAccessService underTest;
+
 
     @BeforeEach
     void setUp() {
@@ -46,6 +47,12 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
                 userRolesRowMapper
         );
     }
+    /*@AfterEach
+    void tearDown() {
+        DataSource dataSource = getDataSource();
+        dataSource.();
+        }
+    }*/
 
     @Test
     void selectAllOrganizations() {

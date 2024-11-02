@@ -77,13 +77,13 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
         );
     }
 
-    @AfterEach
+    /*@AfterEach
     void tearDown() {
         DataSource dataSource = getDataSource();
         if (dataSource instanceof HikariDataSource) {
             ((HikariDataSource) dataSource).close();
         }
-    }
+    }*/
 
     //TODO: WRITE THE TEST FOR ALL THESE JDBC FUNCTIONS,
     // AND WRITE THE TEST VARIANTS SUCH AS IF ONE IS EMPTY DOES IT PASS ?
