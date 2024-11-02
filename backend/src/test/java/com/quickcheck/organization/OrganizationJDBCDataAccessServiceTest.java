@@ -31,11 +31,18 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
 
     private final UserRowMapper userRowMapper = new UserRowMapper();
     private final UserRolesRowMapper userRolesRowMapper = new UserRolesRowMapper();
-    private UserJDBCDataAccessService userUnderTest;
-    private OrganizationJDBCDataAccessService underTest;
+    private UserJDBCDataAccessService userUnderTest = new UserJDBCDataAccessService(
+            getJdbcTemplate(),
+            userRowMapper,
+            userRolesRowMapper
+    );;
+    private OrganizationJDBCDataAccessService underTest = new OrganizationJDBCDataAccessService(
+            getJdbcTemplate(),
+            organizationRowMapper
+    );;
 
 
-    @BeforeEach
+    /*@BeforeEach
     void setUp() {
         underTest = new OrganizationJDBCDataAccessService(
                 getJdbcTemplate(),
@@ -47,7 +54,7 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
                 userRolesRowMapper
         );
     }
-    /*@AfterEach
+    *//*@AfterEach
     void tearDown() {
         DataSource dataSource = getDataSource();
         dataSource.();

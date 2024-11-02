@@ -41,21 +41,34 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @Rollback
 public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
 
-    private UserJDBCDataAccessService underTest;
-    private ClassroomJDBCDataAccessService classroomUnderTest;
-    private ClassJDBCDataAccessService classUnderTest;
-
     private final UserRowMapper userRowMapper = new UserRowMapper();
     private final UserRolesRowMapper userRolesRowMapper = new UserRolesRowMapper();
 
     private final ClassroomRowMapper classroomRowMapper = new ClassroomRowMapper();
     private final ClassRowMapper classRowMapper = new ClassRowMapper();
 
-    private OrganizationJDBCDataAccessService orgUnderTest;
+
     private final OrganizationRowMapper organizationRowMapper = new OrganizationRowMapper();
 
+    private UserJDBCDataAccessService underTest= new UserJDBCDataAccessService(
+            getJdbcTemplate(),
+            userRowMapper,
+            userRolesRowMapper
+    );
+    private OrganizationJDBCDataAccessService orgUnderTest= new OrganizationJDBCDataAccessService(
+            getJdbcTemplate(),
+            organizationRowMapper
+    );
+    private ClassJDBCDataAccessService classUnderTest= new ClassJDBCDataAccessService(
+            getJdbcTemplate(),
+            classRowMapper
+    );
+    private ClassroomJDBCDataAccessService classroomUnderTest= new ClassroomJDBCDataAccessService(
+            getJdbcTemplate(),
+            classroomRowMapper
+    );
 
-    @BeforeEach
+    /*@BeforeEach
     void setUp() {
 
         underTest = new UserJDBCDataAccessService(
@@ -75,7 +88,7 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
                 getJdbcTemplate(),
                 classroomRowMapper
         );
-    }
+    }*/
 
     /*@AfterEach
     void tearDown() {
