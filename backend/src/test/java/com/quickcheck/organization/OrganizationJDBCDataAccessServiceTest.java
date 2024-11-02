@@ -35,11 +35,11 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
             getJdbcTemplate(),
             userRowMapper,
             userRolesRowMapper
-    );;
+    );
     private OrganizationJDBCDataAccessService underTest = new OrganizationJDBCDataAccessService(
             getJdbcTemplate(),
             organizationRowMapper
-    );;
+    );
 
 
     /*@BeforeEach
@@ -182,12 +182,8 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
     @Test
     void existOrganizationByNameReturnsFalseWhenDoesNotExist()  {
         // Given
-        int id = 1;
-        Organization organization = new Organization(
-                id,
-                FAKER.name().fullName()
-        );
-        String orgName = "Non-existent Organization";
+
+        String orgName = FAKER.name().name();
 
         // When
         boolean actual = underTest.existOrganizationByName(orgName);

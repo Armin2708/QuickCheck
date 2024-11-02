@@ -20,7 +20,7 @@ import javax.sql.DataSource;
 
 
 @Testcontainers
-@TestPropertySource(properties = "spring.datasource.url=jdbc:tc:postgresql:16:///quickcheck-dao-unit-test")
+@TestPropertySource(properties = "spring.datasource.url=jdbc:tc:postgresql:16:///quickcheck-unit-test")
 public abstract class AbstractTestContainer {
 
     @BeforeAll
@@ -43,7 +43,7 @@ public abstract class AbstractTestContainer {
     @Container
     protected static final PostgreSQLContainer<?> postgreSQLContainer =
             new PostgreSQLContainer<>("postgres:16")
-                    .withDatabaseName("quickcheck-dao-unit-test")
+                    .withDatabaseName("quickcheck-unit-test")
                     .withUsername("quickcheck")
                     .withPassword("password");
 
