@@ -33,12 +33,12 @@ public abstract class AbstractTestContainer {
                 .load();
         flyway.migrate();
     }
-    @AfterAll
+    /*@AfterAll
     static void afterAll() {
         if (postgreSQLContainer.isRunning()) {
             postgreSQLContainer.stop();
         }
-    }
+    }*/
 
     @Container
     protected static final PostgreSQLContainer<?> postgreSQLContainer =
@@ -47,7 +47,7 @@ public abstract class AbstractTestContainer {
                     .withUsername("quickcheck")
                     .withPassword("password");
 
-    @DynamicPropertySource
+    /*@DynamicPropertySource
     private static void registerDataSourceProperties(DynamicPropertyRegistry registry){
         registry.add(
                 "spring.datasource.url",
@@ -61,7 +61,7 @@ public abstract class AbstractTestContainer {
                 "spring.datasource.password",
                 postgreSQLContainer::getPassword
         );
-    }
+    }*/
 
     protected static DataSource getDataSource() {
         HikariDataSource dataSource = new HikariDataSource();
@@ -69,9 +69,6 @@ public abstract class AbstractTestContainer {
         dataSource.setJdbcUrl(postgreSQLContainer.getJdbcUrl());
         dataSource.setUsername(postgreSQLContainer.getUsername());
         dataSource.setPassword(postgreSQLContainer.getPassword());
-        dataSource.setMaximumPoolSize(10); // Set pool size here
-        dataSource.setConnectionTimeout(30000); // 30 seconds
-        dataSource.setIdleTimeout(600000); // 10 minutes
         return dataSource;
     }
 

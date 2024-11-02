@@ -25,8 +25,6 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@Transactional
-@Rollback
 public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer {
 
     private OrganizationJDBCDataAccessService underTest;
@@ -47,13 +45,6 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
                 userRowMapper,
                 userRolesRowMapper
         );
-    }
-    @AfterEach
-    void tearDown() {
-        DataSource dataSource = getDataSource();
-        if (dataSource instanceof HikariDataSource) {
-            ((HikariDataSource) dataSource).close();
-        }
     }
 
     @Test
@@ -395,7 +386,6 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
     void leaveOrganizationWillThrowWhenNotJoined() {
     }*/
 
-    @DirtiesContext
     @Test
     void existUserInOrganization() {
         String orgName = FAKER.name().name();
