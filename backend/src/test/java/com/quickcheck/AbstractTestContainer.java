@@ -33,12 +33,12 @@ public abstract class AbstractTestContainer {
                 .load();
         flyway.migrate();
     }
-    /*@AfterAll
+    @AfterAll
     static void afterAll() {
         if (postgreSQLContainer.isRunning()) {
-            postgreSQLContainer.stop();
+            postgreSQLContainer.close();
         }
-    }*/
+    }
 
     @Container
     protected static final PostgreSQLContainer<?> postgreSQLContainer =
