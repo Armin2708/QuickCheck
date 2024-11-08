@@ -34,7 +34,7 @@ jobs:
       - name: Discord commit message and sha
         run: >
           curl -X POST -H 'Content-type: application/json'
-          --data '{"text":":github: https://github.com/armin2708/QuickCheck/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
+          -d '{"content":":github: https://github.com/armin2708/QuickCheck/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         run: >
