@@ -38,7 +38,7 @@ jobs:
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         run: >
-          curl -X POST -H 'Content-type: application/json'
+          curl -v -X POST -H 'Content-type: application/json' 
           --data '{"text":"Deployment started :progress_bar: :fingerscrossed:"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - uses: actions/setup-java@v3
