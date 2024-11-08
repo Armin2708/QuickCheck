@@ -2,6 +2,7 @@ package com.quickcheck.attendance;
 
 import com.quickcheck.exception.*;
 import com.quickcheck.user.User;
+import com.quickcheck.user.UserDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,9 +12,11 @@ import java.util.Random;
 public class AttendanceService {
 
     private final AttendanceDao attendanceDao;
+    private final UserDao userDao;
 
-    public AttendanceService(AttendanceDao attendanceDao) {
+    public AttendanceService(AttendanceDao attendanceDao, UserDao userDao) {
         this.attendanceDao = attendanceDao;
+        this.userDao = userDao;
     }
 
     public List<Attendance> getAllAttendances(){
@@ -66,6 +69,10 @@ public class AttendanceService {
         attendanceDao.createAttendance(newAttendance);
     }
     public void verifyAttendance(Integer userId,AttendanceUserRequest userRequest){
+
+        if (userDao.existUserInAttendance(userId,userRequest.attendanceTag())){
+            throw new DuplicateResourceException("User already took attendance");
+        }
 
         Attendance attendance = attendanceDao.selectAttendance(userRequest.attendanceTag())
                 .orElseThrow(() -> new ResourceNotFoundException(

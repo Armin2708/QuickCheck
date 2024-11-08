@@ -4,7 +4,7 @@ import {
     getClassById,
     getClassroomById,
     getUserById,
-    getUsersInClass,
+    getUsersInClass, getUsersOfAttendance,
     getValidRadius,
 } from "../services/client.js";
 import {useAuth} from "../components/context/AuthContext.jsx";

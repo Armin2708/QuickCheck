@@ -27,9 +27,6 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
     const toast = useToast()
 
     const fetchProfessor = () => {
-        if (!professorId){
-            return
-        }
         getUserById(professorId)
             .then(res => {
                 if (res.data) {
@@ -44,9 +41,6 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
     };
 
     const fetchClassroom = () =>{
-        if (!classroomId){
-            return
-        }
         getClassroomById(classroomId)
             .then(res => {
                 if (res.data) {
@@ -60,35 +54,43 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
             });
     };
 
-    useEffect(() => {
-
-        fetchProfessor();
-        fetchClassroom();
-        // Check if joinedClass is loaded and is an array with values
-        if (!Array.isArray(joinedClass)) {
-            return; // Exit early if joinedCLass is not yet loaded
+    const handleJoinClass = () => {
+        if (!fullUser || !fullUser.id) {
+            console.error("User not loaded");
+            return;
         }
 
-        // If joinedClass is loaded, proceed to check if the user has joined this organization
-        const joined = joinedClass.some(org => org.id === id);
-        setIsJoined(joined);
-    }, [joinedClass, id,classroomId,professorId]);
-
-    const handleJoinClass = () => {
         joinClass(id, fullUser.id)
             .then(() => {
-                successNotification("Class Joined", `${name} was successfully added to your organizations`);
-                toast({
-                    title: 'Class joined.',
-                    description: `${name} has been joined successfully.`,
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: true,
-                });
+                successNotification(
+                    "Class Joined",
+                    `${name} was successfully added to your organizations`
+                );
                 setIsJoined(true);
             })
-            .catch((err) => errorNotification(err.code, err.response?.data?.message))
-    }
+            .catch((err) => {
+                errorNotification(
+                    err.code,
+                    err.response?.data?.message || "Error joining class"
+                );
+            });
+    };
+
+    useEffect(() => {
+        if (professorId) {
+            fetchProfessor();
+        }
+
+        if (classroomId) {
+            fetchClassroom();
+        }
+
+        if (Array.isArray(joinedClass) && id) {
+            const joined = joinedClass.some(org => org.id === id);
+            setIsJoined(joined);
+        }
+    }, [joinedClass, id, classroomId, professorId]);
+
 
     return (
         <Center py={12}>

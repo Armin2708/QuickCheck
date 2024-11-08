@@ -245,6 +245,21 @@ public class UserJDBCDataAccessService implements UserDao {
     }
 
     @Override
+    public boolean existUserInAttendance(Integer userId, String tag) {
+        var sql = """
+                SELECT count(id)
+                FROM attendance_user
+                WHERE user_id = ? AND attendance_id = (
+                    SELECT id
+                    FROM attendance
+                    WHERE tag = ?
+                    )
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, tag);
+        return count != null && count > 0;
+    }
+
+    @Override
     public List<User> selectAllUsersOfAttendance(String attendanceTag) {
         var sql = """
                 SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender

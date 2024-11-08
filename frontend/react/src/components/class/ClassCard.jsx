@@ -20,7 +20,7 @@ import {errorNotification, successNotification} from "../../services/notificatio
 const IMAGE =
     'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/blogs/18725/images/DAau3fjETFmAjLVaNl3B_FallLandscape7-.jpg'
 
-export default function ClassCard({id,professorId,name,classroomId,onSuccess}) {
+export default function ClassCard({id,professorId,name,classroomId,onSuccess, fullUser}) {
 
     const [professor, setProfessor] = useState();
     const [classroom, setClassroom] = useState();
@@ -28,7 +28,6 @@ export default function ClassCard({id,professorId,name,classroomId,onSuccess}) {
     const navigate = useNavigate();
 
     const {name : orgName} = useParams();
-    const {fullUser} = useAuth();
 
     const toast = useToast();
 
@@ -60,21 +59,24 @@ export default function ClassCard({id,professorId,name,classroomId,onSuccess}) {
             });
     };
 
-    const handleLeaveClass = () =>{
-        leaveClass(id,fullUser.id)
+    const handleLeaveClass = () => {
+        leaveClass(id, fullUser.id)
             .then(() => {
-                successNotification("Class Left", `${name} was successfully Left`);
-                toast({
-                    title: 'Class Left.',
-                    description: `${name} has been left successfully.`,
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: true,
-                });
-                onSuccess();
+                console.log("Successfully left class");
+                onSuccess(); // Ensure this is being called
+                successNotification(
+                    "Class Left",
+                    `${name} was successfully left`
+                );
             })
-            .catch((err) => errorNotification(err.code, err.response?.data?.message))
-    }
+            .catch((err) => {
+                console.error("Error leaving class:", err);
+                errorNotification(
+                    err.code,
+                    err.response?.data?.message
+                );
+            });
+    };
 
     useEffect(() => {
         fetchProfessor();

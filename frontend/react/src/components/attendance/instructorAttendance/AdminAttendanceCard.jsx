@@ -8,7 +8,7 @@ import AttendanceButton from "./AttendanceButton.jsx";
 import {getAttendance, getUserById} from "../../../services/client.js";
 
 export default function AdminAttendanceCard({classObject, orgName, classroom, professor, usersInClass,
-                                                validRadius, classId,usersRegistered,
+                                                validRadius, classId,
                                                 attendanceRequest, setRadius,radius, tag}){
     const [code,setCode] = useState()
     const [existAttendance, setExistAttendance] = useState(false)
@@ -44,35 +44,34 @@ export default function AdminAttendanceCard({classObject, orgName, classroom, pr
 
             {/*Top Card*/}
             <Stack
-                marginTop={"0px"}
+                marginTop="0px"
                 paddingX="20px"
                 paddingY="10px"
                 borderRadius="10px"
                 justify="flex-start"
                 align="center"
                 spacing="5px"
-                width="400px"
+                width="fit-content"  // Dynamically adjusts to content
                 height="150px"
-                maxWidth="100%"
                 background="#FBFBFB"
                 boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
             >
-                        <Stack
-                            justify="flex-start"
-                            align="flex-start"
-                            spacing="4px"
-                            alignSelf="stretch"
-                            alignContent={"center"}
-                        >
-                            <Text
-                                fontFamily="Inter"
-                                fontWeight="medium"
-                                fontSize="20px"
-                                color="#313131"
-                                alignSelf="stretch"
-                            >
-                                {classObject?.name} - Hello {professor?.name}
-                            </Text>
+                <Stack
+                    justify="flex-start"
+                    align="flex-start"
+                    spacing="4px"
+                    alignSelf="stretch"
+                    alignContent="center"
+                >
+                    <Text
+                        fontFamily="Inter"
+                        fontWeight="medium"
+                        fontSize="20px"
+                        color="#313131"
+                        alignSelf="stretch"
+                    >
+                        {classObject?.name} - Hello {professor?.name}
+                    </Text>
                             <Box
                                 fontFamily="Inter"
                                 fontWeight="medium"
@@ -96,9 +95,10 @@ export default function AdminAttendanceCard({classObject, orgName, classroom, pr
                                           status={attendanceStatus} radius={radius}
                                           setStatus={setAttendanceStatus}
                                           setExistAttendance={setExistAttendance}
+                                          onSuccess={fetchAttendance}
                         />
                     </Stack>
-            <UserAttendanceDisplay usersInClass={usersInClass} usersRegistered={usersRegistered}/>
+            <UserAttendanceDisplay usersInClass={usersInClass} tag={tag}/>
         </Stack>
     )
 }

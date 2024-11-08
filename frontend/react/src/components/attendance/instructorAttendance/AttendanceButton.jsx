@@ -2,13 +2,14 @@ import {Button, Select, Stack, Text} from "@chakra-ui/react";
 import {useState} from "react";
 import {closeAttendance, createAttendance, openAttendance} from "../../../services/client.js";
 
-export default function AttendanceButton({tag,attendanceRequest,radius,setRadius, existAttendance,setExistAttendance,status, setStatus}){
+export default function AttendanceButton({tag,attendanceRequest,radius,setRadius, existAttendance,setExistAttendance,status, setStatus, onSuccess}){
 
     const handleAttendance =() =>{
 
         if(!existAttendance){
             createAttendance(attendanceRequest)
             setExistAttendance(true)
+            onSuccess()
         }
         else if(status){
             closeAttendance(tag)

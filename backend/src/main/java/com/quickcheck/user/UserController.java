@@ -46,6 +46,13 @@ public class UserController {
             @PathVariable("attendanceTag") String attendanceTag) {
         return userService.getUsersOfAttendance(attendanceTag);
     }
+    @GetMapping("/attendance/{tag}/user/{userId}")
+    public ResponseEntity<Boolean> isUserInAttendance(
+            @PathVariable("userId") Integer userId,
+            @PathVariable("tag") String  tag) {
+        boolean isInAttendance = userService.isUserInAttendance(userId, tag);
+        return ResponseEntity.ok(isInAttendance);
+    }
 
 
     @PostMapping

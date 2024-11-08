@@ -69,6 +69,10 @@ public class UserService{
                 ));
     }
 
+    public Boolean isUserInAttendance(Integer userId, String tag){
+        return userDao.existUserInAttendance(userId,tag);
+    }
+
     public void addUser(UserRegistrationRequest request) throws SQLException {
         String email = request.email();
         if (userDao.existUserWithEmail(email)) {

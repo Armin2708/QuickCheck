@@ -7,7 +7,7 @@ import {
     Stack,
     Image, Button, useToast,
 } from '@chakra-ui/react'
-import {joinOrganization} from "../../services/client.js";
+import {joinOrganization, leaveClass} from "../../services/client.js";
 import {useAuth} from "../context/AuthContext.jsx";
 import {errorNotification, successNotification} from "../../services/notification.js";
 
@@ -21,6 +21,23 @@ export default function BrowseOrganizationCard({ id, name, joinedOrg }) {
     // State to control button status - null initially means "checking status"
     const [isJoined, setIsJoined] = useState(null);
 
+    const handleJoinOrg = () => {
+        joinOrganization(id, fullUser.id)
+            .then(() => {
+                successNotification(
+                    "Organization Joined",
+                    `${name} was successfully added to your organizations`
+                );
+                setIsJoined(true);
+            })
+            .catch((err) => {
+                errorNotification(
+                    err.code,
+                    err.response?.data?.message
+                )
+            })
+    }
+
     useEffect(() => {
         // Check if joinedOrg is loaded and is an array with values
         if (!Array.isArray(joinedOrg)) {
@@ -31,22 +48,6 @@ export default function BrowseOrganizationCard({ id, name, joinedOrg }) {
         const joined = joinedOrg.some(org => org.id === id);
         setIsJoined(joined);
     }, [joinedOrg, id]);
-
-    const handleJoinOrg = () => {
-        joinOrganization(id, fullUser.id)
-            .then(() => {
-                successNotification("Organization Joined", `${name} was successfully added to your organizations`);
-                toast({
-                    title: 'Organization joined.',
-                    description: `${name} has been joined successfully.`,
-                    status: 'success',
-                    duration: 3000,
-                    isClosable: true,
-                });
-                setIsJoined(true);
-            })
-            .catch((err) => errorNotification(err.code, err.response?.data?.message))
-    }
 
     return (
         <Center py={12}>

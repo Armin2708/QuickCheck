@@ -11,31 +11,48 @@ import {
     Button,
 } from '@chakra-ui/react'
 import {useEffect, useState} from "react";
-import {getClassrooms, getUserById} from "../../services/client.js";
+import {getClassrooms, getUserById, leaveClass, leaveOrganization} from "../../services/client.js";
 import {useNavigate} from "react-router-dom";
+import {errorNotification, successNotification} from "../../services/notification.js";
 
 
 const IMAGE =
     'https://media.istockphoto.com/id/1349030917/photo/business-and-finance-looking-up-at-high-rise-office-buildings-in-the-financial-district-of-a.jpg?s=612x612&w=0&k=20&c=NSnN0va-f1OBG_GA7bTVmUIoBwNDKUXtHD8_PzeTNiA='
 
-export default function OrganizationCard({id,name}) {
+export default function OrganizationCard({id,name, onSuccess,fullUser}) {
 
     const navigate = useNavigate();
 
+    const handleLeaveOrg = () =>{
+        leaveOrganization(fullUser.id,id)
+            .then(() => {
+                successNotification(
+                    "Class Left",
+                    `${name} was successfully Left`
+                );
+                onSuccess()
+            })
+            .catch((err) => {
+                errorNotification(
+                    err.code,
+                    err.response?.data?.message
+                )
+            })
+
+    }
+
     return (
         <Center py={12}>
-            <Button
+            <Box
                 width={"100%"}
                 height={"100%"}
                 background={"transparent"}
+                cursor="pointer"
                 _hover={{
                     transform: "scale(1.05)", // Scale up slightly on hover
                     transition: "transform 0.2s ease-in-out" // Smooth transition effect
                 }}
-                _active={{
-                    transform: "scale(1)" // Return to original size when clicked
-                }}
-                onClick={()=>navigate(`/organization/${name}`)}
+                onClick={() => navigate(`/organization/${name}`)}
             >
                 <Box
                     role={'group'}
@@ -46,7 +63,8 @@ export default function OrganizationCard({id,name}) {
                     boxShadow={'2xl'}
                     rounded={'lg'}
                     pos={'relative'}
-                    zIndex={1}>
+                    zIndex={1}
+                >
                     <Box
                         rounded={'lg'}
                         mt={-12}
@@ -68,7 +86,8 @@ export default function OrganizationCard({id,name}) {
                             _after: {
                                 filter: 'blur(20px)',
                             },
-                        }}>
+                        }}
+                    >
                         <Image
                             rounded={'lg'}
                             height={230}
@@ -82,9 +101,19 @@ export default function OrganizationCard({id,name}) {
                         <Heading fontSize={'2xl'} fontFamily={'body'} fontWeight={500}>
                             {name}
                         </Heading>
+                        <Button
+                            fontWeight={800}
+                            fontSize={'xl'}
+                            onClick={(e) => {
+                                e.stopPropagation(); // Prevent click from propagating to the outer Box
+                                handleLeaveOrg();
+                            }}
+                        >
+                            Leave
+                        </Button>
                     </Stack>
                 </Box>
-            </Button>
+            </Box>
         </Center>
-    )
+    );
 }

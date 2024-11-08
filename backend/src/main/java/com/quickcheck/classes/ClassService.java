@@ -52,14 +52,6 @@ public class ClassService {
 
         Integer orgId = organizationDao.selectOrganizationByName(orgName).get().getId();
 
-        if (!classDao.existClassesInOrganization(orgId)){
-            throw new ResourceNotFoundException("No Classes in organization %s found".formatted(orgName));
-        }
-
-        if (!classDao.existClassesOfUser(userId)){
-            throw new ResourceNotFoundException("User with id %s is not in any classes".formatted(userId));
-        }
-
         return classDao.selectClassesOfUserInOrganization(userId,orgId);
 
     }

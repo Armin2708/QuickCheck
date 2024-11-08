@@ -62,7 +62,7 @@ export default function Dashboard() {
                             {Array.isArray(organizations) && organizations.length > 0 ? (
                                 organizations.map((organization) => (
                                     <WrapItem key={organization?.id}>
-                                        <OrganizationCard {...organization} />
+                                        <OrganizationCard {...organization} onSuccess={fetchOrganization} fullUser={fullUser}/>
                                     </WrapItem>
                                 ))
                             ) : (

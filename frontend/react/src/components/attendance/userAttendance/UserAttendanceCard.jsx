@@ -5,7 +5,7 @@ import {
     getClassById,
     getClassroomById,
     getUserById, getUsersInClass,
-    getValidRadius,
+    getValidRadius, isUserInAttendance,
     verifyAttendance
 } from "../../../services/client.js";
 import {Button, Input, Stack, Text, useToast} from "@chakra-ui/react";
@@ -15,6 +15,7 @@ import LocationButton from "./LocationButton.jsx";
 import {FiCheckCircle, FiUser} from "react-icons/fi";
 import {FaCheck} from "react-icons/fa";
 import {IoWarningOutline} from "react-icons/io5";
+import {errorNotification, successNotification} from "../../../services/notification.js";
 
 export default function UserAttendanceCard({classObject, classroom, professor, usersInClass,
                                                validRadius, orgName, classId, fullUser,tag,})
@@ -24,6 +25,7 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
     const [isCodeValid, setIsCodeValid] = useState(null);  // To store if the code is valid or not
     const [inputCode,setInputCode] = useState()
     const [isLoading, setIsLoading] = useState(false);
+    const [isPresent,setIsPresent] = useState(false)
 
     const toast = useToast()
 
@@ -36,29 +38,38 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
         verifyAttendance(fullUser?.id,attendanceData)
             .then(res => {
                 console.log(res.data)
-                toast({
-                    title: "Valid Code",
-                    description: "Code Verified",
-                    status: "success",
-                    duration: 5000, // 5 seconds
-                    isClosable: true,
-                });
+                successNotification(
+                    "Success",
+                    "Attended class"
+                )
 
             })
             .catch(error => {
                 console.error('Error fetching users:', error);
-                toast({
-                    title: "Error",
-                    description: "Wrong Code",
-                    status: "error",
-                    duration: 5000, // 5 seconds
-                    isClosable: true,
-                });
+                errorNotification(
+                    error.code,
+                    error.response.data.message
+                )
             })
             .finally(() => {
                 setIsLoading(false); // Stop loading after fetch
+                setIsPresent(true);
             });
     }
+
+    const checkUserAttendance = () =>{
+        isUserInAttendance(tag,fullUser?.id)
+            .then(res =>{
+                console.log(res.data)
+                setIsPresent(res.data)
+            })
+    }
+
+    useEffect(() => {
+        if (fullUser.id){
+            checkUserAttendance()
+        }
+    }, [fullUser]);
 
 
     return (
@@ -94,7 +105,7 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                     justify="flex-start"
                     align="flex-start"
                     spacing="10px"
-                    width="400px"
+                    width="fit-content"  // Dynamically adjusts to content
                     height="135px"
                     background="#444343"
                     boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
@@ -110,6 +121,7 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                             fontSize="20px"
                             color="#707070"
                             alignSelf="stretch"
+                            width="auto"  // Allows the text width to adjust
                         >
                             {classObject?.name} - Prof. {professor?.name}
                         </Text>
@@ -281,7 +293,7 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                     </Stack>
                 </Stack>
 
-                {/*Bot User*/}
+                {/*User Icon*/}
                 <Stack
                     justify="flex-start"
                     align="center"
@@ -289,7 +301,7 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                     width="269px"
                     maxWidth="100%"
                 >
-                    <FiUser color="#707070" size={"100px"} />
+                    <FiUser color={isPresent===true ? "7E3BB5" :"#707070"} size={"100px"} />
                     <Text
                         fontFamily="Inter"
                         fontWeight="semibold"

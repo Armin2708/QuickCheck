@@ -89,6 +89,16 @@ export const saveUser = async (user) => {
     }
 }
 
+export const isUserInAttendance = async (tag, userId) =>{
+    try{
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/attendance/${tag}/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
 export const updateUser = async (userId, updateRequest) => {
     try {
         console.log(updateRequest)

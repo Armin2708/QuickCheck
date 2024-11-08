@@ -17,11 +17,8 @@ export default function OrganizationUserClassListPage() {
     const [loading, setLoading] = useState(true); // Add loading state
 
     const fetchClasses = () => {
-        if (!fullUser && !fullUser.id){
-            return
-        }
         setLoading(true); // Start loading
-        getClassesOfUserInOrganization(fullUser.id,organizationName)
+        getClassesOfUserInOrganization(fullUser.id, organizationName)
             .then((res) => {
                 if (Array.isArray(res.data)) {
                     setClasses(res.data);
@@ -35,10 +32,10 @@ export default function OrganizationUserClassListPage() {
             .finally(() => setLoading(false)); // End loading
     };
 
-
-
     useEffect(() => {
-        fetchClasses();
+        if (fullUser && fullUser.id) {
+            fetchClasses();
+        }
     }, [fullUser]);
 
     // Show spinner while loading
@@ -75,7 +72,7 @@ export default function OrganizationUserClassListPage() {
                         {Array.isArray(classes) && classes.length > 0 ? (
                             classes.map((classObject) => (
                                 <WrapItem key={classObject.id}>
-                                    <ClassCard {...classObject} onSuccess={fetchClasses} />
+                                    <ClassCard {...classObject} onSuccess={fetchClasses} fullUser={fullUser} />
                                 </WrapItem>
                             ))
                         ) : (
