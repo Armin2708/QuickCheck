@@ -26,7 +26,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json'
-          -d '{"content":":react: Deployment started :progress_bar: :fingerscrossed:"}' 
+          -d '{"content":":react: Deployment started :progress_bar: :fingers_crossed:"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Set build number
         id: build-number
@@ -43,7 +43,7 @@ jobs:
           REPO=quickcheck-react \
           TAG=${{ steps.build-number.outputs.BUILD_NUMBER }} \
           ../../.ci/build-publish.sh . \
-            --build-arg api_base_url=TODO
+            --build-arg api_base_url=quickcheck-api-env.eba-6hz8n2y8.us-west-1.elasticbeanstalk.com
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
