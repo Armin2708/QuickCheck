@@ -34,12 +34,12 @@ jobs:
       - name: Discord commit message and sha
         run: >
           curl -X POST -H 'Content-type: application/json'
-          -d '{"content":":github: https://github.com/armin2708/QuickCheck/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
+          -d '{"content":"<:github:1304254544225636443> https://github.com/armin2708/QuickCheck/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         run: >
           curl -v -X POST -H 'Content-type: application/json' 
-          -d '{"content":"Deployment started :progress_bar: :fingerscrossed:"}' 
+          -d '{"content":"Deployment started <:loading:1304255093880914011> :fingers_crossed:"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - uses: actions/setup-java@v3
         with:
@@ -57,14 +57,14 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":maven: Building with Maven"}' 
+          -d '{"content":"<:maven:1304255452246184096> Building with Maven"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Build Package Push with Maven
         run: mvn -ntp -B verify -Ddocker.image.tag=${{steps.build-number.outputs.BUILD_NUMBER}} jib:build
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":docker: Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/armine27/quickcheck-api"}' 
+          -d '{"content":"<:docker:1304255479383326830> Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/armine27/quickcheck-api"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Update Dockerrun.aws.json api image tag with new build number
         run: |
@@ -76,7 +76,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":aws: Starting deployment to Elastic Beanstalk"}' 
+          -d '{"content":"<:aws:1304255513017716747> Starting deployment to Elastic Beanstalk"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
