@@ -92,7 +92,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":githubloading: Committing to repo https://github.com/armin2708/QuickCheck/"}' 
+          -d '{"content":"<:githubloading:1304310430138892300> Committing to repo https://github.com/armin2708/QuickCheck/"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Commit and push Dockerrun.aws.json
         run: |
@@ -104,7 +104,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":"Deployment and commit completed :github-check-mark: :party_blob: - TODO"}' 
+          -d '{"content":"Deployment and commit completed :white_check_mark: - quickcheck-api-env.eba-6hz8n2y8.us-west-1.elasticbeanstalk.com"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         if: always()

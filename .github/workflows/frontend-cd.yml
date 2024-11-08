@@ -10,7 +10,6 @@ on:
 
 jobs:
   deploy:
-    if: false
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -21,12 +20,12 @@ jobs:
       - name: Discord commit message and sha
         run: >
           curl -X POST -H 'Content-type: application/json'
-          -d '{"content":":github: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
+          -d '{"content":"<:github:1304254544225636443> ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} - ${{ github.event.head_commit.message }}"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json'
-          -d '{"content":":react: Deployment started :progress_bar: :fingers_crossed:"}' 
+          -d '{"content":"<:react:1304312939825729619> Deployment started <:loading:1304255093880914011> :fingers_crossed:"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Set build number
         id: build-number
@@ -47,7 +46,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":docker: Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/armine27/quickcheck-react"}' 
+          -d '{"content":"<:docker:1304255479383326830> Image tag:${{steps.build-number.outputs.BUILD_NUMBER}} pushed to https://hub.docker.com/repository/docker/armine27/quickcheck-react"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Update Dockerrun.aws.json react image tag with new build number
         run: |
@@ -59,7 +58,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":aws: Starting deployment to Elastic Beanstalk"}' 
+          -d '{"content":"<:aws:1304255513017716747> Starting deployment to Elastic Beanstalk"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Deploy to Elastic Beanstalk
         uses: einaregilsson/beanstalk-deploy@v21
@@ -76,7 +75,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":":githubloading: Committing to repo https://github.com/armin2708/QuickCheck/"}' 
+          -d '{"content":"<:githubloading:1304310430138892300> Committing to repo https://github.com/armin2708/QuickCheck/"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Commit and push Dockerrun.aws.json
         run: |
@@ -88,7 +87,7 @@ jobs:
       - name: Send Discord Message
         run: >
           curl -X POST -H 'Content-type: application/json' 
-          -d '{"content":"Deployment and commit completed :github-check-mark: :party_blob: - TODO"}' 
+          -d '{"content":"Deployment and commit completed :white_check_mark: - TODO"}' 
           ${{ secrets.DISCORD_WEBHOOK_URL }}
       - name: Send Discord Message
         if: always()
