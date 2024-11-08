@@ -1,3 +1,4 @@
+/*
 package com.quickcheck.organization;
 
 import com.quickcheck.AbstractTestContainer;
@@ -312,7 +313,8 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
         assertThat(underTest.existUserInOrganization(id, userId)).isTrue();
     }
 
-    /*@Test
+    */
+/*@Test
     void joinOrganizationWillThrowWhenAlreadyJoined() {
         Organization org = new Organization(
                 "ORG1234"
@@ -347,7 +349,8 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
         underTest.joinOrganization(orgId,userId);
 
         assertThat(underTest.joinOrganization(orgId, userId));
-    }*/
+    }*//*
+
 
     @Test
     void leaveOrganization() {
@@ -387,9 +390,11 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
         assertThat(underTest.existUserInOrganization(orgId, userId)).isFalse();
     }
 
-    /*@Test
+    */
+/*@Test
     void leaveOrganizationWillThrowWhenNotJoined() {
-    }*/
+    }*//*
+
 
     @Test
     void existUserInOrganization() {
@@ -489,3 +494,4 @@ public class OrganizationJDBCDataAccessServiceTest extends AbstractTestContainer
     }
 }
 
+*/

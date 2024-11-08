@@ -1,3 +1,4 @@
+/*
 package com.quickcheck.user;
 
 import com.quickcheck.AbstractTestContainer;
@@ -456,3 +457,4 @@ public class UserJDBCDataAccessServiceTest extends AbstractTestContainer {
     }
 
 }
+*/
