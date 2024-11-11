@@ -53,6 +53,20 @@ public class UserController {
         boolean isInAttendance = userService.isUserInAttendance(userId, tag);
         return ResponseEntity.ok(isInAttendance);
     }
+    @GetMapping("/organization/{orgName}/user/{userId}")
+    public ResponseEntity<Boolean> isUserInOrganization(
+            @PathVariable("userId") Integer userId,
+            @PathVariable("orgName") String  orgName) {
+        boolean isInOrganization = userService.isUserInOrganization(userId, orgName);
+        return ResponseEntity.ok(isInOrganization);
+    }
+    @GetMapping("/class/{classId}/user/{userId}")
+    public ResponseEntity<Boolean> isUserInClass(
+            @PathVariable("userId") Integer userId,
+            @PathVariable("classId") Integer  classId) {
+        boolean isInClass = userService.isUserInClass(userId, classId);
+        return ResponseEntity.ok(isInClass);
+    }
 
 
     @PostMapping

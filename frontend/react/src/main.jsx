@@ -18,6 +18,8 @@ import UserProfilePage from "./pages/UserProfilePage.jsx";
 import BrowseOrganizationListPage from "./pages/BrowseOrganizationListPage.jsx";
 import AdminProtectedRoute from "./components/shared/protectedRoutes/AdminProtectedRoute.jsx";
 import Test from "./pages/Test.jsx";
+import JoinedOrgProtectedRoute from "./components/shared/protectedRoutes/JoinedOrgProtectedRoute.jsx";
+import JoinedClassProtectedRoute from "./components/shared/protectedRoutes/JoinedClassProtectedRoute.jsx";
 
 const { ToastContainer } = createStandaloneToast();
 const router = createBrowserRouter([
@@ -54,9 +56,9 @@ const router = createBrowserRouter([
     {
         path:`/organization/:name`,
         element:
-            <ProtectedRoute>
+            <JoinedOrgProtectedRoute>
                 <OrganizationUserClassListPage/>
-            </ProtectedRoute>
+            </JoinedOrgProtectedRoute>
     },
     {
         path:"/users",
@@ -75,16 +77,16 @@ const router = createBrowserRouter([
     {
         path:"/organization/:name/classes",
         element:
-            <ProtectedRoute>
+            <JoinedOrgProtectedRoute>
                 <BrowseOrganizationClassListPage/>
-            </ProtectedRoute>
+            </JoinedOrgProtectedRoute>
     },
     {
         path:`/organization/:name/class/:id`,
         element:
-            <ProtectedRoute>
+            <JoinedClassProtectedRoute>
                 <ClassPage/>
-            </ProtectedRoute>
+            </JoinedClassProtectedRoute>
     }
 ])
 

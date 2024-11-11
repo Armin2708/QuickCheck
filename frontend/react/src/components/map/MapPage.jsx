@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import { GoogleMap, Marker, useLoadScript, StandaloneSearchBox } from "@react-google-maps/api";
 import { Box, Input, VStack } from "@chakra-ui/react";
 
-const apiKey = "AIzaSyB7sllsLey1ptbSmWNjgYINwhSgOkuQzW8"; // Replace with your actual API key
+const apiKey = `${import.meta.env.VITE_GOOGLE_MAP_API_KEY}`; // Replace with your actual API key
 const libraries = ["places"];
 
 export default function MapPage({ onMarkerSet }) {

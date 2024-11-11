@@ -34,6 +34,8 @@ public class ClassService {
         return classDao.selectClassesOfOrganization(organizationId);
     }
 
+
+
     public Class getClassById(Integer classId) {
         return classDao.selectClassById(classId)
                 .orElseThrow(() -> new ResourceNotFoundException(
@@ -56,6 +58,21 @@ public class ClassService {
 
     }
 
+    public List<Class> getClassesOfProfessorInOrganization(String orgName,Integer professorId) {
+        if (!organizationDao.existOrganizationByName(orgName)){
+            throw new ResourceNotFoundException("Organization with name %s not found".formatted(orgName));
+        }
+
+        if (!userDao.existUserById(professorId)){
+            throw new ResourceNotFoundException("professor with id %s not found".formatted(professorId));
+        }
+
+        Integer orgId = organizationDao.selectOrganizationByName(orgName).get().getId();
+
+        return classDao.selectClassesOfProfessorInOrganization(professorId,orgId);
+
+    }
+
     public void addClass(ClassRegistrationRequest request) {
 
         Integer organizationId = organizationDao.selectOrganizationByName(request.organizationName()).get().getId();
@@ -75,11 +92,15 @@ public class ClassService {
         if (!classDao.existClassById(classId)){
             throw new ResourceNotFoundException("No class found with id %s".formatted(classId));
         }
+        Integer professorId=classDao.selectClassById(classId).get().getProfessorId();
         if (!userDao.existUserById(userId)){
             throw new ResourceNotFoundException("No user found with id %s".formatted(userId));
         }
         if (classDao.existUserInClass(classId, userId)){
             throw new DuplicateResourceException("User %s already in Class %s".formatted(userId,classId));
+        }
+        if (professorId.equals(userId)){
+            throw new DuplicateResourceException("User [%s] is the instructor".formatted(userId));
         }
 
         classDao.joinClass(classId,userId);
@@ -90,11 +111,15 @@ public class ClassService {
         if (!classDao.existClassById(classId)){
             throw new ResourceNotFoundException("No class found with id %s".formatted(classId));
         }
+        Integer professorId=classDao.selectClassById(classId).get().getProfessorId();
         if (!userDao.existUserById(userId)){
             throw new ResourceNotFoundException("No user found with id %s".formatted(userId));
         }
+        if (professorId.equals(userId)){
+            throw new DuplicateResourceException("User [%s] is the instructor".formatted(userId));
+        }
         if (!classDao.existUserInClass(classId, userId)){
-            throw new DuplicateResourceException("User %s already in Class %s".formatted(userId,classId));
+            throw new DuplicateResourceException("User %s not in Class %s".formatted(userId,classId));
         }
 
         classDao.leaveClass(classId,userId);

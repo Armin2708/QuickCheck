@@ -4,19 +4,19 @@ import {useAuth} from "../../context/AuthContext.jsx";
 
 const AdminProtectedRoute = ({ children }) => {
 
-    const { isUserAuthenticated,isUserAdmin } = useAuth();
+    const { isUserAuthenticated,isAdmin } = useAuth();
     const navigate = useNavigate();
 
     useEffect(() => {
         if (!isUserAuthenticated()){
             navigate("/login")
         }
-        if (!isUserAdmin()){
+        if (!isAdmin()){
             navigate("/dashboard")
         }
-    },[isUserAuthenticated,isUserAdmin,navigate])
+    },[isUserAuthenticated,isAdmin,navigate])
 
-    return isUserAuthenticated() && isUserAdmin() ? children : null;
+    return isUserAuthenticated() && isAdmin() ? children : null;
 }
 
 export default AdminProtectedRoute;

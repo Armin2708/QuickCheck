@@ -26,7 +26,7 @@ export default function ClassPage(){
         radius: null,
     });
     const { name: orgName, id: classId } = useParams();
-    const {fullUser,isUserAdmin,isUserUser} = useAuth()
+    const {fullUser,isAdmin,isUser} = useAuth()
 
     const tag = `${classId}_${new Date().toISOString().split('T')[0]}`
 
@@ -113,10 +113,10 @@ export default function ClassPage(){
 
     return (
         <>
-            {(isUserAdmin()) ?
+            {(isAdmin()) ?
                 <AdminAttendanceCard {...commonProps} setRadius={setRadius} tag={tag} radius={radius}/>
                 :
-                isUserUser ? <UserAttendanceCard {...commonProps} />
+                isUser() ? <UserAttendanceCard {...commonProps} />
                     : <Box>Error</Box>
             }
         </>

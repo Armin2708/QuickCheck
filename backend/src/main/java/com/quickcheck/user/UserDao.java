@@ -25,7 +25,10 @@ public interface UserDao {
 
     boolean existUserById(Integer id);
     boolean existUserWithEmail(String email);
+
     boolean existUserInAttendance(Integer userId, String tag);
+    boolean existUserInOrganization(Integer userId, String orgName);
+    boolean existUserInClass(Integer userId, Integer classId);
 
     void insertUser(User user) throws SQLException;
     void updateUser(User update);

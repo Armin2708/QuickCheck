@@ -150,7 +150,7 @@ export default function CreateClassForm() {
             {({ isValid, isSubmitting, setFieldValue, values }) => (
                 <Form>
                     <Box borderWidth="1px" rounded="lg" shadow="1px 1px 3px rgba(0,0,0,0.3)" maxWidth={600} p={6} m="10px auto">
-                        <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated />
+                        <Progress hasStripe value={progress} mb="5%" mx="5%" isAnimated borderRadius={"3px"} colorScheme={"pink"}/>
                         {step === 1 ? (
                             <>
                                 <Heading w="100%" textAlign="center" fontWeight="normal" mb="2%">Create Class</Heading>
@@ -189,10 +189,10 @@ export default function CreateClassForm() {
                                     </MySelect>
                                 ) : (
                                     <>
-                                        <MyTextInput name="roomName" type="text" placeholder="Room Name" />
                                         <MapButton onLocationSelect={(lat, lng) => {
                                             setFieldValue("location", `${lat}, ${lng}`);
                                         }}/>
+                                        <MyTextInput name="roomName" type="text" placeholder="Room Name" />
                                         <MyTextInput name="capacity" type="number" placeholder="Class Capacity" />
                                     </>
                                 )}
@@ -200,11 +200,37 @@ export default function CreateClassForm() {
                         )}
                         <ButtonGroup mt="5%" w="100%">
                             <Flex w="100%" justifyContent="space-between">
-                                <Button onClick={() => { setStep(step - 1); setProgress(progress - 50); }} isDisabled={step === 1} colorScheme="teal" variant="solid" w="7rem" mr="5%">Back</Button>
-                                <Button w="7rem" isDisabled={step === 2} onClick={() => { setStep(step + 1); setProgress(100); }} colorScheme="teal" variant="outline">Next</Button>
-                                {step === 2 && (
+                                <Button
+                                    onClick={() => {
+                                        setStep(step - 1);
+                                        setProgress(progress - 50);
+                                    }}
+                                    isDisabled={step === 1}
+                                    backgroundColor="#7E3BB5"
+                                    color={"white"}
+                                    variant="solid"
+                                    w="7rem"
+                                    mr="5%"
+                                >
+                                    Back
+                                </Button>
+                                {step === 2 ? (
                                     <Button w="7rem" colorScheme="red" variant="solid" isLoading={isSubmitting} type="submit" isDisabled={!isValid || isSubmitting}>
                                         Submit
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        w="7rem"
+                                        isDisabled={step === 2}
+                                        onClick={() => {
+                                            setStep(step + 1);
+                                            setProgress(100);
+                                        }}
+                                        color="#7E3BB5"
+                                        variant="outline"
+                                        borderColor={"#7E3BB5"}
+                                    >
+                                        Next
                                     </Button>
                                 )}
                             </Flex>

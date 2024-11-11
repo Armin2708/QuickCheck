@@ -15,7 +15,7 @@ import CreateOrganizationButton from "../components/organization/CreateOrganizat
 export default function BrowseOrganizationListPage() {
     const [organizations, setOrganizations] = useState([]);
     const [joinedOrg, setJoinedOrg] = useState([]);
-    const { fullUser,isUserAdmin } = useAuth();
+    const { fullUser,isAdmin } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 
@@ -79,7 +79,7 @@ export default function BrowseOrganizationListPage() {
                         >
                             Return
                         </Button>
-                        {isUserAdmin() &&<CreateOrganizationButton onSuccess={fetchOrganizations} />}
+                        {isAdmin() &&<CreateOrganizationButton onSuccess={fetchOrganizations} />}
                     </Stack>
                     <Wrap justify={"center"} spacing={"30px"}>
                         {Array.isArray(organizations) && organizations.length > 0 ? (

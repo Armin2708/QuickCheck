@@ -17,7 +17,7 @@ import {errorNotification, successNotification} from "../../services/notificatio
 const IMAGE =
     'https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/blogs/18725/images/DAau3fjETFmAjLVaNl3B_FallLandscape7-.jpg'
 
-export default function BrowseClassCard({id,professorId,name,classroomId, joinedClass}) {
+export default function BrowseClassCard({id: classId,professorId,name,classroomId, joinedClass,userId}) {
 
     const [professor, setProfessor] = useState({});
     const [classroom, setClassroom] = useState({});
@@ -60,7 +60,7 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
             return;
         }
 
-        joinClass(id, fullUser.id)
+        joinClass(classId, fullUser.id)
             .then(() => {
                 successNotification(
                     "Class Joined",
@@ -85,11 +85,11 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
             fetchClassroom();
         }
 
-        if (Array.isArray(joinedClass) && id) {
-            const joined = joinedClass.some(org => org.id === id);
+        if (Array.isArray(joinedClass) && classId) {
+            const joined = joinedClass.some(org => org.id === classId);
             setIsJoined(joined);
         }
-    }, [joinedClass, id, classroomId, professorId]);
+    }, [joinedClass, classId, classroomId, professorId]);
 
 
     return (
@@ -149,10 +149,10 @@ export default function BrowseClassCard({id,professorId,name,classroomId, joined
                     </Stack>
                     {isJoined !== null && (
                         <Button
-                            isDisabled={isJoined}
+                            isDisabled={isJoined || (userId===professorId)}
                             onClick={handleJoinClass}
                         >
-                            {isJoined ? "Joined" : "Join"}
+                            {userId===professorId?"Instructor" : (isJoined ? "Joined" : "Join")}
                         </Button>
                     )}
                 </Stack>

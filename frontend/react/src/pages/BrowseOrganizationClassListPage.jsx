@@ -1,6 +1,7 @@
 import {Box, Button, Stack, Wrap, WrapItem} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
+    getClassesOfInstructorInOrganization,
     getClassesOfUserInOrganization,
     getOrganizationClasses
 } from "../services/client.js";
@@ -17,8 +18,9 @@ export default function BrowseOrganizationClassListPage() {
     const [classes, setClasses] = useState([]);
     const [joinedClass, setJoinedClass] = useState([]);
 
+
     const {name:organizationName} = useParams()
-    const {fullUser,isUserAdmin} = useAuth()
+    const {fullUser,isAdmin,isInstructor} = useAuth()
 
     const navigate = useNavigate();
 
@@ -76,13 +78,13 @@ export default function BrowseOrganizationClassListPage() {
                         >
                             Return
                         </Button>
-                        {isUserAdmin() &&<CreateClassButton onSuccess={fetchClasses} />}
+                        {(isAdmin() || isInstructor()) &&<CreateClassButton onSuccess={fetchClasses} />}
                     </Stack>
                     <Wrap justify={"center"} spacing={"30px"}>
                         {Array.isArray(classes) && classes.length > 0 ? (
                             classes.map((classObject) => (
                                 <WrapItem key={classObject.id}>
-                                        <BrowseClassCard {...classObject} joinedClass={joinedClass} />
+                                        <BrowseClassCard {...classObject} joinedClass={joinedClass} userId={fullUser?.id} />
                                 </WrapItem>
                             ))
                         ) : (

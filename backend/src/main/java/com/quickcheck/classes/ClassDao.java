@@ -10,6 +10,7 @@ public interface ClassDao {
 
     List<Class> selectClassesOfUserInOrganization(Integer userId, Integer orgId);
     List<Class> selectClassesOfOrganization(Integer orgId);
+    List<Class> selectClassesOfProfessorInOrganization(Integer professorId ,Integer orgId);
 
     Optional<Class> selectClassById(Integer id);
 

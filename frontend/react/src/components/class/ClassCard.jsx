@@ -15,6 +15,7 @@ import {getClassroomById, getClassrooms, getUserById, leaveClass} from "../../se
 import {useNavigate, useParams} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
 import {errorNotification, successNotification} from "../../services/notification.js";
+import DeleteClassButton from "./DeleteClassButton.jsx";
 
 
 const IMAGE =
@@ -158,13 +159,21 @@ export default function ClassCard({id,professorId,name,classroomId,onSuccess, fu
                             >
                                 Open
                             </Button>
-                            <Button
-                                fontWeight={800}
-                                fontSize={'xl'}
-                                onClick={()=>handleLeaveClass()}
-                            >
-                                Leave
-                            </Button>
+                            {fullUser?.id===professorId ? (
+                                    <DeleteClassButton
+                                        classId={id}
+                                        className={name}
+                                        onSuccess={onSuccess}
+                                    />
+                                ) : (
+                                    <Button
+                                        fontWeight={800}
+                                        fontSize={'xl'}
+                                        onClick={() => handleLeaveClass()}
+                                    >
+                                        Leave
+                                    </Button>
+                                )}
                         </Stack>
                     </Stack>
                 </Box>

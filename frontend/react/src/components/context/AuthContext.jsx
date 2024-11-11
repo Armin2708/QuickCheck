@@ -4,8 +4,15 @@ import{
     useEffect,
     useState
 } from "react";
-import {getClassroomById, getUserById, getUserByEmail, login as performLogin} from "../../services/client.js";
+import {
+    getClassroomById,
+    getUserById,
+    getUserByEmail,
+    login as performLogin,
+    isUserInOrganization, isUserInClass
+} from "../../services/client.js";
 import {jwtDecode} from "jwt-decode";
+import {useParams} from "react-router-dom";
 
 const AuthContext = createContext({})
 
@@ -13,6 +20,8 @@ const AuthProvider = ({ children }) => {
 
     const [user, setUser] = useState(null);
     const [fullUser, setFullUser] = useState([]);
+
+    const {name:orgName,id:classId} = useParams();
 
     const setUserFromToken = () =>{
         let token = localStorage.getItem("access_token");
@@ -100,7 +109,7 @@ const AuthProvider = ({ children }) => {
         return true;
     }
 
-    const isUserAdmin =() => {
+    const isAdmin =() => {
         const token = localStorage.getItem("access_token");
         if (!token){
             return false;
@@ -113,7 +122,22 @@ const AuthProvider = ({ children }) => {
         }
         return true;
     }
-    const isUserUser =() => {
+
+    const isInstructor =() => {
+        const token = localStorage.getItem("access_token");
+        if (!token){
+            return false;
+        }
+        const decodedToken = jwtDecode(token);
+        const scopes = Array.isArray(decodedToken.scopes[0]) ? decodedToken.scopes.flat() : decodedToken.scopes;
+
+        if (!scopes.includes('INSTRUCTOR')) {
+            return false;
+        }
+        return true;
+    }
+
+    const isUser =() => {
         const token = localStorage.getItem("access_token");
         if (!token){
             return false;
@@ -127,6 +151,7 @@ const AuthProvider = ({ children }) => {
         return true;
     }
 
+
     return(
         <AuthContext.Provider value={{
             user,
@@ -134,9 +159,10 @@ const AuthProvider = ({ children }) => {
             login,
             logOut,
             isUserAuthenticated,
-            isUserAdmin,
-            isUserUser,
-            setUserFromToken
+            isAdmin,
+            isInstructor,
+            isUser,
+            setUserFromToken,
         }}>
             {children}
         </AuthContext.Provider>

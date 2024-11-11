@@ -6,6 +6,7 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 import MapPage from "./MapPage.jsx";
+import {CheckIcon} from "@chakra-ui/icons";
 
 const MapButton = ({ onLocationSelect }) => {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -14,10 +15,15 @@ const MapButton = ({ onLocationSelect }) => {
     return (
         <>
             <Button
-                backgroundColor={"#7E3BB5"}
-                color={"white"}
+                marginTop={"10px"}
+                backgroundColor={"white"}
+                color={"#7E3BB5"}
+                colorScheme="#7E3BB5"
                 _active={{ transform: "scale(1)" }}
+                _hover={{backgroundColor: "#EED9FF"}}
                 onClick={onOpen}
+                variant="outline"
+                rightIcon={selectedCoordinates && <CheckIcon/>}
             >
                 Select Location
             </Button>

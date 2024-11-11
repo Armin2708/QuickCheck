@@ -24,7 +24,7 @@ export default function SideBar({ isOpen, onClose, finalFocusRef }) {
         return () => navigate(to); // Return a function that navigates to the specified path
     };
 
-    const {logOut,isUserAdmin} = useAuth();
+    const {logOut,isAdmin} = useAuth();
 
     return (
         <Drawer
@@ -60,7 +60,7 @@ export default function SideBar({ isOpen, onClose, finalFocusRef }) {
                             </ButtonText>
                         </SideBarPageButton>
 
-                        {isUserAdmin() &&
+                        {isAdmin() &&
                             <SideBarPageButton handleNavigate={handleNavigate("/users")}>
                             <FiUsers size="24px"/>
                             <ButtonText>

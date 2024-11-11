@@ -17,10 +17,11 @@ export const login = async (usernameAndPassword) => {
     }
 }
 
-export const verifyEmail = async (email) => {
+export const verifyEmail = async (emailRequest) => {
     try{
         return await axios.post(
-            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify?email=${email}`
+            `${import.meta.env.VITE_API_BASE_URL}/api/email/verify`,
+            emailRequest
         )
     }catch (e){
         throw e;
@@ -93,6 +94,24 @@ export const isUserInAttendance = async (tag, userId) =>{
     try{
         return await axios.get(
             `${import.meta.env.VITE_API_BASE_URL}/api/users/attendance/${tag}/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+export const isUserInOrganization = async (name, userId) =>{
+    try{
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/organization/${name}/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+export const isUserInClass = async (classId, userId) =>{
+    try{
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/class/${classId}/user/${userId}`,
             getAuthConfig())
     }catch (e){
         throw e;
@@ -352,6 +371,14 @@ export const getOrganizationClasses= async (name) => {
 export const getClassesOfUserInOrganization= async (userId,orgName) => {
     try {
         return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes/organization/${orgName}/user/${userId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+export const getClassesOfInstructorInOrganization= async (instructorId,orgName) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classes/organization/${orgName}/instructor/${instructorId}`,
             getAuthConfig())
     }catch (e){
         throw e;

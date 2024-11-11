@@ -17,15 +17,15 @@ import { useAuth } from "../context/AuthContext.jsx"; // import your Auth contex
 import MyTextInput from "../shared/form/MyText.jsx";
 import MySelect from "../shared/form/MySelect.jsx";
 
-const RegisterForm = () => {
+const RegisterForm = ({initialStep = 1}) => {
     const navigate = useNavigate();
     const { login } = useAuth();  // use the login function from context
-    const [step, setStep] = useState(1);
-    const [progress, setProgress] = useState(50);
+    const [step, setStep] = useState(initialStep); // Set initial step based on the prop
+    const [progress, setProgress] = useState(initialStep === 2 ? 100 : 50);
 
-    const handleEmailVerification = async (email) => {
+    const handleEmailVerification = async (emailRequest) => {
         try {
-            await verifyEmail(email);
+            await verifyEmail(emailRequest);
             successNotification("Verification Email Sent", "Please check your email for the verification code.");
         } catch (err) {
             errorNotification(err.code || "Error", err.response?.data?.message || "Failed to send verification email.");
@@ -79,7 +79,12 @@ const RegisterForm = () => {
 
                 if (step === 1) {
                     try {
-                        await handleEmailVerification(values.email);
+                        const emailRequest = {
+                            email:values.email,
+                            url:`${import.meta.env.VITE_REACT_BASE_URL}/register?step=verify`
+                        }
+                        console.log(`link : ${import.meta.env.VITE_REACT_BASE_URL}/register?step=verify`)
+                        await handleEmailVerification(emailRequest);
                         setStep(2);
                         setProgress(100);
                     } catch (error) {

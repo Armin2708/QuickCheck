@@ -11,7 +11,7 @@ import BrowseOrganizationButton from "../components/organization/BrowseOrganizat
 
 export default function Dashboard() {
     const [organizations, setOrganizations] = useState([]);
-    const { fullUser, isUserAdmin } = useAuth();
+    const { fullUser } = useAuth();
     const navigate = useNavigate();
     const [loading, setLoading] = useState(true);
 

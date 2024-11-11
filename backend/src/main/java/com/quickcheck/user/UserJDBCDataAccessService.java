@@ -258,6 +258,30 @@ public class UserJDBCDataAccessService implements UserDao {
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, tag);
         return count != null && count > 0;
     }
+    @Override
+    public boolean existUserInOrganization(Integer userId, String orgName) {
+        var sql = """
+                SELECT count(id)
+                FROM organization_user
+                WHERE user_id = ? AND organization_id = (
+                    SELECT id
+                    FROM organizations
+                    WHERE name = ?
+                    )
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, orgName);
+        return count != null && count > 0;
+    }
+    @Override
+    public boolean existUserInClass(Integer userId, Integer classId) {
+        var sql = """
+                SELECT count(id)
+                FROM class_user
+                WHERE user_id = ? AND class_id = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, classId);
+        return count != null && count > 0;
+    }
 
     @Override
     public List<User> selectAllUsersOfAttendance(String attendanceTag) {

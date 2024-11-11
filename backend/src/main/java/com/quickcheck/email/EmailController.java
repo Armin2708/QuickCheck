@@ -17,8 +17,8 @@ public class EmailController {
         }
 
         @PostMapping("/verify")
-        public void verifyEmail(@RequestParam String email){
-                emailService.verifyEmail(email);
+        public void verifyEmail(@RequestBody EmailCodeCreationRequest request){
+                emailService.verifyEmail(request);
         }
 
         @PostMapping("/verify/code")

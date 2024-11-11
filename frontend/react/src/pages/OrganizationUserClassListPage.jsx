@@ -1,6 +1,6 @@
 import { Box, Button, Stack, Wrap, WrapItem, Center, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import {getClassesOfUserInOrganization} from "../services/client.js";
+import {getClassesOfInstructorInOrganization, getClassesOfUserInOrganization} from "../services/client.js";
 import SideBar from "../components/shared/SideBar.jsx";
 import ClassCard from "../components/class/ClassCard.jsx";
 import HeaderFooter from "../components/shared/HeaderFooter.jsx";
@@ -18,10 +18,23 @@ export default function OrganizationUserClassListPage() {
 
     const fetchClasses = () => {
         setLoading(true); // Start loading
-        getClassesOfUserInOrganization(fullUser.id, organizationName)
+
+        getClassesOfInstructorInOrganization(fullUser.id,organizationName)
             .then((res) => {
                 if (Array.isArray(res.data)) {
                     setClasses(res.data);
+                } else {
+                    console.error("Expected an array but got:", res.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Error fetching classrooms:", error);
+            })
+
+        getClassesOfUserInOrganization(fullUser.id, organizationName)
+            .then((res) => {
+                if (Array.isArray(res.data)) {
+                    setClasses((prevClasses) => [...prevClasses, ...res.data]);
                 } else {
                     console.error("Expected an array but got:", res.data);
                 }

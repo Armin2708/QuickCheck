@@ -1,6 +1,6 @@
 import {Button, Flex, Heading, Image, Stack} from "@chakra-ui/react";
 import {useAuth} from "../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
+import {useNavigate, useSearchParams} from "react-router-dom";
 import {useEffect} from "react";
 import RegisterForm from "./RegisterForm.jsx";
 
@@ -8,6 +8,7 @@ import RegisterForm from "./RegisterForm.jsx";
 const Register = () => {
     const { user,setUserFromToken } = useAuth();
     const navigate = useNavigate();
+    const [searchParams] = useSearchParams();
 
     useEffect(() => {
         if (user) {
@@ -50,11 +51,14 @@ const Register = () => {
             <Flex p={8} flex={1} align={'center'} justify={'center'} >
                 <Stack spacing={4} w={'full'} maxW={'md'}>
                     <Heading fontSize={'2xl'}>Create your account</Heading>
-                    <RegisterForm onSuccess={(token) => {
-                        localStorage.setItem("access_token",token);
-                        setUserFromToken();
-                        navigate("/dashboard")
-                    }}/>
+                    <RegisterForm
+                        initialStep={searchParams.get("step") === "verify" ? 2 : 1}
+                        onSuccess={(token) => {
+                            localStorage.setItem("access_token", token);
+                            setUserFromToken();
+                            navigate("/dashboard");
+                        }}
+                    />
                 </Stack>
             </Flex>
         </Stack>

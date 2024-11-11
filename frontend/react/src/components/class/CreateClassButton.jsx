@@ -44,7 +44,6 @@ const CreateClassButton = ({onSuccess}) => {
 
                 <ModalFooter>
                     <Button
-                        leftIcon={<CloseIcon/>}
                         backgroundColor={"#7E3BB5"}
                         color={"white"}
 

@@ -43,7 +43,7 @@ public class EmailService {
                     "<p style='color: #333333; font-size: 16px;'>"+ emailRequest.body() + "</p>" +
                     "<p style='color: #666666; font-size: 14px;'>Thank you for choosing us. If you have any questions, feel free to reach out.</p>" +
                     "<p style='text-align: center;'>" +
-                    "<a href='https://example.com' style='text-decoration: none; color: #ffffff; background-color: #4a90e2; padding: 10px 20px; border-radius: 5px;'>Visit Our Website</a>" +
+                    "<a href="+emailRequest.url()+" style='text-decoration: none; color: #ffffff; background-color: #4a90e2; padding: 10px 20px; border-radius: 5px;'>Verify Email</a>" +
                     "</p>" +
                     "</div>" +
                     "</body>" +
@@ -59,26 +59,28 @@ public class EmailService {
         }
     }
 
-    public void verifyEmail(String email){
+    public void verifyEmail(EmailCodeCreationRequest request){
+        System.out.println(request.url());
         Random random = new Random();
         // Generate a random number between 100000 and 999999 (inclusive)
         String code = String.valueOf(100000 + random.nextInt(900000));
+        String userEmail = request.email();
 
-        EmailCodeObject emailCodeObject = new EmailCodeObject(email, code);
-        EmailRequest request = new EmailRequest(email,"Quick Check email verification","Verify your email with "+code);
+        EmailCodeObject emailCodeObject = new EmailCodeObject(userEmail, code);
+        EmailRequest emailRequest = new EmailRequest(userEmail,"Quick Check email verification","Verify your email with "+code,request.url());
 
-        if (userDao.existUserWithEmail(email)) {
+        if (userDao.existUserWithEmail(userEmail)) {
 
             throw new DuplicateResourceException("Email already taken");
             }
 
-        if (emailDao.existCodeWithEmail(email)){
+        if (emailDao.existCodeWithEmail(userEmail)){
             emailDao.updateCodeByEmail(emailCodeObject);
-            sendEmail(request);
+            sendEmail(emailRequest);
             return;
         }
 
-        sendEmail(request);
+        sendEmail(emailRequest);
         emailDao.saveCodeAndEmail(emailCodeObject);
     }
 
