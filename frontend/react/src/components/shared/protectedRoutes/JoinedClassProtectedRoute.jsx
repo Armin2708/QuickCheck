@@ -32,8 +32,6 @@ const JoinedClassProtectedRoute = ({ children }) => {
     const checkClassProfessor = async () => {
         try {
             const res = await getClassById(id);
-            console.log(fullUser?.id)
-            console.log(res.data.professorId)
             return res.data.professorId === fullUser?.id;
         } catch (error) {
             console.error("Error checking organization status:", error);
