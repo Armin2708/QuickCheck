@@ -81,11 +81,11 @@ const RegisterForm = ({initialStep = 1}) => {
                     try {
                         const emailRequest = {
                             email:values.email,
-                            url:`${import.meta.env.VITE_REACT_BASE_URL}/register?step=verify`
+                            url:`${import.meta.env.VITE_FRONT_URL}/register?step=verify`
                         }
-                        console.log(`link : ${import.meta.env.VITE_REACT_BASE_URL}/register?step=verify`)
+                        console.log(`link : ${import.meta.env.VITE_FRONT_URL}/register?step=verify`)
                         console.log("API Base URL:", import.meta.env.VITE_API_BASE_URL);
-                        console.log("Frontend Base URL:", import.meta.env.VITE_REACT_BASE_URL);
+                        console.log("Frontend Base URL:", import.meta.env.VITE_FRONT_URL);
                         console.log("Google Map API Key:", import.meta.env.VITE_GOOGLE_MAP_API_KEY);
 
                         await handleEmailVerification(emailRequest);
