@@ -53,7 +53,6 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
             case 4: // Final step, validate all required fields
                 return Yup.object({
                     email: Yup.string().email('Invalid email address').required('Required'),
-                    verificationCode: Yup.string().required("Verification code is required"),
                     password: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
                     name: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
                     address: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
