@@ -5,13 +5,18 @@ import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.s3.S3Buckets;
+import com.quickcheck.s3.S3Service;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,12 +26,20 @@ public class UserService{
     private final AttendanceDao attendanceDao;
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
+    private final S3Service s3Service;
+    private final S3Buckets s3Buckets;
 
-    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper) {
+    private void checkIfUserExists(Integer userId){
+        checkIfUserExists(userId);
+    }
+
+    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets) {
         this.userDao = userDao;
         this.attendanceDao = attendanceDao;
         this.passwordEncoder = passwordEncoder;
         this.userDTOMapper = userDTOMapper;
+        this.s3Service = s3Service;
+        this.s3Buckets = s3Buckets;
     }
 
     public List<UserDTO> getAllUsers(){
@@ -170,9 +183,42 @@ public class UserService{
     }
 
     public void deleteUser(Integer userId){
-        if (!userDao.existUserById(userId)){
-            throw new ResourceNotFoundException("User with id [%s] not found".formatted(userId));
-        }
+        checkIfUserExists(userId);
         userDao.deleteUserById(userId);
+    }
+
+    public void uploadUserImage(Integer userId, MultipartFile file) {
+        checkIfUserExists(userId);
+        String profileImageId = UUID.randomUUID().toString();
+
+        try {
+            s3Service.putObject(
+                    s3Buckets.getUser(),
+                    "profile-images/%s/%s".formatted(userId, profileImageId),
+                    file.getBytes()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        userDao.updateUserProfileImageId(profileImageId,userId);
+    }
+
+    public byte[] getUserImage(Integer userId) {
+        UserDTO user = userDao.selectUserById(userId)
+                .map(userDTOMapper)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "user with id [%s] not found".formatted(userId)
+                ));
+
+        if (user.profileImageId().isBlank()){
+            throw new ResourceNotFoundException("User with id [%s] profile image not found".formatted(userId));
+        }
+
+        byte[] profileImage = s3Service.getObject(
+                s3Buckets.getUser(),
+                "profile-images/%s/%s".formatted(userId, user.profileImageId())
+        );
+
+        return profileImage;
     }
 }

@@ -19,6 +19,7 @@ public class User implements UserDetails {
     private LocalDate dateOfBirth;
     private Gender gender;
     private List<Roles> roles;
+    private String profileImageId;
 
     public User() {}
 
@@ -43,6 +44,13 @@ public class User implements UserDetails {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.roles = roles;
+    }
+
+    public User(Integer id, String name, String address, String email,
+                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles,
+                String profileImageId) {
+        this(id, name, address,email, password, dateOfBirth, gender,roles);
+        this.profileImageId=profileImageId;
     }
 
     public Integer getId() {
@@ -141,39 +149,38 @@ public class User implements UserDetails {
         this.gender = gender;
     }
 
+    public String getProfileImageId() {
+        return profileImageId;
+    }
+
+    public void setProfileImageId(String profileImageId) {
+        this.profileImageId = profileImageId;
+    }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        User user = (User) o;
-        return Objects.equals(id, user.id) &&
-                Objects.equals(name, user.name) &&
-                Objects.equals(address, user.address) &&
-                Objects.equals(email, user.email) &&
-                Objects.equals(password, user.password) &&
-                Objects.equals(dateOfBirth, user.dateOfBirth) &&
-                Objects.equals(gender, user.gender) &&
-                Objects.equals(roles, user.roles) ;
+        if (!(o instanceof User user)) return false;
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(address, user.address) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(dateOfBirth, user.dateOfBirth) && gender == user.gender && Objects.equals(roles, user.roles) && Objects.equals(profileImageId, user.profileImageId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, email, password, dateOfBirth, gender, roles);
+        return Objects.hash(id, name, address, email, password, dateOfBirth, gender, roles, profileImageId);
     }
 
     @Override
     public String toString() {
-
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", address='" + address + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
-                ", dateOfBirth=" + dateOfBirth + '\'' +
-                ", gender=" + gender + '\'' +
-                ", roles=" + roles + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", gender=" + gender +
+                ", roles=" + roles +
+                ", profileImageId='" + profileImageId + '\'' +
                 '}';
     }
 }

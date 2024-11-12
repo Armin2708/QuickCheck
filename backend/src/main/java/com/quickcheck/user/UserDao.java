@@ -20,10 +20,10 @@ public interface UserDao {
 
     void deleteUserRoles(Integer userId);
 
-    Optional<User> selectUserById(Integer id);
+    Optional<User> selectUserById(Integer userId);
     Optional<User> selectUserByEmail(String email);
 
-    boolean existUserById(Integer id);
+    boolean existUserById(Integer userId);
     boolean existUserWithEmail(String email);
 
     boolean existUserInAttendance(Integer userId, String tag);
@@ -32,5 +32,7 @@ public interface UserDao {
 
     void insertUser(User user) throws SQLException;
     void updateUser(User update);
-    void deleteUserById(Integer id);
+    void deleteUserById(Integer userId);
+
+    void updateUserProfileImageId(String profileImageId, Integer userId);
 }

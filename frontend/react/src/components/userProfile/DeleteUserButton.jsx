@@ -37,6 +37,12 @@ function DeleteUserButton({ userId, name, }) {
     return (
         <>
             <Button
+                flex={1}
+                fontSize={'sm'}
+                rounded={'full'}
+                boxShadow={
+                    '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
+                }
                 bg={'red'}
                 color={'white'}
                 _hover={{

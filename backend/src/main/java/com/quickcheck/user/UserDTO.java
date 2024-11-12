@@ -3,7 +3,6 @@ package com.quickcheck.user;
 import com.quickcheck.Gender;
 
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.List;
 
 public record UserDTO (
@@ -14,7 +13,7 @@ public record UserDTO (
         LocalDate dateOfBirth,
         Gender gender,
         List<String> roles,
-        String username
-){
+        String username,
+        String profileImageId){
 
 }

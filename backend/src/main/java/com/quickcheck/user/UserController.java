@@ -2,8 +2,10 @@ package com.quickcheck.user;
 
 import com.quickcheck.jwt.JWTUtil;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -98,6 +100,22 @@ public class UserController {
             @PathVariable("userId") Integer userId
     ){
         userService.deleteUser(userId);
+    }
+
+    @PostMapping(
+            value = "{userId}/profile-image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public void uploadUserProfilePicture(
+            @PathVariable("userId") Integer userId,
+            @RequestParam("file") MultipartFile file){
+        userService.uploadUserImage(userId,file);
+    }
+
+    @GetMapping("{userId}/profile-image")
+    public byte[] getUserProfilePicture(
+            @PathVariable("userId") Integer userId){
+        return userService.getUserImage(userId);
     }
 
 }

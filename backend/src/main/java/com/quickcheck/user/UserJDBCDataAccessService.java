@@ -59,7 +59,7 @@ public class UserJDBCDataAccessService implements UserDao {
         @Override
         public List<User> selectAllUsers() {
             var sql = """
-                SELECT id, name, address, email, password, date_of_birth, gender
+                SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
                 FROM users
                 """;
             List<User> users = jdbcTemplate.query(sql, userRowMapper);
@@ -70,7 +70,7 @@ public class UserJDBCDataAccessService implements UserDao {
         @Override
         public Optional<User> selectUserByEmail(String email) {
             var sql = """
-                SELECT id, name, address, email, password, date_of_birth, gender
+                SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
                 FROM users
                 WHERE email = ?
                 """;
@@ -82,7 +82,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public List<User> selectAllUserInOrganizationById(Integer id) {
         var sql = """
-                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender, users.profile_image_id
                 FROM users JOIN organization_user ON (users.id = organization_user.user_id)
                 WHERE organization_user.organization_id = ?
                 """;
@@ -101,7 +101,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public List<User> selectAllUserInClassById(Integer classId) {
         var sql = """
-                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender, users.profile_image_id
                 FROM users JOIN class_user ON (users.id = class_user.user_id)
                 WHERE class_user.class_id = ?
                 """;
@@ -120,7 +120,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public Optional<User> selectUserById(Integer id) {
         var sql = """
-                SELECT id, name, address, email, password, date_of_birth, gender
+                SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
                 FROM users
                 WHERE id = ?
                 """;
@@ -223,6 +223,16 @@ public class UserJDBCDataAccessService implements UserDao {
         }
 
     @Override
+    public void updateUserProfileImageId(String profileImageId, Integer userId) {
+        var sql = """
+                UPDATE users
+                SET profile_image_id = ?
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql, profileImageId, userId);
+    }
+
+    @Override
     public boolean existUserById(Integer id) {
         var sql = """
                 SELECT count(id)
@@ -286,7 +296,7 @@ public class UserJDBCDataAccessService implements UserDao {
     @Override
     public List<User> selectAllUsersOfAttendance(String attendanceTag) {
         var sql = """
-                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender
+                SELECT users.id, users.name, users.address, users.email, users.password, users.date_of_birth, users.gender, users.profile_image_id
                 FROM users JOIN attendance_user ON users.id = attendance_user.user_id
                 WHERE attendance_user.attendance_id = (
                     SELECT id

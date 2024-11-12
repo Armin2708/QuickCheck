@@ -21,6 +21,7 @@ import UserProfileCard from "../components/userProfile/UserProfileCard.jsx";
 export default function UserProfilePage(){
 
     const {fullUser} = useAuth();
+    const navigate = useNavigate();
 
     const [user,setUser]=useState(fullUser);
     const userId = fullUser.id
@@ -49,7 +50,6 @@ export default function UserProfilePage(){
             <VStack>
                 <Button
                     fontSize={'sm'}
-                    rounded={'full'}
                     _focus={{
                         bg: 'gray.200',
                     }}
