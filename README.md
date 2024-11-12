@@ -92,9 +92,20 @@ For complete documentation on all API endpoints, database models, and more, plea
 QuickCheck is powered by the following technologies:
 
 - **Frontend**: React, Axios
-- **Backend**: Spring Boot, PostgreSQL
+- **Backend**: Spring Boot, Spring Security PostgreSQL
 - **Cloud**: AWS EC2, Amplify, RDS, S3 
 
+---
+
+## 🔧 Tech Tools
+
+QuickCheck relies on the following tools:
+
+- **UI/UX**: Chakra UI, Figma
+- **CI/CD**: GitHub Actions, Docker Hub
+- **Database Migration**: Flyway DB
+- **Testing**: JUnit, Surefire, Postman
+- **App Hosting**: AWS ALB, VPC, Route53
 ---
 
 ## 📬 Get in Touch!
