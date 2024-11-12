@@ -39,8 +39,7 @@ QuickCheck combines essential classroom features—attendance, communication, an
 ## 🚀 Getting Started
 
 Follow these simple steps to set up QuickCheck :
-
-- Get Started on https://quickcheckapp.org
+- [Get Started on QuickCheck](https://quickcheckapp.org)
 - Create your account 
 - Enjoy
 
