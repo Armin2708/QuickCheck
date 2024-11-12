@@ -23,7 +23,7 @@ Welcome to **QuickCheck**! QuickCheck aims to be your go-to solution for smooth,
 
 ---
 
-## 🌈 Why QuickCheck?
+## 🌕 Why QuickCheck?
 
 QuickCheck combines essential classroom features—attendance, communication, and scheduling—into one efficient, **easy-to-use platform**. 🧑‍🏫👩‍🎓 Perfect for students and teachers alike, QuickCheck is designed to:
 
