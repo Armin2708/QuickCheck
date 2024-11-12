@@ -53,6 +53,7 @@ const Register = () => {
                     <Heading fontSize={'2xl'}>Create your account</Heading>
                     <RegisterForm
                         initialStep={searchParams.get("step") === "verify" ? 2 : 1}
+                        token={searchParams.get("token")}
                         onSuccess={(token) => {
                             localStorage.setItem("access_token", token);
                             setUserFromToken();

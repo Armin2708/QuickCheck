@@ -1,6 +1,7 @@
 package com.quickcheck.email;
 
 import com.quickcheck.exception.DuplicateResourceException;
+import com.quickcheck.exception.InvalidAccessCodeException;
 import com.quickcheck.exception.ResourceNotFoundException;
 import com.quickcheck.user.UserDao;
 import jakarta.mail.internet.MimeMessage;
@@ -41,7 +42,7 @@ public class EmailService {
                     "<div style='max-width: 600px; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);'>" +
                     "<h2 style='color: #4a90e2; text-align: center;'>Hello!</h2>" +
                     "<p style='color: #333333; font-size: 16px;'>"+ emailRequest.body() + "</p>" +
-                    "<p style='color: #666666; font-size: 14px;'>Thank you for choosing us. If you have any questions, feel free to reach out.</p>" +
+                    "<p style='color: #666666; font-size: 14px;'>Thank's for joining Quick Check. If you have any questions, feel free to reach out.</p>" +
                     "<p style='text-align: center;'>" +
                     "<a href="+emailRequest.url()+" style='text-decoration: none; color: #ffffff; background-color: #4a90e2; padding: 10px 20px; border-radius: 5px;'>Verify Email</a>" +
                     "</p>" +
@@ -60,41 +61,62 @@ public class EmailService {
     }
 
     public void verifyEmail(EmailCodeCreationRequest request){
-        System.out.println(request.url());
-        Random random = new Random();
-        // Generate a random number between 100000 and 999999 (inclusive)
-        String code = String.valueOf(100000 + random.nextInt(900000));
-        String userEmail = request.email();
 
-        EmailCodeObject emailCodeObject = new EmailCodeObject(userEmail, code);
-        EmailRequest emailRequest = new EmailRequest(userEmail,"Quick Check email verification","Verify your email with "+code,request.url());
+        String userEmail = request.email();
 
         if (userDao.existUserWithEmail(userEmail)) {
 
             throw new DuplicateResourceException("Email already taken");
-            }
+        }
+
+        Random random = new Random();
+        String code = String.valueOf(100000 + random.nextInt(900000));
+
+        EmailCodeObject emailCodeObject = new EmailCodeObject(userEmail, code);
 
         if (emailDao.existCodeWithEmail(userEmail)){
             emailDao.updateCodeByEmail(emailCodeObject);
-            sendEmail(emailRequest);
-            return;
         }
+        else {
+            emailDao.saveCodeAndEmail(emailCodeObject);
+        }
+        Integer token=emailDao.getEmailObjectByEmail(userEmail).get().getId();
+
+        EmailRequest emailRequest = new EmailRequest(
+                userEmail,
+                "Quick Check email verification",
+                "Verify your email with "+code,
+                request.url()+"&token="+token);
 
         sendEmail(emailRequest);
-        emailDao.saveCodeAndEmail(emailCodeObject);
+
     }
 
-    public boolean verifyGivenCode(EmailVerificationRequest request){
+    public EmailCodeVerificationResponse verifyGivenCode(EmailVerificationRequest request){
+        System.out.println(request);
 
-        if (!emailDao.existCodeWithEmail(request.email())){
-            throw new ResourceNotFoundException("Code has not been sent to %s".formatted(request.email()));
+        EmailCodeObject actual;
+
+        if (!(request.token() == null)){
+            actual = emailDao.getEmailObjectById(request.token()).get();
         }
-        EmailCodeObject actual =  emailDao.getCodeByEmail(request.email()).get();
 
-        if (actual.getEmail().equals(request.email()) && actual.getCode().equals(request.code())){
-            return true;
+        else if (!emailDao.existCodeWithEmail(request.email())){
+            throw new ResourceNotFoundException(
+                    "Code has not been sent to %s".formatted(request.email())
+            );
+        } else {
+            actual =  emailDao.getEmailObjectByEmail(request.email()).get();
         }
-        return false;
 
+        System.out.println(actual);
+
+        if (
+                !((actual.getEmail().equals(request.email())||actual.getId().equals(request.token())) &&
+                        actual.getCode().equals(request.code()))
+        ){
+            throw new InvalidAccessCodeException("Wrong Code");
+        }
+        return new EmailCodeVerificationResponse(actual.getEmail());
     }
 }

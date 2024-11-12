@@ -4,7 +4,8 @@ import java.util.Optional;
 
 public interface EmailDao {
 
-    Optional<EmailCodeObject> getCodeByEmail(String email);
+    Optional<EmailCodeObject> getEmailObjectByEmail(String email);
+    Optional<EmailCodeObject> getEmailObjectById(Integer id);
 
     boolean existCodeWithEmail(String email);
 

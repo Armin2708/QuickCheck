@@ -22,7 +22,8 @@ public class EmailController {
         }
 
         @PostMapping("/verify/code")
-        public boolean verifyGivenCode(@RequestBody EmailVerificationRequest emailRequest){
+        public EmailCodeVerificationResponse verifyGivenCode(
+                @RequestBody EmailVerificationRequest emailRequest){
                 return  emailService.verifyGivenCode(emailRequest);
         }
 

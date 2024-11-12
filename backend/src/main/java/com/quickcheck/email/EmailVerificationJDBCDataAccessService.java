@@ -17,7 +17,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public Optional<EmailCodeObject> getCodeByEmail(String email) {
+    public Optional<EmailCodeObject> getEmailObjectByEmail(String email) {
 
         var sql= """
                 SELECT id, email, code
@@ -26,6 +26,20 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
                 """;
 
         return jdbcTemplate.query(sql,emailCodeObjectRowMapper,email)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<EmailCodeObject> getEmailObjectById(Integer id) {
+
+        var sql= """
+                SELECT id, email, code
+                FROM email_check
+                WHERE id= ?
+                """;
+
+        return jdbcTemplate.query(sql,emailCodeObjectRowMapper,id)
                 .stream()
                 .findFirst();
     }

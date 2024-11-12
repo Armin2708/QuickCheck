@@ -16,8 +16,9 @@ import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
 import {useNavigate} from "react-router-dom";
 import UpdateUserButton from "./UpdateUserButton.jsx";
 import UpdateUserRolesButton from "./UpdateUserRolesButton.jsx";
+import DeleteUserButton from "./DeleteUserButton.jsx";
 
-export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles,onSuccess, returnButton, userProfile}){
+export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles,onSuccess, userProfile}){
 
     const navigate = useNavigate();
     return(
@@ -93,19 +94,6 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                     </Stack>
 
                     <Stack mt={8} direction={'row'} spacing={4}>
-                        {returnButton && <Button
-                            flex={1}
-                            fontSize={'sm'}
-                            rounded={'full'}
-                            _focus={{
-                                bg: 'gray.200',
-                            }}
-                            onClick={() => {
-                                navigate("/dashboard")
-                            }}
-                        >
-                            Return
-                        </Button>}
                         {userProfile ? <UpdateUserProfileButton
                             userId={id} name={name} address={address}
                             email={email} dateOfBirth={dateOfBirth}
@@ -121,6 +109,7 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                                 <UpdateUserRolesButton userId={id} roles={roles}/>
                             </HStack>)
                         }
+                        <DeleteUserButton userId={id} name={name} onSuccess={onSuccess}/>
                     </Stack>
                 </Box>
             </Center>

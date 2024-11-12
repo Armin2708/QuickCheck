@@ -8,7 +8,7 @@ import {
     Button,
     Link,
     Badge,
-    useColorModeValue,
+    useColorModeValue, VStack,
 } from '@chakra-ui/react'
 import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 import {useEffect, useState} from "react";
@@ -46,9 +46,23 @@ export default function UserProfilePage(){
 
     return(
         <HeaderFooter>
-            <UserProfileCard
-                {...user} onSuccess={fetchUser} returnButton={true} userProfile={true}
-            />
+            <VStack>
+                <Button
+                    fontSize={'sm'}
+                    rounded={'full'}
+                    _focus={{
+                        bg: 'gray.200',
+                    }}
+                    onClick={() => {
+                        navigate("/dashboard")
+                    }}
+                >
+                    Return
+                </Button>
+                <UserProfileCard
+                    {...user} onSuccess={fetchUser} returnButton={true} userProfile={true}
+                />
+            </VStack>
         </HeaderFooter>
     )
 }
