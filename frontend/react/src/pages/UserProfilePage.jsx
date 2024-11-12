@@ -8,7 +8,7 @@ import {
     Button,
     Link,
     Badge,
-    useColorModeValue, VStack,
+    useColorModeValue, VStack, Spinner,
 } from '@chakra-ui/react'
 import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 import {useEffect, useState} from "react";
@@ -22,28 +22,30 @@ export default function UserProfilePage(){
 
     const {fullUser} = useAuth();
     const navigate = useNavigate();
+    const [isLoading,setIsLoading] = useState(false)
 
-    const [user,setUser]=useState(fullUser);
-    const userId = fullUser.id
+    const [user,setUser]=useState();
 
     const fetchUser = () =>{
-        if (!userId) return;
-        getUserById(userId)
+        setIsLoading(true);
+        getUserById(fullUser?.id)
             .then(res => {
-                if (res.data) {
-                    setUser(res.data); // Set the admins state
-                } else {
-                    console.error('Expected an object but got:', res.data);
-                }
+                setUser(res.data)
             })
             .catch(error => {
-                console.error('Error fetching professor:', error); // Log any errors
-            });
+                console.error('Error fetching user details:', error); // Log any errors
+            })
+            .finally(() => {
+                setIsLoading(false)
+            })
     }
 
     useEffect(() => {
+        if (!fullUser || !fullUser.id){
+            return
+        }
         fetchUser();
-    }, []);
+    }, [fullUser]);
 
     return(
         <HeaderFooter>
@@ -59,9 +61,11 @@ export default function UserProfilePage(){
                 >
                     Return
                 </Button>
-                <UserProfileCard
-                    {...user} onSuccess={fetchUser} returnButton={true} userProfile={true}
-                />
+                {isLoading ? <Spinner/> :
+                    <UserProfileCard
+                        {...user} onSuccess={fetchUser} returnButton={true} userProfile={true}
+                    />
+                }
             </VStack>
         </HeaderFooter>
     )

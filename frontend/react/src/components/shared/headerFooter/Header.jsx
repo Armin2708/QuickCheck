@@ -12,29 +12,32 @@ import {
     MenuButton, Avatar, VStack, MenuList, useColorModeValue, MenuItem, MenuDivider
 } from "@chakra-ui/react";
 import { IoMenu } from "react-icons/io5";
-import React from "react";
+import React, {useEffect} from "react";
 
 import {useNavigate} from "react-router-dom";
 import {FiBell, FiChevronDown} from "react-icons/fi";
 import {useAuth} from "../../context/AuthContext.jsx";
 import SideBar from "../SideBar.jsx";
+import {useProfileImage} from "../../../services/useProfileImage.js";
 
 export default function Header() {
     const {isOpen, onOpen, onClose} = useDisclosure()
     const btnRef = React.useRef()
-
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
 
     const handleNavigate = (to) => {
         return () => navigate(to); // Return a function that navigates to the specified path
     };
 
-    const {logOut, user, isUserAuthenticated} = useAuth();
+    const {logOut, user, isUserAuthenticated, fullUser} = useAuth();
+
+    const { profileImageUrl, fetchProfileImage } = useProfileImage(fullUser?.id);
 
     const handleLogOut = () => {
         logOut();
         navigate("/login");  // Ensure the user is navigated to the login page
     };
+
     return (
 
         <Stack
@@ -120,7 +123,7 @@ export default function Header() {
                                 <HStack>
                                         <Avatar
                                             size={'md'}
-                                            backgroundColor={"gray"}
+                                            src={profileImageUrl}
                                         />
                                     <VStack
                                         display={{ base: 'none', md: 'flex' }}
@@ -146,7 +149,7 @@ export default function Header() {
                                 <MenuItem
                                     fontFamily="Inter"
                                     fontWeight="semibold"
-                                    onClick={()=>{navigate("/profile")}}
+                                    onClick={()=>{navigate(`/profile`)}}
                                 >
                                     Profile
                                 </MenuItem>

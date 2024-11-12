@@ -17,10 +17,11 @@ import {useNavigate} from "react-router-dom";
 import UpdateUserButton from "./UpdateUserButton.jsx";
 import UpdateUserRolesButton from "./UpdateUserRolesButton.jsx";
 import DeleteUserButton from "./DeleteUserButton.jsx";
+import {useProfileImage} from "../../services/useProfileImage.js";
 
 export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles,onSuccess, userProfile}){
-
     const navigate = useNavigate();
+    const { profileImageUrl, fetchProfileImage } = useProfileImage(id);
     return(
             <Center py={6} >
                 <Box
@@ -33,9 +34,7 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                     textAlign={'center'}>
                     <Avatar
                         size={'xl'}
-                        src={
-                            '/one-piece-shanks.gif'
-                        }
+                        src={profileImageUrl}
                         mb={4}
                         pos={'relative'}
                         _after={{

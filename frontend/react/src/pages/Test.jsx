@@ -1,18 +1,29 @@
-import {
-    Button,
-    Input,
-    Stack,
-    Text
-} from "@chakra-ui/react";
-import {FiCheckCircle, FiUser} from "react-icons/fi";
-import {FaCheck} from "react-icons/fa";
-import {IoWarningOutline} from "react-icons/io5";
-import React, {useEffect, useState} from "react";
-import Navbar from "../components/attendance/Navbar.jsx";
+import { useEffect, useState } from 'react';
+import {getUserProfilePictureUrl} from "../services/client.js";
 
-    export default function Test() {
 
-        return (
-            <Text>Test</Text>
-        )
-    }
+export default function UserProfilePicture(userId) {
+    const [imageUrl, setImageUrl] = useState(null);
+
+    useEffect(() => {
+        const fetchProfileImage = async () => {
+            try {
+                const url = await getUserProfilePictureUrl(userId);
+                setImageUrl(url);
+            } catch (e) {
+                console.error("Error loading profile image:", e);
+            }
+        };
+
+        fetchProfileImage();
+
+        // Cleanup the object URL when the component unmounts
+        return () => {
+            if (imageUrl) {
+                URL.revokeObjectURL(imageUrl);
+            }
+        };
+    }, [userId]);
+
+    return imageUrl
+}

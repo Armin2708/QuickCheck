@@ -1,12 +1,12 @@
-import {Form, Formik, useField} from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
+import {Button,Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
-import {updateClass, updateClassroom, updateUser} from "../../services/client.js";
+import {updateUser} from "../../services/client.js";
 import MyTextInput from "../shared/form/MyText.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import MySelect from "../shared/form/MySelect.jsx";
-
+import MyDropzone from "../shared/form/MyDropzone.jsx";
 
 // And now we can use these
 const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
@@ -15,6 +15,7 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
 
     return (
         <>
+            <MyDropzone userId={id}/>
             <Formik
                 initialValues={{
                     name: name,

@@ -5,8 +5,6 @@ import {errorNotification, successNotification} from "../../services/notificatio
 import {updateUser} from "../../services/client.js";
 import MyTextInput from "../shared/form/MyText.jsx";
 import MySelect from "../shared/form/MySelect.jsx";
-import MyCheckbox from "../shared/form/MyCheckbox.jsx";
-
 
 
 // And now we can use these

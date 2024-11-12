@@ -512,4 +512,34 @@ export const getAttendance = async (tag) =>{
     }
 }
 
+export const uploadUserProfilePicture = async (userId, formData) =>{
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}/profile-image`,
+            formData,
+            {
+                ...getAuthConfig(),
+                'Content-Type' : 'multipart/form-data'
+
+            }
+        );
+    } catch (e) {
+        throw e;
+    }
+}
+export const getUserProfilePictureUrl = async (userId) => {
+    try {
+        return await axios.get(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}/profile-image`,
+            {
+                ...getAuthConfig(),
+                responseType: 'blob' // Specify blob to handle binary data
+            }
+        );
+
+    } catch (e) {
+        console.error("Failed to fetch profile image:", e);
+        throw e;
+    }
+};
 
