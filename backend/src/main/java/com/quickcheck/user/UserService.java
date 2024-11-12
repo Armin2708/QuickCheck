@@ -7,6 +7,7 @@ import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
 import com.quickcheck.s3.S3Buckets;
 import com.quickcheck.s3.S3Service;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -30,7 +31,11 @@ public class UserService{
     private final S3Buckets s3Buckets;
 
     private void checkIfUserExists(Integer userId){
-        checkIfUserExists(userId);
+        if (!userDao.existUserById(userId)){
+            throw new ResourceNotFoundException(
+                    "User with id [%s] does not exist".formatted(userId)
+            );
+        }
     }
 
     public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets) {
@@ -210,7 +215,7 @@ public class UserService{
                         "user with id [%s] not found".formatted(userId)
                 ));
 
-        if (user.profileImageId().isBlank()){
+        if (StringUtils.isBlank(user.profileImageId())){
             throw new ResourceNotFoundException("User with id [%s] profile image not found".formatted(userId));
         }
 

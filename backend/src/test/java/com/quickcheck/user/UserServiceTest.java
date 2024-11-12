@@ -7,6 +7,8 @@ import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.s3.S3Buckets;
+import com.quickcheck.s3.S3Service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -33,12 +35,16 @@ class UserServiceTest {
     private PasswordEncoder passwordEncoder;
     @Mock
     private AttendanceDao attendanceDao;
+    @Mock
+    private S3Service s3Service;
+    @Mock
+    private S3Buckets s3Buckets;
     private UserService underTest;
     private final UserDTOMapper userDTOMapper = new UserDTOMapper();
 
     @BeforeEach
     void setUp() {
-        underTest = new UserService(userDao,attendanceDao,passwordEncoder,userDTOMapper);
+        underTest = new UserService(userDao,attendanceDao,passwordEncoder,userDTOMapper, s3Service, s3Buckets);
     }
 
     @Test
