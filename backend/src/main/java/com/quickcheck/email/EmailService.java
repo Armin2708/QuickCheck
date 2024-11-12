@@ -93,7 +93,6 @@ public class EmailService {
     }
 
     public EmailCodeVerificationResponse verifyGivenCode(EmailVerificationRequest request){
-        System.out.println(request);
 
         EmailCodeObject actual;
 
@@ -108,8 +107,6 @@ public class EmailService {
         } else {
             actual =  emailDao.getEmailObjectByEmail(request.email()).get();
         }
-
-        System.out.println(actual);
 
         if (
                 !((actual.getEmail().equals(request.email())||actual.getId().equals(request.token())) &&

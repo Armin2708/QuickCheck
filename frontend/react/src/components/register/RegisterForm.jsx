@@ -95,7 +95,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
             })
     };
 
-    const handleVerifyCode = (token, email, code) => {
+    const handleVerifyCode = (token, email, code, setFieldValue) => {
         verifyCode({ token, email, code })
             .then((res) => {
                 setIsVerified(true);
@@ -103,6 +103,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                     ...prevValues,
                     email: res.data.email || prevValues.email,
                 }));
+                setFieldValue("verificationCode", code);
                 successNotification(
                     "Email Verified",
                     "Your email has been successfully verified."
@@ -123,7 +124,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
             initialValues={initialValues}
             enableReinitialize // Allows Formik to use updated initialValues
             validationSchema={stepValidationSchema(step)}
-            onSubmit={async (values, { setSubmitting }) => {
+            onSubmit={async (values, { setSubmitting, setFieldValue }) => {
                 setSubmitting(true);
 
                 if (step === 1) {
@@ -139,7 +140,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                     }
                 } else if (step === 2) {
                     // Step 2: Verify the code
-                    await handleVerifyCode(token, values.email, values.verificationCode);
+                    await handleVerifyCode(token, values.email, values.verificationCode, setFieldValue);
                     setSubmitting(false);
                 } else if (step === 3) {
                     setStep(4);
