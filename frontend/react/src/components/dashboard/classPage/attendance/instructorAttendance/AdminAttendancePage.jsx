@@ -2,11 +2,11 @@ import {Stack} from "@chakra-ui/react";
 import Navbar from "../Navbar.jsx";
 import {useEffect, useState} from "react";
 import AttendanceButton from "./AttendanceButton.jsx";
-import {getAttendance} from "../../../services/client.js";
+import {getAttendance} from "../../../../../services/client.js";
 import AdminTopCard from "./AdminTopCard.jsx";
 import UserCardDisplay from "./UserCardDisplay.jsx";
 
-export default function AdminAttendancePage({classObject, orgName, professor, usersInClass, tag}){
+export default function AdminAttendancePage({classObject, professor, usersInClass, tag}){
     const [code,setCode] = useState()
     const [existAttendance, setExistAttendance] = useState(false)
     const [attendanceStatus,setAttendanceStatus] = useState(true)

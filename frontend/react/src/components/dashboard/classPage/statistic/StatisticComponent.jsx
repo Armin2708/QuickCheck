@@ -1,5 +1,5 @@
 import {Text, Box, Divider} from "@chakra-ui/react";
-import DashboardCard from "../../dashboard/DashboardCard.jsx";
+import DashboardCard from "../../DashboardCard.jsx";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { useEffect } from 'react';
@@ -7,14 +7,14 @@ import { useEffect } from 'react';
 // Register chart elements
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-export default function StatisticComponent({ attendanceData }) {
+export default function StatisticComponent({ statsData }) {
     const chartData = {
-        labels: attendanceData.labels,
+        labels: statsData.labels,
         datasets: [
             {
-                data: attendanceData.values,
-                backgroundColor: ['#4CAF50', '#F44336', '#FFA500'], // Green for Present, Red for Absent, Orange for Late
-                hoverBackgroundColor: ['#4CAF50', '#F44336', '#FFA500']
+                data: statsData.values,
+                backgroundColor: ['#9363BA', '#FFA9A9'], // Green for Present, Red for Absent, Orange for Late
+                hoverBackgroundColor: ['#9363BA', '#FFA9A9']
             }
         ]
     };
@@ -22,20 +22,19 @@ export default function StatisticComponent({ attendanceData }) {
     const options = {
         responsive: true,
         maintainAspectRatio: false,
+        animation: {
+            duration: 1000, // Set animation duration to 1 second
+        },
         plugins: {
             legend: {
-                position: 'bottom'
-            }
-        }
+                position: 'bottom',
+            },
+        },
     };
 
     useEffect(() => {
-        return () => {
-            // Destroy all chart instances on unmount
-            Object.values(ChartJS.instances).forEach((instance) => {
-                instance.destroy();
-            });
-        };
+        // Remove unnecessary cleanup unless Chart.js instances need manual handling
+        return () => {};
     }, []);
 
     return (

@@ -1,9 +1,9 @@
 import { Wrap, WrapItem } from "@chakra-ui/react";
 import AttendanceUserCard from "./AttendanceUserCard.jsx";
 import { useEffect, useState } from "react";
-import { getUsersOfAttendance } from "../../../services/client.js";
-import { errorNotification } from "../../../services/notification.js";
-import attendanceNotifications from "../../../services/attendanceNotifications.js"; // Adjust the path as needed
+import { getUsersOfAttendance } from "../../../../../services/client.js";
+import { errorNotification } from "../../../../../services/notification.js";
+import attendanceNotifications from "../../../../../services/attendanceNotifications.js"; // Adjust the path as needed
 
 export default function UserCardDisplay({ usersInClass, tag }) {
     const [attendedUsers, setAttendedUsers] = useState([]);

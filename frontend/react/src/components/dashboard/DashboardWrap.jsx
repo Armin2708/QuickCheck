@@ -1,7 +1,6 @@
 import {Stack,HStack} from "@chakra-ui/react";
-import SideBar from "../SideBar.jsx";
-import Header from "../headerFooter/Header.jsx";
-import OrganizationListComponent from "../../dashboard/organizationList/OrganizationListComponent.jsx";
+import SideBar from "../shared/SideBar.jsx";
+import Header from "../shared/headerFooter/Header.jsx";
 
 export default function DashboardWrap({children}) {
 
@@ -10,7 +9,6 @@ export default function DashboardWrap({children}) {
             <Header />
             <SideBar />
             <HStack alignItems="flex-start" spacing={"0px"}>
-                <OrganizationListComponent />
                 {children}
             </HStack>
         </Stack>

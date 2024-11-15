@@ -2,12 +2,14 @@ import {Center, Spinner, VStack} from "@chakra-ui/react";
 
 import { useAuth } from "../components/context/AuthContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import WeeklyCalendar from "../components/classList/Calendar.jsx";
+import WeeklyCalendar from "../components/dashboard/classList/Calendar.jsx";
 import NotificationComponent from "../components/dashboard/notifications/NotificationComponent.jsx";
 import LeaveOrganizationButton from "../components/dashboard/organizationList/LeaveOrganizationButton.jsx";
-import ClassListWrap from "../components/shared/dashboard/ClassListWrap.jsx";
+import DashboardWrap from "../components/dashboard/DashboardWrap.jsx";
+import OrganizationListComponent from "../components/dashboard/organizationList/OrganizationListComponent.jsx";
+import ClassListComponent from "../components/dashboard/classList/ClassListComponent.jsx";
 
-export default function ClassListPage({}) {
+export default function ClassListPage() {
 
     const weeklyTasks = {
         Monday: ["Team meeting at 10 AM", "Project deadline at 3 PM"],
@@ -23,7 +25,9 @@ export default function ClassListPage({}) {
     const navigate = useNavigate()
 
     return (
-        <ClassListWrap>
+        <DashboardWrap>
+            <OrganizationListComponent fullUser={fullUser} />
+            <ClassListComponent fullUser={fullUser}/>
             <WeeklyCalendar tasks={weeklyTasks} orgName={organizationName} />
             <VStack>
                 <NotificationComponent/>
@@ -34,7 +38,7 @@ export default function ClassListPage({}) {
                     }}
                     fullUser={fullUser}/>
             </VStack>
-        </ClassListWrap>
+        </DashboardWrap>
     );
 
 }

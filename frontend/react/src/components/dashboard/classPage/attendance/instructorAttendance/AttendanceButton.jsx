@@ -1,5 +1,5 @@
 import {Button, Select, Stack} from "@chakra-ui/react";
-import {closeAttendance, createAttendance, openAttendance} from "../../../services/client.js";
+import {closeAttendance, createAttendance, openAttendance} from "../../../../../services/client.js";
 import {useEffect, useState} from "react";
 
 export default function AttendanceButton({tag, existAttendance, setExistAttendance, attendanceStatus,
@@ -16,12 +16,15 @@ export default function AttendanceButton({tag, existAttendance, setExistAttendan
     useEffect(() => {
         setAttendanceRequest((prev) => ({
             ...prev,
+            professorId: professorId,
+            classId: classId,
             radius: radius,
         }));
-    }, [radius]);
+    }, [professorId,classId,radius]);
 
     const handleAttendance =() =>{
 
+        console.log(attendanceRequest)
         if(!existAttendance){
             createAttendance(attendanceRequest)
             setExistAttendance(true)
@@ -35,6 +38,8 @@ export default function AttendanceButton({tag, existAttendance, setExistAttendan
             openAttendance(tag)
             setAttendanceStatus(true)
         }
+
+        console.log(attendanceStatus)
     }
     return(
         <Stack

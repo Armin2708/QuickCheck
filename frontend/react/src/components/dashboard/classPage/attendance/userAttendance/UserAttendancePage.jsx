@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../../context/AuthContext.jsx";
+import {useAuth} from "../../../../context/AuthContext.jsx";
 import {useParams} from "react-router-dom";
 import {
     getClassById,
@@ -7,18 +7,18 @@ import {
     getUserById, getUsersInClass,
     getValidRadius, isUserInAttendance,
     verifyAttendance
-} from "../../../services/client.js";
+} from "../../../../../services/client.js";
 import {Button, Input, Stack, Text, useToast} from "@chakra-ui/react";
 import Navbar from "../Navbar.jsx";
-import getFormattedDate from "../../../services/dateDisplay.js";
+import getFormattedDate from "../../../../../services/dateDisplay.js";
 import LocationButton from "./LocationButton.jsx";
 import {FiCheckCircle, FiUser} from "react-icons/fi";
 import {FaCheck} from "react-icons/fa";
 import {IoWarningOutline} from "react-icons/io5";
-import {errorNotification, successNotification} from "../../../services/notification.js";
+import {errorNotification, successNotification} from "../../../../../services/notification.js";
 
-export default function UserAttendancePage({classObject, classroom, professor, usersInClass,
-                                               validRadius, orgName, classId, fullUser,tag,})
+export default function UserAttendancePage({classObject, classroom, professor,
+                                               validRadius, fullUser, tag,})
 {
 
     const [isLocationValid, setIsLocationValid] = useState(false)

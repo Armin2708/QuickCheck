@@ -19,9 +19,8 @@ import {FiUsers} from "react-icons/fi";
 import {LuSettings} from "react-icons/lu";
 import {RiLoginBoxLine} from "react-icons/ri";
 
-export default function OrganizationListComponent() {
+export default function OrganizationListComponent({fullUser}) {
     const [organizations, setOrganizations] = useState([]);
-    const { fullUser } = useAuth();
     const [loading, setLoading] = useState(true);
 
     const fetchOrganization = () => {
@@ -78,10 +77,8 @@ export default function OrganizationListComponent() {
                             fullUser={fullUser}
                         />
                     ))
-                ) : (
-                    null
-                )}
-                <BrowseOrganizationButton />
+                ) : null}
+                <BrowseOrganizationButton/>
             </VStack>
         </Box>
     );

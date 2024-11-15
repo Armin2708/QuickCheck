@@ -3,7 +3,6 @@ import {Box, VStack} from "@chakra-ui/react";
 export default function DashboardCard({children}){
     return(
         <Box
-            maxWidth={"350px"}
             width={"100%"}
             direction={"column"}
             border={"1px"}

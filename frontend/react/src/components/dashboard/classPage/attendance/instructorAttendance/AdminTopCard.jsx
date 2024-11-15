@@ -1,5 +1,5 @@
 import {Box, Stack, Text} from "@chakra-ui/react";
-import getFormattedDate from "../../../services/dateDisplay.js";
+import getFormattedDate from "../../../../../services/dateDisplay.js";
 
 export default function AdminTopCard({className, professorName, code, children}){
 
