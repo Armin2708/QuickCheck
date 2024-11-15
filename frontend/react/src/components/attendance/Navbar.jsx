@@ -17,6 +17,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import {IoMenu} from "react-icons/io5";
 import SideBar from "../shared/SideBar.jsx";
 import {FaArrowLeft} from "react-icons/fa";
+import {useProfileImage} from "../../services/useProfileImage.js";
 
 export default  function Navbar({colorTheme,orgName}){
 
@@ -24,7 +25,9 @@ export default  function Navbar({colorTheme,orgName}){
     const btnRef = React.useRef()
 
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
-    const {logOut, user, isUserAuthenticated} = useAuth();
+    const {logOut, user, isUserAuthenticated, fullUser} = useAuth();
+
+    const { profileImageUrl, fetchProfileImage } = useProfileImage(fullUser?.id);
 
     const handleLogOut = () => {
         logOut();
@@ -152,7 +155,7 @@ export default  function Navbar({colorTheme,orgName}){
                             </VStack>
                             <Avatar
                                 size={'md'}
-                                backgroundColor={colorTheme == "darkMode" ? "#707070" : "#313131"}
+                                src={profileImageUrl}
                             />
                         </HStack>
                     </MenuButton>

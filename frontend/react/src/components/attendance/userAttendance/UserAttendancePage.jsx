@@ -10,14 +10,14 @@ import {
 } from "../../../services/client.js";
 import {Button, Input, Stack, Text, useToast} from "@chakra-ui/react";
 import Navbar from "../Navbar.jsx";
-import getFormattedDate from "../dateDisplay.js";
+import getFormattedDate from "../../../services/dateDisplay.js";
 import LocationButton from "./LocationButton.jsx";
 import {FiCheckCircle, FiUser} from "react-icons/fi";
 import {FaCheck} from "react-icons/fa";
 import {IoWarningOutline} from "react-icons/io5";
 import {errorNotification, successNotification} from "../../../services/notification.js";
 
-export default function UserAttendanceCard({classObject, classroom, professor, usersInClass,
+export default function UserAttendancePage({classObject, classroom, professor, usersInClass,
                                                validRadius, orgName, classId, fullUser,tag,})
 {
 
@@ -42,6 +42,8 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                     "Success",
                     "Attended class"
                 )
+                setIsPresent(true);
+
 
             })
             .catch(error => {
@@ -50,17 +52,17 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                     error.code,
                     error.response.data.message
                 )
+                setIsPresent(false);
+
             })
             .finally(() => {
                 setIsLoading(false); // Stop loading after fetch
-                setIsPresent(true);
             });
     }
 
     const checkUserAttendance = () =>{
         isUserInAttendance(tag,fullUser?.id)
             .then(res =>{
-                console.log(res.data)
                 setIsPresent(res.data)
             })
     }
@@ -81,7 +83,6 @@ export default function UserAttendanceCard({classObject, classroom, professor, u
                spacing={"20px"}
         >
 
-            <Navbar colorTheme={"darkMode"} orgName={orgName}/>
             {/*Card*/}
             <Stack
                 marginBottom={"50px"}

@@ -14,7 +14,7 @@ import CreateClassButton from "../components/class/CreateClassButton.jsx";
 import {useAuth} from "../components/context/AuthContext.jsx";
 
 
-export default function BrowseOrganizationClassListPage() {
+export default function BrowseClassPage() {
     const [classes, setClasses] = useState([]);
     const [joinedClass, setJoinedClass] = useState([]);
 

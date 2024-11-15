@@ -3,9 +3,9 @@ import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, Text,Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
 import {updateUser, updateUserRoles} from "../../services/client.js";
-import MyTextInput from "../shared/form/MyText.jsx";
-import MySelect from "../shared/form/MySelect.jsx";
-import MyCheckbox from "../shared/form/MyCheckbox.jsx";
+import MyTextInput from "../shared/formFields/MyText.jsx";
+import MySelect from "../shared/formFields/MySelect.jsx";
+import MyCheckbox from "../shared/formFields/MyCheckbox.jsx";
 
 
 

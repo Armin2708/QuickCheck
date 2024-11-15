@@ -1,8 +1,24 @@
-import {Button, Select, Stack, Text} from "@chakra-ui/react";
-import {useState} from "react";
+import {Button, Select, Stack} from "@chakra-ui/react";
 import {closeAttendance, createAttendance, openAttendance} from "../../../services/client.js";
+import {useEffect, useState} from "react";
 
-export default function AttendanceButton({tag,attendanceRequest,radius,setRadius, existAttendance,setExistAttendance,status, setStatus, onSuccess}){
+export default function AttendanceButton({tag, existAttendance, setExistAttendance, attendanceStatus,
+                                             setAttendanceStatus, onSuccess, classId, professorId}){
+
+    const [radius,setRadius] = useState();
+    const [attendanceRequest, setAttendanceRequest] = useState({
+        date: new Date().toISOString().split('T')[0],
+        professorId: professorId,
+        classId: classId,
+        radius: radius,
+    });
+
+    useEffect(() => {
+        setAttendanceRequest((prev) => ({
+            ...prev,
+            radius: radius,
+        }));
+    }, [radius]);
 
     const handleAttendance =() =>{
 
@@ -11,13 +27,13 @@ export default function AttendanceButton({tag,attendanceRequest,radius,setRadius
             setExistAttendance(true)
             onSuccess()
         }
-        else if(status){
+        else if(attendanceStatus){
             closeAttendance(tag)
-            setStatus(false)
+            setAttendanceStatus(false)
         }
         else{
             openAttendance(tag)
-            setStatus(true)
+            setAttendanceStatus(true)
         }
     }
     return(
@@ -45,7 +61,7 @@ export default function AttendanceButton({tag,attendanceRequest,radius,setRadius
                     handleAttendance();
                 }}
             >
-                {!existAttendance ? "Create" : status? "Close" : "Open"} Attendance
+                {!existAttendance ? "Create" : attendanceStatus ? "Close" : "Open"} Attendance
             </Button>
             {!existAttendance &&
                 <Select

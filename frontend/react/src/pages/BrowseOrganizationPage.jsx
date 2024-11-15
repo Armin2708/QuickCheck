@@ -7,12 +7,12 @@ import {
 import SideBar from "../components/shared/SideBar.jsx";
 import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 import { FaArrowLeft } from "react-icons/fa";
-import BrowseOrganizationCard from "../components/organization/BrowseOrganizationCard.jsx";
+import BrowseOrganizationCard from "../components/browseOrganization/BrowseOrganizationCard.jsx";
 import { useAuth } from "../components/context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
-import CreateOrganizationButton from "../components/organization/CreateOrganizationButton.jsx";
+import CreateOrganizationButton from "../components/browseOrganization/CreateOrganizationButton.jsx";
 
-export default function BrowseOrganizationListPage() {
+export default function BrowseOrganizationPage() {
     const [organizations, setOrganizations] = useState([]);
     const [joinedOrg, setJoinedOrg] = useState([]);
     const { fullUser,isAdmin } = useAuth();

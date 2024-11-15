@@ -10,52 +10,47 @@ import {useNavigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
 
 export default function JoinQuickCheck() {
-    const navigate = useNavigate(); // Get the navigate function from react-router-dom
-
-    const {isUserAuthenticated} = useAuth()
+    const navigate = useNavigate();
+    const { isUserAuthenticated } = useAuth();
 
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Responsive padding
-            paddingY={{ base: "50px", md: "100px", lg: "150px" }}  // Responsive padding
+            paddingY={{ base: "20px", md: "50px", lg: "100px" }} // Adjust padding for smaller screens
+            paddingX={{ base: "20px", md: "50px", lg: "100px" }} // Adjust padding for smaller screens
             justify="flex-start"
             align="center"
             spacing="10px"
-            width="100%"  // Full width for responsiveness
+            width="100%"
             background="#FFFFFF"
         >
             <Stack
                 justify="flex-start"
                 align="center"
-                spacing="93px"
-                width="100%"  // Full width for responsiveness
+                spacing={{ base: "50px", md: "93px" }} // Adjust spacing for smaller screens
+                width="100%"
                 maxWidth="1059px"
             >
                 {/* Header Section */}
                 <TitleWrapper>
-                    <TitleText>
-                        Join Quick Check
-                    </TitleText>
-                    <TitleDescription>
-                        Start increasing your productivity today!
-                    </TitleDescription>
+                    <TitleText>Join Quick Check</TitleText>
+                    <TitleDescription>Start increasing your productivity today!</TitleDescription>
                 </TitleWrapper>
 
                 {/* Feature and Card Section */}
                 <Stack
-                    direction={{ base: "column", md: "row" }}  // Stack vertically on small screens
-                    justify="space-between"
+                    direction={{ base: "column", md: "row" }}
+                    justify="center"
                     align="center"
-                    spacing={{ base: "50px", md: "100px" }}  // Adjust spacing for small screens
+                    spacing={{ base: "30px", md: "50px" }}
                     width="100%"
                 >
                     {/* Features Section */}
                     <Stack
                         justify="flex-start"
                         align="flex-start"
-                        spacing="39px"
-                        width="100%"  // Full width
-                        maxWidth="467px"
+                        spacing={{ base: "16px", sm: "20px" }} // Reduced spacing for smaller screens
+                        width="100%"
+                        maxWidth={{ base: "340px", sm: "467px" }} // Responsive max width
                     >
                         {["Speed up your meetings", "Best classroom toolbox", "Support Quick Check"].map((title, index) => (
                             <Stack
@@ -63,46 +58,39 @@ export default function JoinQuickCheck() {
                                 direction="row"
                                 justify="flex-start"
                                 align="center"
-                                spacing="11px"
+                                spacing="10px" // Reduced spacing between icon and text
                                 width="100%"
                             >
                                 <Box
-                                    padding="13px"
+                                    padding="8px" // Reduced padding for smaller screens
                                     borderRadius="5px"
-                                    width="60px"  // Increased width for icon box
-                                    height="60px"  // Increased height for icon box
+                                    width="40px" // Reduced box width
+                                    height="40px" // Reduced box height
                                     background="#7E3BB5"
+                                    flexShrink={0} // Prevents the box from shrinking
                                 >
                                     {index === 0
-                                        ? <TbClockUp color={"white"} size={"35px"}/>  // Set icon size
+                                        ? <TbClockUp color="white" size="20px" /> // Reduced icon size
                                         : index === 1
-                                            ? <LiaToolsSolid color={"white"} size={"35px"}/>  // Set icon size
-                                            : <PiSmiley color={"white"} size={"35px"}/>  // Set icon size
-                                    }
+                                            ? <LiaToolsSolid color="white" size="20px" />
+                                            : <PiSmiley color="white" size="20px" />}
                                 </Box>
-                                <Stack
-                                    justify="flex-start"
-                                    align="flex-start"
-                                    spacing="4px"
-                                    width="100%"
-                                    maxWidth="409px"
-                                >
+                                <Stack spacing="4px" width="100%">
                                     <Text
-                                        fontFamily="Inter"
                                         fontWeight="bold"
-                                        fontSize="24px"
+                                        fontSize={{ base: "16px", md: "20px" }} // Reduced font size
                                         color="#313131"
                                         textAlign="left"
+                                        isTruncated // Prevents text from overflowing
                                     >
                                         {title}
                                     </Text>
                                     <Text
-                                        fontFamily="Inter"
-                                        lineHeight="1.38"
                                         fontWeight="semibold"
-                                        fontSize="16px"
+                                        fontSize={{ base: "12px", md: "14px" }} // Reduced font size
                                         color="#707070"
                                         textAlign="left"
+                                        flexShrink={1} // Allows text to shrink to fit
                                     >
                                         {index === 0
                                             ? "With just one click, attend your meetings with ease and efficiency."
@@ -114,256 +102,100 @@ export default function JoinQuickCheck() {
                             </Stack>
                         ))}
                     </Stack>
+
+
+                    {/* Pricing Card */}
                     <Stack
-                        paddingY="31px"
-                        borderRadius="15px"
-                        justify="flex-start"
-                        align="flex-start"
-                        spacing="10px"
-                        width="489px"
-                        height="352px"
-                        maxWidth="100%"
+                        paddingY="20px"
+                        paddingX="15px"
+                        borderRadius="10px"
+                        spacing="15px"
+                        width="100%"
+                        maxWidth={{ base: "340px", md: "489px" }}
                         background="#FBFBFB"
-                        boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                        boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
                     >
-                        <Stack
-                            justify="flex-start"
-                            align="center"
-                            spacing="27px"
-                            width="489px"
-                            maxWidth="100%"
-                        >
-                            <Stack
-                                justify="flex-start"
-                                align="center"
-                                spacing="19px"
-                                alignSelf="stretch"
-                            >
-                                <Stack
-                                    direction="row"
-                                    justify="flex-start"
-                                    align="center"
-                                    spacing="101px"
-                                >
-                                    <Stack
-                                        justify="flex-start"
-                                        align="flex-start"
-                                        spacing="0px"
-                                        width="133px"
-                                    >
-                                        <Text
-                                            fontFamily="Inter"
-                                            fontWeight="semibold"
-                                            fontSize="24px"
-                                            color="#313131"
-                                            height="30px"
-                                            alignSelf="stretch"
-                                        >
+                        <Stack spacing="15px" width="100%">
+                            <Stack spacing="10px" width="100%">
+                                <Stack direction="row" spacing="10px" justify="space-between" align="center">
+                                    <Stack spacing="0px">
+                                        <Text fontWeight="semibold" fontSize="20px" color="#313131">
                                             Basic
                                         </Text>
-                                        <Text
-                                            fontFamily="Inter"
-                                            lineHeight="1.57"
-                                            fontWeight="medium"
-                                            fontSize="14px"
-                                            color="#707070"
-                                            height="29px"
-                                            alignSelf="stretch"
-                                        >
+                                        <Text fontWeight="medium" fontSize="12px" color="#707070">
                                             With all features
                                         </Text>
                                     </Stack>
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"  // Aligns items vertically in the center
-                                        spacing="0px"
-                                    >
-                                        <Text
-                                            fontFamily="Inter"
-                                            fontWeight="semibold"
-                                            fontSize="45px"
-                                            color="#313131"
-                                            width="85px"
-                                        >
+                                    <Stack direction="row" align="center" spacing="5px">
+                                        <Text fontWeight="semibold" fontSize="36px" color="#313131">
                                             $10
                                         </Text>
-                                        <Text
-                                            fontFamily="Inter"
-                                            lineHeight="1.57"
-                                            fontWeight="medium"
-                                            fontSize="14px"
-                                            color="#707070"
-                                            width="113px"
-                                        >
+                                        <Text fontWeight="medium" fontSize="12px" color="#707070">
                                             per user / month
                                         </Text>
                                     </Stack>
-
                                 </Stack>
-                                <Stack
-                                    justify="flex-start"
-                                    align="center"
-                                    spacing="29px"
-                                    alignSelf="stretch"
-                                >
-                                    <Box height="1px" alignSelf="stretch" background="#EDEDED" />
-                                    <Stack
-                                        justify="flex-start"
-                                        align="flex-end"
-                                        spacing="21px"
-                                        width="393.25px"
-                                        maxWidth="100%"
-                                    >
-                                        <Text
-                                            fontFamily="Inter"
-                                            fontWeight="semibold"
-                                            fontSize="14px"
-                                            color="#313131"
-                                            height="18px"
-                                            alignSelf="stretch"
-                                        >
-                                            FEATURES
-                                        </Text>
-                                        <Stack
-                                            justify="flex-start"
-                                            align="flex-start"
-                                            spacing="15px"
-                                            width="376px"
-                                            maxWidth="100%"
-                                        >
-                                            <Stack
-                                                direction="row"
-                                                justify="flex-start"
-                                                align="center"
-                                                spacing="73px"
-                                                alignSelf="stretch"
-                                            >
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="6px"
-                                                >
-                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        lineHeight="1.57"
-                                                        fontWeight="medium"
-                                                        fontSize="14px"
-                                                        color="#707070"
-                                                        width="133px"
-                                                        height="18px"
-                                                    >
-                                                        Unlimited Classes
-                                                    </Text>
-                                                </Stack>
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="6px"
-                                                >
-                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        lineHeight="1.57"
-                                                        fontWeight="medium"
-                                                        fontSize="14px"
-                                                        color="#707070"
-                                                        width="133px"
-                                                        height="18px"
-                                                    >
-                                                        Class Chats
-                                                    </Text>
-                                                </Stack>
+
+                                {/* Features Section */}
+                                <Stack spacing="10px" width="100%">
+                                    <Box height="1px" background="#EDEDED" />
+                                    <Text fontWeight="semibold" fontSize="12px" color="#313131">
+                                        FEATURES
+                                    </Text>
+                                    <Stack spacing="100px" direction="row">
+                                        <Stack spacing="10px" direction="column">
+                                            <Stack direction="row" spacing="6px" align="center">
+                                                <IoMdCheckmarkCircleOutline color="#7E3BB5" />
+                                                <Text fontWeight="medium" fontSize="12px" color="#707070">
+                                                    Unlimited Classes
+                                                </Text>
                                             </Stack>
-                                            <Stack
-                                                direction="row"
-                                                justify="flex-start"
-                                                align="center"
-                                                spacing="73px"
-                                                alignSelf="stretch"
-                                            >
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="6px"
-                                                >
-                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
-
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        lineHeight="1.57"
-                                                        fontWeight="medium"
-                                                        fontSize="14px"
-                                                        color="#707070"
-                                                        width="133px"
-                                                        height="18px"
-                                                    >
-                                                        Schedule Calendar
-                                                    </Text>
-                                                </Stack>
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="6px"
-                                                >
-                                                    <IoMdCheckmarkCircleOutline color={"#7E3BB5"}/>
-
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        lineHeight="1.57"
-                                                        fontWeight="medium"
-                                                        fontSize="14px"
-                                                        color="#707070"
-                                                        width="133px"
-                                                        height="18px"
-                                                    >
-                                                        Custom Reports
-                                                    </Text>
-                                                </Stack>
+                                            <Stack direction="row" spacing="6px" align="center">
+                                                <IoMdCheckmarkCircleOutline color="#7E3BB5" />
+                                                <Text fontWeight="medium" fontSize="12px" color="#707070">
+                                                    Class Chats
+                                                </Text>
+                                            </Stack>
+                                        </Stack>
+                                        <Stack spacing="10px" direction="column">
+                                            <Stack direction="row" spacing="6px" align="center">
+                                                <IoMdCheckmarkCircleOutline color="#7E3BB5" />
+                                                <Text fontWeight="medium" fontSize="12px" color="#707070">
+                                                    Schedule Calendar
+                                                </Text>
+                                            </Stack>
+                                            <Stack direction="row" spacing="6px" align="center">
+                                                <IoMdCheckmarkCircleOutline color="#7E3BB5" />
+                                                <Text fontWeight="medium" fontSize="12px" color="#707070">
+                                                    Custom Reports
+                                                </Text>
                                             </Stack>
                                         </Stack>
                                     </Stack>
-                                    <Box height="1px" alignSelf="stretch" background="#EDEDED" />
+                                    <Box height="1px" background="#EDEDED" />
                                 </Stack>
                             </Stack>
+
+                            {/* CTA Button */}
                             <Button
-                                paddingX="160px"
-                                paddingY="7px"
-                                borderRadius="5px"
-                                direction="row"
-                                justify="center"
-                                align="center"
-                                spacing="10px"
-                                width="428px"
+                                width="100%"
                                 height="35px"
-                                maxWidth="100%"
+                                borderRadius="5px"
                                 background="#7E3BB5"
-                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                onClick={()=>{
-                                    isUserAuthenticated ? navigate("/dashboard") :
-                                        navigate("/login")
+                                boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+                                onClick={() => {
+                                    isUserAuthenticated ? navigate("/dashboard") : navigate("/login");
                                 }}
                             >
-                                <Text
-                                    fontFamily="Inter"
-                                    fontWeight="medium"
-                                    fontSize="16px"
-                                    color="#F9F9F9"
-                                    textAlign="center"
-                                >
+                                <Text fontWeight="medium" fontSize="14px" color="#F9F9F9">
                                     Start free trial
                                 </Text>
                             </Button>
                         </Stack>
                     </Stack>
-
                 </Stack>
             </Stack>
         </Stack>
     );
 }
+

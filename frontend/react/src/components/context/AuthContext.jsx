@@ -21,36 +21,37 @@ const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [fullUser, setFullUser] = useState([]);
 
-    const {name:orgName,id:classId} = useParams();
+    const [loadingFullUser, setLoadingFullUser] = useState(true);
 
-    const setUserFromToken = () =>{
+    const setUserFromToken = () => {
         let token = localStorage.getItem("access_token");
         if (token) {
-            // Decode token to get the user info
             const decodedToken = jwtDecode(token);
 
-            // Set the user information from the token
             setUser({
                 username: decodedToken.sub,
-                roles: decodedToken.scopes
+                roles: decodedToken.scopes,
             });
 
-            // Use decodedToken.sub for the API call to fetch full user details
+            setLoadingFullUser(true); // Start loading full user
             getUserByEmail(decodedToken.sub)
-                .then(res => {
+                .then((res) => {
                     if (res.data) {
                         setFullUser(res.data);
                     } else {
-                        console.error('Expected user data but got:', res.data);
+                        console.error("Expected user data but got:", res.data);
                     }
                 })
-                .catch(error => {
-                    console.error('Error fetching user:', error);
-                });
+                .catch((error) => {
+                    console.error("Error fetching user:", error);
+                })
+                .finally(() => setLoadingFullUser(false)); // Stop loading full user
         } else {
             console.warn("No token found in localStorage.");
+            setLoadingFullUser(false); // No user to fetch
         }
-    }
+    };
+
 
 
     useEffect(() => {

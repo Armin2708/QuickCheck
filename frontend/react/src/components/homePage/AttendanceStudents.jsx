@@ -1,6 +1,7 @@
 import { FiUser } from "react-icons/fi";
 import { Stack, Tooltip, Text, Box } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import { useMediaQuery } from "react-responsive";
 
 // A list of 30 names
 const names = [
@@ -18,13 +19,11 @@ export default function AttendanceStudents() {
     const [randomNames, setRandomNames] = useState([]);
 
     useEffect(() => {
-        // Generate random 0 or 1 for each icon
         const generateRandomValues = () => {
             const values = Array.from({ length: 30 }).map(() => Math.round(Math.random()));
             setRandomValues(values);
         };
 
-        // Shuffle the names array and assign names to each icon
         const generateRandomNames = () => {
             const shuffledNames = names.sort(() => 0.5 - Math.random());
             setRandomNames(shuffledNames);
@@ -36,14 +35,16 @@ export default function AttendanceStudents() {
 
     const getColor = (index) => (randomValues[index] === 0 ? "#EBECFF" : "#7E3BB5");
     const getStatusColor = (index) => (randomValues[index] === 0 ? "#707070" : "#7E3BB5");
-    const getTooltipText = (index) => {
-        const status = randomValues[index] === 0 ? "Absent" : "Present";
-        return randomNames[index];
-    };
+    const getTooltipText = (index) => randomNames[index];
+
+    // Define breakpoints for responsive icon size
+    const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
+    const isMediumScreen = useMediaQuery({ query: "(min-width: 601px) and (max-width: 1024px)" });
+    const iconSize = isSmallScreen ? 40 : isMediumScreen ? 50 : 70;
 
     return (
         <Stack direction={"column"} spacing={2} justify="center">
-            {/* First row with 6 icons, centered */}
+            {/* First row with 6 icons */}
             <Stack direction="row" spacing={2} justifyContent="center">
                 {Array.from({ length: 6 }).map((_, index) => (
                     <Tooltip
@@ -58,14 +59,16 @@ export default function AttendanceStudents() {
                         label={
                             <Box textAlign="center">
                                 <Text fontWeight="bold">{getTooltipText(index)}</Text>
-                                <Text color={getStatusColor(index)} fontWeight={"medium"}>{randomValues[index] === 0 ? "Absent" : "Present"}</Text>
+                                <Text color={getStatusColor(index)} fontWeight={"medium"}>
+                                    {randomValues[index] === 0 ? "Absent" : "Present"}
+                                </Text>
                             </Box>
                         }
                     >
                         <div>
                             <FiUser
-                                size="80px"  // Increased icon size
-                                color={hoveredIndex === index ? "#D9C4EC" : getColor(index)}  // Hover color
+                                size={iconSize}
+                                color={hoveredIndex === index ? "#D9C4EC" : getColor(index)}
                                 onMouseEnter={() => setHoveredIndex(index)}
                                 onMouseLeave={() => setHoveredIndex(null)}
                             />
@@ -89,13 +92,15 @@ export default function AttendanceStudents() {
                         label={
                             <Box textAlign="center">
                                 <Text fontWeight="bold">{getTooltipText(index + 6)}</Text>
-                                <Text color={getStatusColor(index + 6)} fontWeight={"medium"}>{randomValues[index + 6] === 0 ? "Absent" : "Present"}</Text>
+                                <Text color={getStatusColor(index + 6)} fontWeight={"medium"}>
+                                    {randomValues[index + 6] === 0 ? "Absent" : "Present"}
+                                </Text>
                             </Box>
                         }
                     >
                         <div>
                             <FiUser
-                                size="80px"
+                                size={iconSize}
                                 color={hoveredIndex === index + 6 ? "#D9C4EC" : getColor(index + 6)}
                                 onMouseEnter={() => setHoveredIndex(index + 6)}
                                 onMouseLeave={() => setHoveredIndex(null)}
@@ -120,13 +125,15 @@ export default function AttendanceStudents() {
                         label={
                             <Box textAlign="center">
                                 <Text fontWeight="bold">{getTooltipText(index + 14)}</Text>
-                                <Text color={getStatusColor(index + 14)} fontWeight={"medium"}>{randomValues[index + 14] === 0 ? "Absent" : "Present"}</Text>
+                                <Text color={getStatusColor(index + 14)} fontWeight={"medium"}>
+                                    {randomValues[index + 14] === 0 ? "Absent" : "Present"}
+                                </Text>
                             </Box>
                         }
                     >
                         <div>
                             <FiUser
-                                size="80px"
+                                size={iconSize}
                                 color={hoveredIndex === index + 14 ? "#D9C4EC" : getColor(index + 14)}
                                 onMouseEnter={() => setHoveredIndex(index + 14)}
                                 onMouseLeave={() => setHoveredIndex(null)}
@@ -151,13 +158,15 @@ export default function AttendanceStudents() {
                         label={
                             <Box textAlign="center">
                                 <Text fontWeight="bold">{getTooltipText(index + 22)}</Text>
-                                <Text color={getStatusColor(index + 22)} fontWeight={"medium"}>{randomValues[index + 22] === 0 ? "Absent" : "Present"}</Text>
+                                <Text color={getStatusColor(index + 22)} fontWeight={"medium"}>
+                                    {randomValues[index + 22] === 0 ? "Absent" : "Present"}
+                                </Text>
                             </Box>
                         }
                     >
                         <div>
                             <FiUser
-                                size="80px"
+                                size={iconSize}
                                 color={hoveredIndex === index + 22 ? "#D9C4EC" : getColor(index + 22)}
                                 onMouseEnter={() => setHoveredIndex(index + 22)}
                                 onMouseLeave={() => setHoveredIndex(null)}

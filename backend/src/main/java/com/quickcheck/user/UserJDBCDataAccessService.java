@@ -248,7 +248,7 @@ public class UserJDBCDataAccessService implements UserDao {
         var sql = """
                 SELECT count(id)
                 FROM users
-                WHERE email = ?
+                WHERE LOWER(email) = LOWER(?)
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, email);
         return count != null && count > 0;

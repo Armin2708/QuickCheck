@@ -7,19 +7,20 @@ import {createBrowserRouter, RouterProvider} from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Login from "./components/login/Login.jsx";
 import AuthProvider from "./components/context/AuthContext.jsx";
-import OrganizationUsersListPage from "./pages/OrganizationUsersListPage.jsx";
+import OrganizationListComponent from "./components/dashboard/organizationList/OrganizationListComponent.jsx";
 import ProtectedRoute from "./components/shared/protectedRoutes/ProtectedRoute.jsx";
-import OrganizationUserClassListPage from "./pages/OrganizationUserClassListPage.jsx";
+import ClassListPage from "./pages/ClassListPage.jsx";
 import Register from "./components/register/Register.jsx";
-import BrowseOrganizationClassListPage from "./pages/BrowseOrganizationClassListPage.jsx";
+import BrowseClassPage from "./pages/BrowseClassPage.jsx";
 import ClassPage from "./pages/ClassPage.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import UserProfilePage from "./pages/UserProfilePage.jsx";
-import BrowseOrganizationListPage from "./pages/BrowseOrganizationListPage.jsx";
+import BrowseOrganizationPage from "./pages/BrowseOrganizationPage.jsx";
 import AdminProtectedRoute from "./components/shared/protectedRoutes/AdminProtectedRoute.jsx";
 import Test from "./pages/Test.jsx";
 import JoinedOrgProtectedRoute from "./components/shared/protectedRoutes/JoinedOrgProtectedRoute.jsx";
 import JoinedClassProtectedRoute from "./components/shared/protectedRoutes/JoinedClassProtectedRoute.jsx";
+import UserList from "./pages/UserList.jsx";
 
 const { ToastContainer } = createStandaloneToast();
 const router = createBrowserRouter([
@@ -50,21 +51,21 @@ const router = createBrowserRouter([
         path:`/dashboard/organizations`,
         element:
             <ProtectedRoute>
-                <BrowseOrganizationListPage/>
+                <BrowseOrganizationPage/>
             </ProtectedRoute>
     },
     {
         path:`/organization/:name`,
         element:
             <JoinedOrgProtectedRoute>
-                <OrganizationUserClassListPage/>
+                <ClassListPage/>
             </JoinedOrgProtectedRoute>
     },
     {
         path:"/users",
         element:
             <AdminProtectedRoute>
-                <OrganizationUsersListPage/>
+                <UserList/>
             </AdminProtectedRoute>
     },
     {
@@ -78,7 +79,7 @@ const router = createBrowserRouter([
         path:"/organization/:name/classes",
         element:
             <JoinedOrgProtectedRoute>
-                <BrowseOrganizationClassListPage/>
+                <BrowseClassPage/>
             </JoinedOrgProtectedRoute>
     },
     {

@@ -1,5 +1,5 @@
-import {Box, Button, Card, Image, Input, Stack, Text} from "@chakra-ui/react";
-import {FiCheckCircle} from "react-icons/fi";
+import {Box, Button, Card, Image, Input, Spacer, Stack, Text} from "@chakra-ui/react";
+import {FiCheckCircle, FiUser} from "react-icons/fi";
 import {IoMenu, IoWarningOutline} from "react-icons/io5";
 import {FaCheck} from "react-icons/fa";
 import {IoMdInformationCircleOutline} from "react-icons/io";
@@ -8,540 +8,292 @@ import {useEffect, useState} from "react";
 import TitleText from "./TitleText.jsx";
 import TitleDescription from "./TitleDescription.jsx";
 import TitleWrapper from "./TitleWrapper.jsx";
+import {useMediaQuery} from "react-responsive";
 
-const Navbar = ({colorTheme}) =>(
-        <Stack
-            paddingX="11px"
-            paddingY="5px"
-            borderRadius="10px"
-            justify="center"  // Center vertically
-            align="center"  // Align content horizontally
-            spacing="10px"
-            height="46px"
-            alignSelf="stretch"
-            background={colorTheme == "darkMode"? "#444343" : "#FFFFFF"}
-            boxShadow="0px 2px 2px 0px rgba(0, 0, 0, 0.25)"
-        >
-            <Stack
-                direction="row"
-                justify="space-between"
-                align="center"
-                width="100%"
-                maxWidth="653px"
-            >
-                <Stack
-                    direction="row"
-                    justify="flex-start"
-                    align="center"
-                    spacing="14px"
-                >
-                    {/* Icon Button */}
-                    <Button
-                        borderRadius="4px"
-                        display="flex"
-                        justifyContent="center"
-                        alignItems="center"
-                        width="28px"   // Set explicit width
-                        height="28px"  // Set explicit height to match width for square shape
-                        background={colorTheme == "darkMode"? "#313131" : "#FBFBFB"}
-                        padding="0"  // Remove padding to ensure square button
-                        minWidth="28px"  // Ensure it doesn't shrink below 28px
-                        minHeight="28px"  // Ensure it doesn't shrink below 28px
-                    >
-                        <IoMenu size="16px" color={colorTheme=="darkMode"? "#707070" : "#313131"} /> {/* Set icon size to fit */}
-                    </Button>
-
-                    {/* Text and Image Button */}
-                    <Button
-                        backgroundColor="transparent"
-                        _hover={{
-                            bg: "transparent",  // Keep background transparent on hover
-                            color: "inherit"  // Maintain text color
-                        }}
-                        display="inline-flex"
-                        alignItems="center"  // Align content vertically
-                        padding="0"
-                        width="auto"  // Make the button width automatic based on content
-                    >
-                        <Image
-                            width="34.82px"
-                            height="34.5px"
-                            src={"./QuickCheckTransparent.png"}
-                        />
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="bold"
-                            fontSize="26px"
-                            color="#313131"
-                            marginLeft="8px"  // Space between image and text
-                            lineHeight="34.5px"  // Line height matches the image height
-                        >
-                            Quick Check
-                        </Text>
-                    </Button>
-                </Stack>
-            </Stack>
-        </Stack>
-    );
-
-const CardWrapper = ({children,colorTheme}) =>(
+const Navbar = ({ colorTheme }) => (
     <Stack
-        paddingX="12px"
-        paddingY="13px"
+        paddingX="11px"
+        paddingY="5px"
         borderRadius="10px"
         justify="flex-start"
-        align="flex-start"
-        spacing="10px"
-        width="702px"
-        height="689px"
-        maxWidth="100%"
-        background={colorTheme == "darkMode"? "#313131" : "#F9F9F9"}
-        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+        align="center"
+        direction="row"
+        background={colorTheme === "darkMode" ? "#444343" : "#FFFFFF"}
+        boxShadow="0px 2px 2px rgba(0, 0, 0, 0.25)"
+        width="100%"
+    >
+        <Button
+            borderRadius="4px"
+            width="28px"
+            height="28px"
+            background={colorTheme === "darkMode" ? "#313131" : "#FBFBFB"}
+            padding="0"
+        >
+            <IoMenu size="16px" color={colorTheme === "darkMode" ? "#707070" : "#313131"} />
+        </Button>
+        <Button
+            backgroundColor="transparent"
+            _hover={{ bg: "transparent" }}
+            display="flex"
+            alignItems="center"
+            padding="0"
+        >
+            <Image width="35px" height="35px" src="./QuickCheckTransparent.png" />
+            <Text fontWeight="bold" fontSize="26px" color="#313131" marginLeft="8px">
+                Quick Check
+            </Text>
+        </Button>
+    </Stack>
+);
+
+const Header = () => (
+    <TitleWrapper>
+        <TitleText>
+            Less waste. More
+            <Box as="span" color="#7E3BB5">
+                {" speed"}
+            </Box>
+        </TitleText>
+        <TitleDescription>
+            Spend less time doing attendance and more time teaching class
+        </TitleDescription>
+    </TitleWrapper>
+);
+
+const CardWrapper = ({ children, colorTheme, spacing ="30px" }) => (
+    <Stack
+        padding="12px"
+        borderRadius="10px"
+        spacing={spacing}
+        width="100%"
+        height={"100%"}
+        maxWidth={"720px"}
+        maxHeight={"640px"}
+        background={colorTheme === "darkMode" ? "#313131" : "#F9F9F9"}
+        boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+        align="center" // Aligns children horizontally to the center
+        justify="center" // Centers children vertically (if the parent has height)
     >
         {children}
     </Stack>
 );
 
+
+const LeftCard = ({ randomCode }) => (
+    <CardWrapper colorTheme="lightMode">
+        <Navbar colorTheme="lightMode" />
+        <Stack
+            padding="15px"
+            borderRadius="10px"
+            spacing="5px"
+            background="#FFFFFF"
+            boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
+            direction="column"
+            align="center"
+            justify="space-between"
+            maxWidth={"300px"}
+        >
+                <Text fontWeight="medium" fontSize="20px" color="#313131">
+                    CS 3337 - Prof. Pym
+                </Text>
+                <Box fontSize="18px" color="#313131">
+                    Friday 10/15
+                    <Stack direction="row">
+                        <Text>Code:</Text>
+                        <Text as="span" fontWeight="bold" color="#7E3BB5">
+                            {randomCode}
+                        </Text>
+                    </Stack>
+                </Box>
+                <Button
+                    borderRadius="8px"
+                    width="153px"
+                    height="38px"
+                    background="#7E3BB5"
+                    boxShadow="0px 4px 4px rgba(0, 0, 0, 0.25)"
+                >
+                    <Text fontWeight="medium" fontSize="18px" color="#FFFFFF">
+                        End Attendance
+                    </Text>
+                </Button>
+        </Stack>
+        <AttendanceStudents />
+    </CardWrapper>
+);
+
+const RightCard = ({ inputCode, setInputCode, isValid, setIsValid }) => {
+    // Define breakpoints for responsive icon size
+    const isSmallScreen = useMediaQuery({ query: "(max-width: 600px)" });
+    const isMediumScreen = useMediaQuery({ query: "(min-width: 601px) and (max-width: 1024px)" });
+    const iconSize = isSmallScreen ? 40 : isMediumScreen ? 60 : 80;
+
+    return (
+        <CardWrapper colorTheme="darkMode" spacing={"20px"}>
+            <Navbar colorTheme="darkMode" />
+            <Stack
+                padding="15px"
+                borderRadius="10px"
+                spacing="5px"
+                background="#444343"
+                boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
+                maxWidth={"300px"}
+            >
+                <Text fontWeight="medium" fontSize="20px" color="#707070">
+                    CS 3337 - Prof. Pym
+                </Text>
+                <Text fontWeight="medium" fontSize="18px" color="#707070">
+                    Friday 10/15
+                    <br />
+                    Class location: FA 218
+                </Text>
+            </Stack>
+            <Stack
+                direction={{ base: "column", lg: "row" }} // Stack vertically on small screens, horizontally on large screens
+                spacing="10px"
+                width="100%" // Optional: Ensures full width
+                align="center" // Align items to the center
+                justify="center"
+            >
+                {/* Location Card */}
+                <Stack
+                    paddingY="15px"
+                    paddingX="20px"
+                    borderRadius="10px"
+                    spacing="10px"
+                    background="#444343"
+                    boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
+                    align="center"
+                    width="250px" // Optional: Ensures consistent width
+                >
+                    <Text fontWeight="semibold" fontSize="30px" color="#707070" lineHeight={"30px"} >
+                        Location
+                    </Text>
+                    <Button
+                        paddingX="18px"
+                        paddingY="7px"
+                        borderRadius="8px"
+                        width="154px"
+                        height="38px"
+                        background="#7E3BB5"
+                    >
+                        <Text fontWeight="medium" fontSize="20px" color="#313131">
+                            Get location
+                        </Text>
+                    </Button>
+                    <Stack direction="row" spacing="7px" align="center">
+                        <Text fontWeight="medium" fontSize="18px" color="#707070">
+                            My location
+                        </Text>
+                        <FiCheckCircle size="23px" color="#7E3BB5" />
+                    </Stack>
+                </Stack>
+
+                {/* Code Card */}
+                <Stack
+                    paddingY="15px"
+                    paddingX="20px"
+                    borderRadius="10px"
+                    spacing="10px"
+                    background="#444343"
+                    boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
+                    align="center"
+                    width="250px" // Optional: Ensures consistent width
+                >
+                    <Text fontWeight="semibold" fontSize="30px" color="#707070" lineHeight={"30px"} >
+                        Code
+                    </Text>
+                    <Stack direction="row" spacing="6px">
+                        <Input
+                            type="text"
+                            maxWidth="130px"
+                            value={inputCode}
+                            onChange={(e) =>
+                                /^\d*$/.test(e.target.value) && setInputCode(e.target.value)
+                            }
+                            textAlign="center"
+                            background="#707070"
+                            color="#313131"
+                            fontSize="20px"
+                            placeholder="123456"
+                            border="none"
+                            _focus={{
+                                boxShadow: "0px 0px 0px 2px #7E3BB5",
+                            }}
+                        />
+                        <Button
+                            width="38px"
+                            height="38px"
+                            borderRadius="8px"
+                            background="#7E3BB5"
+                            onClick={() => setIsValid(inputCode === "123456")}
+                        >
+                            <FaCheck color="#313131" size="10px" />
+                        </Button>
+                    </Stack>
+                    <Stack direction="row" spacing="7px" align="center">
+                        <Text fontSize="18px" color="#707070">
+                            {isValid === null
+                                ? "Enter Code"
+                                : isValid
+                                    ? "Valid Code"
+                                    : "Invalid Code"}
+                        </Text>
+                        {isValid === true && <FiCheckCircle size="23px" color="#7E3BB5" />}
+                        {isValid === false && (
+                            <IoWarningOutline size="23px" color="#7E3BB5" />
+                        )}
+                    </Stack>
+                </Stack>
+            </Stack>
+
+            <Spacer/>
+
+            <Stack align="center">
+                <FiUser size={iconSize} /> {/* Responsive icon size */}
+                <Text fontWeight="semibold" fontSize="30px" color="#707070" lineHeight={"30px"} >
+                    John Doe
+                </Text>
+            </Stack>
+        </CardWrapper>
+    );
+};
+
+
 export default function SneakPeek() {
     const [randomCode, setRandomCode] = useState("");
-    const [inputCode, setInputCode] = useState(""); // To store the input code
-    const [isValid, setIsValid] = useState(null);  // To store if the code is valid or not
+    const [inputCode, setInputCode] = useState("");
+    const [isValid, setIsValid] = useState(null);
 
-    // Generate a random 6-digit code when the component mounts
     useEffect(() => {
-        const code = Math.floor(100000 + Math.random() * 900000).toString(); // Generate random 6-digit code
-        setRandomCode(code);
+        setRandomCode(Math.floor(100000 + Math.random() * 900000).toString());
     }, []);
+
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "54px" }}  // Responsive padding
-            justify="flex-end"
-            align="center"
+            paddingX={{ base: "20px", lg: "54px" }}
             spacing="10px"
-            width="100%"  // Full width for responsiveness
-            maxWidth="100%"
-            height="auto"  // Make the height flexible
-            background="#FFFFFF"
+            width="100%"
+            align="center" // Centers the entire layout horizontally
+            justify="center" // Centers the entire layout horizontally
         >
+            <Header />
             <Stack
-                justify="flex-start"
-                align="center"
-                spacing="56px"
-                width="100%"
-                maxWidth="1404px"
+                direction={{ base: "column", lg: "row" }}
+                justify="center" // Centers the cards in the row direction
+                spacing="10px"
+                width="100%" // Full width for proper centering
             >
-                {/* Header Section */}
-                <TitleWrapper>
-                    <TitleText>
-                        Less waste. More
-                        <Box as="span" color="#7E3BB5">
-                            {" speed"}
-                        </Box>
-                    </TitleText>
-                    <TitleDescription
-                    >
-                        Spend less time doing attendance and more time teaching class
-                    </TitleDescription>
-                </TitleWrapper>
-
-                {/* Attendance Section */}
-                <Stack
-                    direction={{ base: "column", lg: "row" }}  // Responsive direction
-                    justify="center"
-                    align="center"
-                    width="100%"
-                    maxWidth="100%"
-                >
-
-                    <CardWrapper colorTheme={"lightMode"}>
-                        <Stack
-                            paddingY="0px"
-                            justify="flex-start"
-                            align="center"
-                            spacing="33px"
-                            width={"100%"}
-                            background={"#FBFBFB"}
-                        >
-                            {/* Nav Bar */}
-                            <Navbar colorTheme={"lightmode"}/>
-
-                            <Stack
-                                paddingX="20px"
-                                paddingY="10px"
-                                borderRadius="10px"
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="5px"
-                                width="326px"
-                                height="137px"
-                                maxWidth="100%"
-                                background="#FFFFFF"
-                                boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                            >
-                                <Stack
-                                    direction="row"
-                                    justify="flex-start"
-                                    align="flex-start"
-                                    spacing="5px"
-                                >
-                                    <Stack
-                                        justify="center"
-                                        align="flex-start"
-                                        spacing="5px"
-                                        height="121px"
-                                    >
-                                        <Stack
-                                            justify="flex-start"
-                                            align="center"
-                                            spacing="5px"
-                                            width="280px"
-                                        >
-                                            <Stack
-                                                justify="flex-start"
-                                                align="flex-start"
-                                                spacing="4px"
-                                                alignSelf="stretch"
-                                                alignContent={"center"}
-                                            >
-                                                <Text
-                                                    fontFamily="Inter"
-                                                    fontWeight="medium"
-                                                    fontSize="20px"
-                                                    color="#313131"
-                                                    alignSelf="stretch"
-                                                >
-                                                    CS 3337 - Prof. Abalos
-                                                </Text>
-                                                <Box
-                                                    fontFamily="Inter"
-                                                    fontWeight="medium"
-                                                    fontSize="18px"
-                                                    color="#313131"
-                                                    alignSelf="stretch"
-                                                >
-                                                    Friday 10/15
-                                                    <Stack direction={"row"}>
-                                                        <Text>
-                                                            Code :
-                                                        </Text>
-                                                        <Text as="span" fontWeight="bold" color="#7E3BB5">
-                                                            {randomCode}  {/* Display the generated random code */}
-                                                        </Text>
-                                                    </Stack>
-                                                </Box>
-                                            </Stack>
-                                            <Button
-                                                paddingX="7px"
-                                                paddingY="8px"
-                                                borderRadius="8px"
-                                                direction="row"
-                                                justify="center"
-                                                align="center"
-                                                spacing="10px"
-                                                width="153px"
-                                                height="38px"
-                                                background="#7E3BB5"
-                                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                            >
-                                                <Text
-                                                    fontFamily="Inter"
-                                                    fontWeight="medium"
-                                                    fontSize="18px"
-                                                    color="#FFFFFF"
-                                                >
-                                                    End Attendance
-                                                </Text>
-                                            </Button>
-                                        </Stack>
-                                    </Stack>
-                                </Stack>
-                            </Stack>
-                            <AttendanceStudents />
-                        </Stack>
-                    </CardWrapper>
-
-                    {/* Right Card */}
-                    <CardWrapper colorTheme={"darkMode"}>
-                        <Stack
-                            justify="flex-start"
-                            align="center"
-                            spacing="32px"
-                            width="675px"
-                            maxWidth="100%"
-                        >
-                            <Navbar colorTheme={"darkMode"}/>
-
-                            <Stack
-                                justify="flex-start"
-                                align="center"
-                                spacing="33px"
-                                width="564px"
-                                maxWidth="100%"
-                            >
-                                <Stack
-                                    paddingX="38px"
-                                    paddingY="31px"
-                                    borderRadius="10px"
-                                    justify="flex-start"
-                                    align="flex-start"
-                                    spacing="10px"
-                                    width="324px"
-                                    height="135px"
-                                    maxWidth="100%"
-                                    background="#444343"
-                                    boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="flex-start"
-                                        spacing="13px"
-                                    >
-                                        <Stack
-                                            justify="flex-start"
-                                            align="flex-start"
-                                            spacing="4px"
-                                            width="218px"
-                                        >
-                                            <Text
-                                                fontFamily="Inter"
-                                                fontWeight="medium"
-                                                fontSize="20px"
-                                                color="#707070"
-                                                alignSelf="stretch"
-                                            >
-                                                CS 3337 - Prof. Abalos
-                                            </Text>
-                                            <Text
-                                                fontFamily="Inter"
-                                                fontWeight="medium"
-                                                fontSize="18px"
-                                                color="#707070"
-                                                alignSelf="stretch"
-                                            >
-                                                Friday 10/15
-                                                <br/>
-                                                Class location : FA 218
-                                            </Text>
-                                        </Stack>
-                                    </Stack>
-                                </Stack>
-                                <Stack
-                                    justify="flex-start"
-                                    align="center"
-                                    spacing="48px"
-                                    alignSelf="stretch"
-                                >
-                                    <Stack
-                                        direction="row"
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="26px"
-                                        alignSelf="stretch"
-                                    >
-                                        <Stack
-                                            paddingX="34px"
-                                            paddingY="12px"
-                                            borderRadius="10px"
-                                            justify="flex-start"
-                                            align="flex-start"
-                                            spacing="10px"
-                                            width="269px"
-                                            height="170px"
-                                            maxWidth="100%"
-                                            background="#444343"
-                                            boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                                        >
-                                            <Stack
-                                                justify="flex-start"
-                                                align="center"
-                                                spacing="16px"
-                                                width="200px"
-                                            >
-                                                <Text
-                                                    fontFamily="Inter"
-                                                    fontWeight="semibold"
-                                                    fontSize="45px"
-                                                    color="#707070"
-                                                    height="47px"
-                                                    alignSelf="stretch"
-                                                    textAlign="center"
-                                                >
-                                                    Location
-                                                </Text>
-                                                <Button
-                                                    paddingX="18px"
-                                                    paddingY="7px"
-                                                    borderRadius="8px"
-                                                    direction="row"
-                                                    justify="center"
-                                                    align="center"
-                                                    spacing="10px"
-                                                    width="154px"
-                                                    height="38px"
-                                                    background="#7E3BB5"
-                                                    boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                                >
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        fontWeight="medium"
-                                                        fontSize="20px"
-                                                        color="#313131"
-                                                        textAlign="center"
-                                                    >
-                                                        Get location
-                                                    </Text>
-                                                </Button>
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="7px"
-                                                >
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        fontWeight="medium"
-                                                        fontSize="18px"
-                                                        color="#707070"
-                                                    >
-                                                        My location
-                                                    </Text>
-                                                    <FiCheckCircle size={"23px"} color={"#7E3BB5"} />
-                                                </Stack>
-
-                                            </Stack>
-                                        </Stack>
-                                        <Stack
-                                            paddingX="34px"
-                                            paddingY="12px"
-                                            borderRadius="10px"
-                                            justify="flex-start"
-                                            align="flex-start"
-                                            spacing="10px"
-                                            width="269px"
-                                            height="170px"
-                                            maxWidth="100%"
-                                            background="#444343"
-                                            boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                                        >
-                                            <Stack
-                                                justify="flex-start"
-                                                align="center"
-                                                spacing="16px"
-                                                width="200px"
-                                            >
-                                                <Text
-                                                    fontFamily="Inter"
-                                                    fontWeight="semibold"
-                                                    fontSize="45px"
-                                                    color="#707070"
-                                                    height="47px"
-                                                    alignSelf="stretch"
-                                                    textAlign="center"
-                                                >
-                                                    Code
-                                                </Text>
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="6px"
-                                                    alignSelf="stretch"
-                                                >
-                                                        <Input
-                                                            type="text"
-                                                            maxLength={6}
-                                                            value={inputCode}
-                                                            onChange={(e) => {
-                                                                if (/^\d*$/.test(e.target.value)) { // Ensure only digits
-                                                                    setInputCode(e.target.value);
-                                                                }
-                                                            }}
-                                                            paddingX="35px"
-                                                            borderRadius="4px"
-                                                            direction="row"
-                                                            justify="center"
-                                                            align="center"
-                                                            spacing="10px"
-                                                            width="154px"
-                                                            height="38px"
-                                                            textAlign="center"
-                                                            background="#707070"
-                                                            color="#313131"
-                                                            fontWeight="medium"
-                                                            fontSize="20px"
-                                                            boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
-                                                            placeholder={"123456"}
-                                                            border="none"  // Remove default border
-                                                            _focus={{
-                                                                outline: "none",  // Remove default outline
-                                                                boxShadow: "0px 0px 0px 2px #7E3BB5",  // Custom focus shadow
-                                                                border: "none",  // Ensure no border on focus
-                                                            }}
-                                                        >
-
-                                                        </Input>
-                                                    <Button
-                                                        paddingX="9px"
-                                                        paddingY="11px"
-                                                        borderRadius="8px"
-                                                        justify="flex-start"
-                                                        align="flex-start"
-                                                        spacing="10px"
-                                                        width="38px"
-                                                        height="38px"
-                                                        background="#7E3BB5"
-                                                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                                        onClick={() => setIsValid(inputCode === randomCode)}
-                                                    >
-                                                        <FaCheck color="#313131" size={"100%"} />
-                                                    </Button>
-                                                </Stack>
-                                                <Stack
-                                                    direction="row"
-                                                    justify="flex-start"
-                                                    align="center"
-                                                    spacing="7px"
-                                                >
-                                                    <Text
-                                                        fontFamily="Inter"
-                                                        fontWeight="medium"
-                                                        fontSize="18px"
-                                                        color="#707070"
-                                                    >
-                                                        {isValid === null ? "Enter Code" : isValid ? "Valid Code" : "Invalid Code"}
-                                                    </Text>
-                                                    {isValid === true ? <FiCheckCircle size={"23px"} color={"#7E3BB5"} />
-                                                        : isValid === false ? <IoWarningOutline size="23px" color="#7E3BB5" /> : null}
-                                                </Stack>
-
-                                            </Stack>
-                                        </Stack>
-                                    </Stack>
-                                    <Stack
-                                        justify="flex-start"
-                                        align="center"
-                                        spacing="9px"
-                                        width="269px"
-                                        maxWidth="100%"
-                                    >
-                                        <Text
-                                            fontFamily="Inter"
-                                            fontWeight="semibold"
-                                            fontSize="36px"
-                                            color="#707070"
-                                            height="47px"
-                                            alignSelf="stretch"
-                                            textAlign="center"
-                                        >
-                                            John Doe
-                                        </Text>
-                                    </Stack>
-                                </Stack>
-                            </Stack>
-                        </Stack>
-                    </CardWrapper>
-
+                {/* Ensure consistent card dimensions */}
+                <Stack width="100%">
+                    <LeftCard randomCode={randomCode} />
+                </Stack>
+                <Stack width="100%" >
+                    <RightCard
+                        inputCode={inputCode}
+                        setInputCode={setInputCode}
+                        isValid={isValid}
+                        setIsValid={setIsValid}
+                    />
                 </Stack>
             </Stack>
         </Stack>

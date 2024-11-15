@@ -24,7 +24,7 @@ export default function MyDropzone({ userId }) {
             });
     }, [userId]);
 
-    const { getRootProps, getInputProps } = useDropzone({ onDrop });
+    const { getRootProps, getInputProps } = useDropzone({ onDrop});
 
     return (
         <div {...getRootProps()}>

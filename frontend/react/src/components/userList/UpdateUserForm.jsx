@@ -3,12 +3,12 @@ import * as Yup from 'yup';
 import {Alert, AlertIcon, Box, Button, Text,Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
 import {updateUser} from "../../services/client.js";
-import MyTextInput from "../shared/form/MyText.jsx";
-import MySelect from "../shared/form/MySelect.jsx";
+import MyTextInput from "../shared/formFields/MyText.jsx";
+import MySelect from "../shared/formFields/MySelect.jsx";
 
 
 // And now we can use these
-const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
+const UpdateUserForm = ({id,name,address,email,dateOfBirth,gender}) => {
 
     return (
         <>
@@ -78,4 +78,4 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
     );
 };
 
-export default UpdateUserProfileForm;
+export default UpdateUserForm;

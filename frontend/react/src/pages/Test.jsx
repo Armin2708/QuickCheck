@@ -1,29 +1,15 @@
-import { useEffect, useState } from 'react';
-import {getUserProfilePictureUrl} from "../services/client.js";
+import EfficiencySection from "../components/homePage/EfficiencySection.jsx";
+import PresentationSection from "../components/homePage/PresentationSection.jsx";
+import SupportedBy from "../components/homePage/SupportedBy.jsx";
+import SneakPeek from "../components/homePage/SneakPeek.jsx";
+import CommunityComments from "../components/homePage/CommunityComments.jsx";
+import AdvantageTabs from "../components/homePage/AdvantageTabs.jsx";
+import JoinQuickCheck from "../components/homePage/JoinQuickCheck.jsx";
 
+export default function Test() {
 
-export default function UserProfilePicture(userId) {
-    const [imageUrl, setImageUrl] = useState(null);
+    return(
 
-    useEffect(() => {
-        const fetchProfileImage = async () => {
-            try {
-                const url = await getUserProfilePictureUrl(userId);
-                setImageUrl(url);
-            } catch (e) {
-                console.error("Error loading profile image:", e);
-            }
-        };
-
-        fetchProfileImage();
-
-        // Cleanup the object URL when the component unmounts
-        return () => {
-            if (imageUrl) {
-                URL.revokeObjectURL(imageUrl);
-            }
-        };
-    }, [userId]);
-
-    return imageUrl
+        <></>
+    )
 }

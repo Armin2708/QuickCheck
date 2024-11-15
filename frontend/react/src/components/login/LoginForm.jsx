@@ -4,7 +4,7 @@ import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import {errorNotification} from "../../services/notification.js";
-import MyTextInput from "../shared/form/MyText.jsx";
+import MyTextInput from "../shared/formFields/MyText.jsx";
 
 const LoginForm = () =>{
 

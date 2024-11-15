@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 import {Button,Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
 import {updateUser} from "../../services/client.js";
-import MyTextInput from "../shared/form/MyText.jsx";
+import MyTextInput from "../shared/formFields/MyText.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
-import MySelect from "../shared/form/MySelect.jsx";
-import MyDropzone from "../shared/form/MyDropzone.jsx";
+import MySelect from "../shared/formFields/MySelect.jsx";
+import MyDropzone from "../shared/formFields/MyDropzone.jsx";
 
 // And now we can use these
 const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {

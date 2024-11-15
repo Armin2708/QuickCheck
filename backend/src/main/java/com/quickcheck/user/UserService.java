@@ -98,7 +98,7 @@ public class UserService{
     }
 
     public void addUser(UserRegistrationRequest request) throws SQLException {
-        String email = request.email();
+        String email = request.email().toLowerCase();
         if (userDao.existUserWithEmail(email)) {
             throw new DuplicateResourceException("Email already exists");
         }
@@ -110,7 +110,7 @@ public class UserService{
             User user = new User(
                     request.name(),
                     request.address(),
-                    request.email(),
+                    email,
                     passwordEncoder.encode(request.password()),
                     request.dateOfBirth(),
                     request.gender(),
@@ -136,11 +136,12 @@ public class UserService{
             changes = true;
         }
 
-        if (userUpdateRequest.email() != null && !userUpdateRequest.email().equals(user.getEmail())) {
-            if (userDao.existUserWithEmail(userUpdateRequest.email())) {
+        if (userUpdateRequest.email() != null && !userUpdateRequest.email().equalsIgnoreCase(user.getEmail())) {
+            String newEmail = userUpdateRequest.email().toLowerCase();  // Convert new email to lowercase
+            if (userDao.existUserWithEmail(newEmail)) {
                 throw new DuplicateResourceException("Email already taken");
             }
-            user.setEmail(userUpdateRequest.email());
+            user.setEmail(newEmail);
             changes = true;
         }
 

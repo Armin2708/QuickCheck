@@ -11,13 +11,6 @@ export default function EfficiencySection() {
             width="100%"  // Full width for responsiveness
             background="#9363BA"
         >
-            <Stack
-                justify="flex-start"
-                align="center"
-                spacing="67px"
-                width="100%"
-                maxWidth="1163px"  // Limit max width for large screens
-            >
                 <Text
                     fontFamily="Inter"
                     fontWeight="bold"
@@ -154,7 +147,6 @@ export default function EfficiencySection() {
                         </Stack>
                     </Stack>
                 </Stack>
-            </Stack>
         </Stack>
     );
 }

@@ -1,10 +1,10 @@
 server:
-  port: 8088
+  port: 8080
   error:
     include-message: always
 
 cors:
-  allowed-origins: "*"
+  allowed-origins: "http://localhost:5173"  # Use the actual URL of your frontend
   allowed-methods: "*"
   allowed-headers: "*"
   exposed-headers: "*"

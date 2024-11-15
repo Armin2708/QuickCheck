@@ -8,8 +8,8 @@ import { useAuth } from "../context/AuthContext.jsx";
 import {
     Box, Button, ButtonGroup, Checkbox, Flex, FormLabel, Heading, Input, Select, Stack, Progress, Alert, AlertIcon
 } from '@chakra-ui/react';
-import MySelect from "../shared/form/MySelect.jsx";
-import MyTextInput from "../shared/form/MyText.jsx";
+import MySelect from "../shared/formFields/MySelect.jsx";
+import MyTextInput from "../shared/formFields/MyText.jsx";
 import {useParams} from "react-router-dom";
 import MapButton from "../map/MapButton.jsx";
 

@@ -2,21 +2,14 @@ import {Box, Stack, Text, SimpleGrid, Image, Button} from "@chakra-ui/react";
 
 export default function SupportedBy() {
     return (
-        <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "100px" }}  // Reduced padding for better responsiveness
-            paddingY="70px"
-            justify="flex-start"
-            align="center"
-            spacing="10px"
-            width="100%"
-            background="#FFFFFF"
-        >
             <Stack
-                justify="flex-start"
+                paddingX={{ base: '20px', md: '50px', lg: '100px' }}
+                paddingY="70px"
+                justify="center"
                 align="center"
-                spacing="27px"
+                spacing="10px"
                 width="100%"
-                maxWidth="683px"
+                background="#FFFFFF"
             >
                 <Text
                     fontFamily="Inter"
@@ -30,23 +23,21 @@ export default function SupportedBy() {
 
                 {/* Responsive Grid for Boxes */}
                 <SimpleGrid
-                    minChildWidth="145px"  // Ensures a minimum width per box to prevent stacking
-                    spacing="15px"
+                    columns={{ base: 2, md: 4 }}  // 2 columns on mobile, 4 on larger screens
+                    spacing="20px"                // Consistent spacing of 20px
                     width="100%"
-                    maxWidth="100%"
+                    maxWidth={{base: "320px", md:"660px"}}
                 >
-                    {/* Boxes displayed in grid */}
-                    <SupportedBox width="120px" height="120px" src={"./csula.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./UCLA.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./UCB.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./usc.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./caltech.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./harvard.png"}/>
-                    <SupportedBox width="120px" height="120px" src={"./Stanford.png"}/>
+                    <SupportedBox src={"./csula.png"} />
+                    <SupportedBox src={"./UCLA.png"} />
+                    <SupportedBox src={"./UCB.png"} />
+                    <SupportedBox src={"./usc.png"} />
+                    <SupportedBox src={"./caltech.png"} />
+                    <SupportedBox src={"./harvard.png"} />
+                    <SupportedBox src={"./Stanford.png"} />
                     <DashedBox />
                 </SimpleGrid>
             </Stack>
-        </Stack>
     );
 }
 
@@ -59,16 +50,16 @@ function SupportedBox({ width, height, src }) {
             justify="center"
             align="center"
             background="#F9F9F9"
-            width="160px"
-            height="130px"
+            width="150px"
+            height="150px"
         >
-            <Box width={width} height={height} >
+            <Box width={width} height={height}>
                 <Image
                     src={src}
                     alt="Supported School Logo"
-                    objectFit="contain"  // Ensures the image fits inside the box while maintaining aspect ratio
-                    width="100%"         // Makes the image fill the width of the box
-                    height="100%"        // Makes the image fill the height of the box
+                    objectFit="contain" // Ensures the image fits inside the box while maintaining aspect ratio
+                    width="100%"        // Makes the image fill the width of the box
+                    height="100%"       // Makes the image fill the height of the box
                 />
             </Box>
         </Stack>
@@ -86,14 +77,14 @@ function DashedBox() {
             borderWidth="1px"
             borderColor="#7E3BB5"
             borderStyle="dashed"
-            width="164px"
-            height="132px"
+            width="150px"
+            height="150px"
             background="#EBECFF"
         >
             <Text
                 fontFamily="Inter"
                 fontWeight="semibold"
-                fontSize="22px"
+                fontSize="20px"
                 color="#313131"
                 textAlign="center"
             >

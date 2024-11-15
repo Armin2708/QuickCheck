@@ -14,12 +14,13 @@ import {
 } from "@chakra-ui/react";
 import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
 import {useNavigate} from "react-router-dom";
-import UpdateUserButton from "./UpdateUserButton.jsx";
-import UpdateUserRolesButton from "./UpdateUserRolesButton.jsx";
-import DeleteUserButton from "./DeleteUserButton.jsx";
+import UpdateUserButton from "../userList/UpdateUserButton.jsx";
+import UpdateUserRolesButton from "../userList/UpdateUserRolesButton.jsx";
+import DeleteUserButton from "../userList/DeleteUserButton.jsx";
 import {useProfileImage} from "../../services/useProfileImage.js";
+import DeleteUserProfileButton from "./DeleteUserProfileButton.jsx";
 
-export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles,onSuccess, userProfile}){
+export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles, onSuccess, userProfile }){
     const navigate = useNavigate();
     const { profileImageUrl, fetchProfileImage } = useProfileImage(id);
     return(
@@ -93,11 +94,15 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                     </Stack>
 
                     <Stack mt={8} direction={'row'} spacing={4}>
-                        {userProfile ? <UpdateUserProfileButton
-                            userId={id} name={name} address={address}
-                            email={email} dateOfBirth={dateOfBirth}
-                            gender={gender} onSuccess={onSuccess}
-                        />
+                        {userProfile ?
+                            <HStack>
+                                <UpdateUserProfileButton
+                                    userId={id} name={name} address={address}
+                                    email={email} dateOfBirth={dateOfBirth}
+                                    gender={gender} onSuccess={onSuccess}
+                                />
+                                <DeleteUserProfileButton userId={id} name={name} />
+                            </HStack>
                             :
                             (<HStack>
                                 <UpdateUserButton
@@ -106,9 +111,9 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                                     gender={gender} onSuccess={onSuccess}
                                 />
                                 <UpdateUserRolesButton userId={id} roles={roles}/>
+                                <DeleteUserButton userId={id} name={name} onSuccess={onSuccess} />
                             </HStack>)
                         }
-                        <DeleteUserButton userId={id} name={name} onSuccess={onSuccess}/>
                     </Stack>
                 </Box>
             </Center>

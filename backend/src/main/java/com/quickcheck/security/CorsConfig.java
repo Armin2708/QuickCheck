@@ -33,8 +33,10 @@ public class CorsConfig {
         configuration.setAllowedMethods(allowedMethods);
         configuration.setAllowedHeaders(allowedHeaders);
         configuration.setExposedHeaders(expectedHeaders);
+        configuration.setAllowCredentials(true); // This line allows credentials to be included in requests
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/api/**", configuration);
         return source;
     }
+
 }

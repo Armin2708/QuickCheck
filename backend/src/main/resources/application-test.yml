@@ -1,7 +1,8 @@
-server:
-  port: 8080
-  error:
-    include-message: always
+cors:
+  allowed-origins: "https://quickcheckapp.org"  # Use the actual URL of your frontend
+  allowed-methods: "*"
+  allowed-headers: "*"
+  exposed-headers: "*"
 
 aws:
   s3:

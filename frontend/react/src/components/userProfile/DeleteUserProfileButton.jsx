@@ -14,25 +14,27 @@ import {deleteClass, deleteUser} from "../../services/client.js";
 import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 
-function DeleteUserButton({ userId, name, }) {
+function DeleteUserProfileButton({ userId, name }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
-    const {logOut} = useAuth()
+    const {logOut, fullUser} = useAuth()
     const navigate = useNavigate()
 
-    const handleDelete = async () => {
-        try {
-            await deleteUser(userId);
-            successNotification(`${name} deleted successfully.`);
-            onClose();
-            logOut();
-            navigate("/login")
+    const handleDelete = () => {
+        deleteUser(userId)
+            .then(() => {
+                successNotification(`${name} deleted successfully.`);
+                onClose();
+                logOut()
+                navigate("/login")
 
-        } catch (error) {
-            errorNotification("Failed to delete the customer.");
-        }
+            })
+            .catch((error) => {
+                errorNotification("Failed to delete the customer.");
+                console.log(error)
+            })
+    }
 
-    };
 
     return (
         <>
@@ -72,7 +74,7 @@ function DeleteUserButton({ userId, name, }) {
                                 Cancel
                             </Button>
                             <Button colorScheme="red" onClick={()=>{
-                                handleDelete()
+                                handleDelete();
                             }} ml={3}>
                                 Delete
                             </Button>
@@ -84,4 +86,4 @@ function DeleteUserButton({ userId, name, }) {
     );
 }
 
-export default DeleteUserButton;
+export default DeleteUserProfileButton;

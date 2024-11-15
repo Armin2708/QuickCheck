@@ -8,9 +8,10 @@ import {
     getValidRadius,
 } from "../services/client.js";
 import {useAuth} from "../components/context/AuthContext.jsx";
-import AdminAttendanceCard from "../components/attendance/instructorAttendance/AdminAttendanceCard.jsx";
-import UserAttendanceCard from "../components/attendance/userAttendance/UserAttendanceCard.jsx";
+import AdminAttendancePage from "../components/attendance/instructorAttendance/AdminAttendancePage.jsx";
+import UserAttendancePage from "../components/attendance/userAttendance/UserAttendancePage.jsx";
 import {Box} from "@chakra-ui/react";
+import ClassListWrap from "../components/shared/dashboard/ClassListWrap.jsx";
 
 export default function ClassPage(){
     const [classroom, setClassroom] = useState({});
@@ -18,85 +19,60 @@ export default function ClassPage(){
     const [professor, setProfessor] = useState({});
     const [usersInClass,setUsersInClass] = useState([]);
     const [validRadius, setValidRadius] = useState(null);
-    const [radius,setRadius] = useState();
-    const [attendanceRequest, setAttendanceRequest] = useState({
-        date: new Date().toISOString().split('T')[0],
-        professorId: null,
-        classId: null,
-        radius: null,
-    });
+
     const { name: orgName, id: classId } = useParams();
     const {fullUser,isAdmin,isUser} = useAuth()
 
     const tag = `${classId}_${new Date().toISOString().split('T')[0]}`
 
 
-
     const fetchData = async () => {
-        try {
-            // Fetch class data
-            const classResponse = await getClassById(classId);
-            if (classResponse.data) {
+        getClassById(classId)
+            .then((classResponse) =>{
                 setClassObject(classResponse.data);
-                setAttendanceRequest((prev) => ({
-                    ...prev,
-                    classId: classResponse.data.id,
-                }));
 
+                getUserById(classResponse.data.professorId)
+                    .then((professorResponse) =>{
+                        setProfessor(professorResponse.data);
+                    })
+                    .catch((err) =>{
+                        console.log(err)
+                    })
+                getClassroomById(classResponse.data.classroomId)
+                    .then((classroomResponse) =>{
+                        setClassroom(classroomResponse.data);
+                    })
+                    .catch((err)=>{
+                        console.log(err)
+                    })
+            })
+            .catch((err) => {
+                console.log(err);
+            })
 
-                // Fetch professor data
-                const professorResponse = await getUserById(classResponse.data.professorId);
-                if (professorResponse.data) {
-                    setProfessor(professorResponse.data);
-                    setAttendanceRequest((prev) => ({
-                        ...prev,
-                        professorId: professorResponse.data.id,
-                    }));
-                } else {
-                    console.error('Expected an object for professor but got:', professorResponse.data);
-                }
+        getUsersInClass(classId)
+            .then((usersRes)=>{
+                setUsersInClass(usersRes.data);
 
-                // Fetch classroom data
-                const classroomResponse = await getClassroomById(classResponse.data.classroomId);
-                if (classroomResponse.data) {
-                    setClassroom(classroomResponse.data);
-                } else {
-                    console.error('Expected an object for classroom but got:', classroomResponse.data);
-                }
-            } else {
-                console.error('Expected an object for class but got:', classResponse.data);
-            }
+            })
+            .catch((err)=> {
+                console.log(err)
+            })
 
-            // Fetch users in class
-            const userInClass = await getUsersInClass(classId);
-            if (userInClass.data) {
-                setUsersInClass(userInClass.data);
-            } else {
-                console.error('Expected an object for users in class but got:', userInClass.data);
-            }
-
-            // Fetch valid radius
-            const classRadius = await getValidRadius(tag);
-            if (typeof classRadius.data === 'number') {
-                setValidRadius(classRadius.data);
-            } else {
-                console.error('Expected a number for validRadius but got:', classRadius.data);
-            }
-        } catch (error) {
-            console.error('Error fetching data:', error);
-        }
+       getValidRadius(tag)
+           .then((classRadius) =>{
+               setValidRadius(classRadius.data)
+           })
+           .catch((err) =>{
+               console.log(err)
+           })
     };
 
     useEffect(() => {
         fetchData();
-    }, [classId]);
+    }, [classId,orgName]);
 
-    useEffect(() => {
-        setAttendanceRequest((prev) => ({
-            ...prev,
-            radius: radius,
-        }));
-    }, [radius]);
+
 
     const commonProps = {
         classObject,
@@ -107,18 +83,17 @@ export default function ClassPage(){
         orgName,
         classId,
         fullUser,
-        attendanceRequest,
         tag
     };
 
     return (
-        <>
+        <ClassListWrap>
             {(isAdmin()) ?
-                <AdminAttendanceCard {...commonProps} setRadius={setRadius} tag={tag} radius={radius}/>
+                <AdminAttendancePage {...commonProps}/>
                 :
-                isUser() ? <UserAttendanceCard {...commonProps} />
+                isUser() ? <UserAttendancePage {...commonProps} />
                     : <Box>Error</Box>
             }
-        </>
+        </ClassListWrap>
     )
 }

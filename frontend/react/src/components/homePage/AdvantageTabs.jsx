@@ -8,197 +8,135 @@ import TitleText from "./TitleText.jsx";
 import TitleDescription from "./TitleDescription.jsx";
 
 export default function AdvantageTabs() {
-    const [tab,setTab]=useState(1)
+    const [tab, setTab] = useState(1);
+
     const handleTab = (buttonId) => {
         setTab(buttonId);
-    }
+    };
+
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "324px" }}  // Responsive padding
-            paddingY={{ base: "40px", md: "70px", lg: "100px" }}  // Responsive padding
+            paddingX={{ base: "20px", md: "50px", lg: "100px" }} // Adjusted padding for responsiveness
+            paddingY={{ base: "20px", md: "50px", lg: "100px" }}
             justify="flex-start"
             align="center"
-            spacing="10px"
-            width="100%"  // Full width for responsiveness
+            spacing="20px"
+            width="100%"
             background="#F9F9F9"
         >
             <Stack
                 justify="flex-start"
                 align="center"
-                spacing="25px"
-                width="100%"  // Full width for responsiveness
-                maxWidth="864px"  // Limit max width
+                spacing="20px"
+                width="100%"
+                maxWidth="864px" // Consistent max width for the container
             >
                 {/* Header Section */}
                 <TitleWrapper>
-                    <TitleText>
-                        An innovating experience that’d fit your need
-                    </TitleText>
-                    <TitleDescription>
-                        Designed to fit your needs
-                    </TitleDescription>
+                    <TitleText>An innovating experience that’d fit your need</TitleText>
+                    <TitleDescription>Designed to fit your needs</TitleDescription>
                 </TitleWrapper>
 
                 {/* Buttons Section */}
                 <Stack
-                    direction={{ base: "column", md: "row" }}  // Stack vertically on small screens
-                    paddingTop={"40px"}
+                    direction={{ base: "column", md: "row" }} // Stack vertically on small screens
+                    spacing="20px"
+                    width="100%"
+                    maxWidth="734px" // Match maxWidth with the card section
                     justify="center"
                     align="center"
-                    spacing="20px"  // Adjust spacing between buttons
-                    width="100%"  // Full width for responsiveness
-                    maxWidth="100%"  // Prevent buttons from shrinking too much
                 >
-                    <Button
-                        paddingX="58px"
-                        paddingY="29px"
-                        borderRadius="10px"
-                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
-                        height="90px"  // Fixed height for all screen sizes
-                        background={tab==1 ?"#BF9BE6":"#7E3BB5"}
-                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                        fontFamily="Inter"
-                        fontWeight="semibold"
-                        fontSize="26px"
-                        color="#FFFFFF"
-                        textAlign="center"
-                        _hover={{ background: tab==1 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
-                        _active={{
-                            transform: "scale(0.95)",  // Scale down a bit on click
-                            background: "#BF9BE6",  // Change background when active
-                        }}
-                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
-                        onClick={() => handleTab(1)}
-                    >
-                        Simple
-                    </Button>
-                    <Button
-                        paddingX="58px"
-                        paddingY="24px"
-                        borderRadius="10px"
-                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
-                        height="90px"  // Fixed height for all screen sizes
-                        background={tab==2 ?"#BF9BE6":"#7E3BB5"}
-                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                        fontFamily="Inter"
-                        fontWeight="semibold"
-                        fontSize="26px"
-                        color="#FFFFFF"
-                        textAlign="center"
-                        _hover={{ background: tab==2 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
-                        _active={{
-                            transform: "scale(0.95)",  // Scale down a bit on click
-                            background: "#BF9BE6",  // Change background when active
-                        }}
-                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
-                        onClick={() => handleTab(2)}
-                    >
-                        Customizable
-                    </Button>
-                    <Button
-                        paddingX="39px"
-                        paddingY="21px"
-                        borderRadius="10px"
-                        width={{ base: "100%", md: "224px" }}  // Full width on small, fixed on large
-                        height="90px"  // Fixed height for all screen sizes
-                        background={tab==3 ?"#BF9BE6":"#7E3BB5"}
-                        boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                        fontFamily="Inter"
-                        fontWeight="semibold"
-                        fontSize="26px"
-                        color="#FFFFFF"
-                        textAlign="center"
-                        _hover={{ background: tab==3 ?"#BF9BE6":"#6C33A1"}}  // Hover effect
-                        _active={{
-                            transform: "scale(0.95)",  // Scale down a bit on click
-                            background: "#BF9BE6",  // Change background when active
-                        }}
-                        transition="all 0.1s ease-in-out"  // Smooth transition for both hover and active states
-                        onClick={() => handleTab(3)}
-                    >
-                        Exportable
-                    </Button>
+                    {["Simple", "Customizable", "Exportable"].map((title, index) => (
+                        <Button
+                            key={index}
+                            paddingX={{ base: "20px", md: "40px" }} // Responsive padding
+                            paddingY="15px"
+                            borderRadius="10px"
+                            width={{ base: "100%", md: "224px" }}
+                            height="60px"
+                            background={tab === index + 1 ? "#BF9BE6" : "#7E3BB5"}
+                            fontSize={{ base: "18px", md: "22px" }}
+                            fontWeight="semibold"
+                            color="#FFFFFF"
+                            textAlign="center"
+                            _hover={{
+                                background: tab === index + 1 ? "#BF9BE6" : "#6C33A1",
+                            }}
+                            _active={{
+                                transform: "scale(0.95)",
+                                background: "#BF9BE6",
+                            }}
+                            transition="all 0.1s ease-in-out"
+                            onClick={() => handleTab(index + 1)}
+                        >
+                            {title}
+                        </Button>
+                    ))}
                 </Stack>
 
                 {/* Card Section */}
-
                 <Stack
-                    paddingX="49px"
-                    paddingY="39px"
+                    paddingX={{ base: "20px", md: "40px" }}
+                    paddingY="30px"
                     borderRadius="15px"
-                    justify="flex-start"
-                    align="flex-start"
-                    spacing="10px"
-                    width="734px"
-                    height="359px"
-                    maxWidth="100%"
+                    spacing="20px"
+                    width="100%"
+                    maxWidth="734px" // Match maxWidth with the buttons section
                     background="#FFFFFF"
-                    boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                    boxShadow="0px 1px 4px rgba(0, 0, 0, 0.25)"
                 >
                     <Stack
-                        justify="flex-start"
-                        align="flex-start"
-                        spacing="39px"
-                        width="630px"
-                        maxWidth="100%"
+                        direction={{ base: "column", md: "row" }} // Stack vertically on small screens
+                        spacing="20px"
+                        align="center"
+                        width="100%"
                     >
-                        <Stack
-                            direction="row"
-                            justify="flex-start"
-                            align="center"
-                            spacing="57px"
-                            alignSelf="stretch"
+                        <Box
+                            padding="20px"
+                            borderRadius="50%"
+                            background="#7E3BB5"
+                            width="80px"
+                            height="80px"
+                            display="flex"
+                            alignItems="center"
+                            justifyContent="center"
                         >
-                            <Box
-                                paddingX="35px"
-                                paddingY="32px"
-                                borderRadius="63.5px"
-                                direction="row"
-                                justify="flex-start"
-                                align="center"
-                                spacing="10px"
-                                width="127px"
-                                height="127px"
-                                background="#7E3BB5"
-                            >
-                                {tab==1 ?<FiThumbsUp color={"white"} size={"100%"}/>
-                                    : (tab==2 ? <LuPen color={"white"} size={"100%"}/>
-                                        : <RiShare2Line color={"white"} size={"100%"}/>)}
-                            </Box>
-                            <Text
-                                fontFamily="Inter"
-                                fontWeight="bold"
-                                fontSize="32px"
-                                color="#313131"
-                                width="446px"
-                                height="79px"
-                                maxWidth="100%"
-                            >
-                                {tab==1 ? "Intuitive design to maximize your output"
-                                    : (tab==2 ? "Customize your experience "
-                                        :"Export your data to other platforms")}
-                            </Text>
-                        </Stack>
+                            {tab === 1 ? (
+                                <FiThumbsUp color="white" size="40px" />
+                            ) : tab === 2 ? (
+                                <LuPen color="white" size="40px" />
+                            ) : (
+                                <RiShare2Line color="white" size="40px" />
+                            )}
+                        </Box>
                         <Text
-                            fontFamily="Inter"
-                            lineHeight="1.58"
-                            fontWeight="semibold"
-                            fontSize="24px"
-                            color="#707070"
-                            height="111px"
-                            alignSelf="stretch"
+                            fontWeight="bold"
+                            fontSize={{ base: "18px", md: "24px" }}
+                            color="#313131"
+                            textAlign={{ base: "center", md: "left" }}
                         >
-                            {tab==1 ?"Quick Check UI has been engineered to be as intuitive as " +
-                                "possible for you to enjoy the simple but efficient experience."
-                                : (tab==2 ? "Quick Check lets you customize your experience to " +
-                                    "better match your specific need."
-                                    :"Quick Check datas can be exported to other platforms \n" +
-                                    "to help you better fit your need.")}
+                            {tab === 1
+                                ? "Intuitive design to maximize your output"
+                                : tab === 2
+                                    ? "Customize your experience"
+                                    : "Export your data to other platforms"}
                         </Text>
                     </Stack>
+                    <Text
+                        fontSize={{ base: "14px", md: "18px" }}
+                        color="#707070"
+                        textAlign="justify"
+                    >
+                        {tab === 1
+                            ? "Quick Check UI has been engineered to be as intuitive as possible for you to enjoy the simple but efficient experience."
+                            : tab === 2
+                                ? "Quick Check lets you customize your experience to better match your specific needs."
+                                : "Quick Check data can be exported to other platforms to help you better fit your needs."}
+                    </Text>
                 </Stack>
-
             </Stack>
         </Stack>
+
     );
 }
+
