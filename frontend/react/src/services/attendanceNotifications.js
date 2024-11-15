@@ -2,7 +2,7 @@ import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 
 function attendanceNotifications(tag, onNewAttendance) {
-    const socket = new SockJS('http://localhost:8080/api/ws');
+    const socket = new SockJS(`${import.meta.env.VITE_API_BASE_URL}/api/ws`);
     const stompClient = new Client({
         webSocketFactory: () => socket,
         reconnectDelay: 5000,
