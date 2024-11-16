@@ -56,7 +56,7 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
                     usersInClass={usersInClass}
                     tag={tag}
                 />
-            ) : (isUser() ? (
+            ) : (
                 <UserAttendancePage
                     classObject={classObject}
                     classroom={classroom}
@@ -65,9 +65,7 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
                     fullUser={fullUser}
                     tag={tag}
                 />
-            ) : (
-                <Box>Error</Box>
-            ))}
+            )}
         </Box>
     )
 }
