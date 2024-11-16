@@ -1,6 +1,6 @@
 import AdminAttendancePage from "./instructorAttendance/AdminAttendancePage.jsx";
 import UserAttendancePage from "./userAttendance/UserAttendancePage.jsx";
-import {Box} from "@chakra-ui/react";
+import {Box, Spinner} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {getClassroomById, getUserById, getValidRadius} from "../../../../services/client.js";
 
@@ -56,7 +56,7 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
                     usersInClass={usersInClass}
                     tag={tag}
                 />
-            ) : (
+            ) : (usersInClass.some(user => user.id === fullUser.id) ? (
                 <UserAttendancePage
                     classObject={classObject}
                     classroom={classroom}
@@ -64,7 +64,10 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
                     validRadius={validRadius}
                     fullUser={fullUser}
                     tag={tag}
-                />
+                />)
+                    : (
+                        <Spinner/>
+                    )
             )}
         </Box>
     )
