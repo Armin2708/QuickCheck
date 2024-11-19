@@ -3,7 +3,6 @@ import {Box, Stack, Text, SimpleGrid, Image, Button} from "@chakra-ui/react";
 export default function SupportedBy() {
     return (
             <Stack
-                paddingX={{ base: '20px', md: '50px', lg: '100px' }}
                 paddingY="70px"
                 justify="center"
                 align="center"

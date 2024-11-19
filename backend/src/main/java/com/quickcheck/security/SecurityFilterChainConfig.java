@@ -50,6 +50,7 @@ public class SecurityFilterChainConfig {
                                 HttpMethod.GET,
                                 "/ping",
                                 "api/users/*/profile-image",
+                                "api/classes/*/image",
                                 "/api/ws/**"
                                 )
                         .permitAll()

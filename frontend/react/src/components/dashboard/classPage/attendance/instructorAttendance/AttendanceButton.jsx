@@ -1,4 +1,4 @@
-import {Button, Select, Stack} from "@chakra-ui/react";
+import {Button, Select, Spacer, Stack} from "@chakra-ui/react";
 import {closeAttendance, createAttendance, openAttendance} from "../../../../../services/client.js";
 import {useEffect, useState} from "react";
 
@@ -46,14 +46,14 @@ export default function AttendanceButton({tag, existAttendance, setExistAttendan
             direction="row"
             justify="center"
             align="center"
-            spacing="10px"
             height="38px"
             width={"100%"}
+            fontFamily="Inter"
+            fontWeight="medium"
+            fontSize="18px"
+            spacing={"20px"}
         >
             <Button
-                fontFamily="Inter"
-                fontWeight="medium"
-                fontSize="18px"
                 color="#FFFFFF"
                 background="#7E3BB5"
                 width={""}
@@ -68,19 +68,21 @@ export default function AttendanceButton({tag, existAttendance, setExistAttendan
             >
                 {!existAttendance ? "Create" : attendanceStatus ? "Close" : "Open"} Attendance
             </Button>
+
             {!existAttendance &&
                 <Select
-                placeholder='type'
-                fontFamily="Inter"
-                fontWeight="medium"
-                fontSize="18px"
-                width={""}
+                placeholder='Select Type'
+                width={"#7E3BB5"}
                 color="#FFFFFF"
                 background="#7E3BB5"
-                paddingX="7px"
-                paddingY="8px"
+                borderColor={"#7E3BB5"}
                 borderRadius="7px"
                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                _focus={{
+                    outline: "none",  // Remove default outline
+                    boxShadow: "0px 0px 0px 2px #7E3BB5",  // Custom focus shadow
+                    border: "none",  // Ensure no border on focus
+                }}
                 onChange={(e) => {
                     setRadius(e.target.value)
                 }}

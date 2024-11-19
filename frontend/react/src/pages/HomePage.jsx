@@ -1,12 +1,12 @@
 import PresentationSection from "../components/homePage/PresentationSection.jsx";
 import SupportedBy from "../components/homePage/SupportedBy.jsx";
 import SneakPeek from "../components/homePage/SneakPeek.jsx";
-import {Center, Divider, Spinner, Stack} from "@chakra-ui/react";
+import {Center, Divider, Spinner, Stack, useColorModeValue} from "@chakra-ui/react";
 import AdvantageTabs from "../components/homePage/AdvantageTabs.jsx";
 import EfficiencySection from "../components/homePage/EfficiencySection.jsx";
 import JoinQuickCheck from "../components/homePage/JoinQuickCheck.jsx";
 import CommunityComments from "../components/homePage/CommunityComments.jsx";
-import HeaderFooter from "../components/shared/HeaderFooter.jsx";
+import HeaderFooterWrap from "../components/homePage/headerFooter/HeaderFooterWrap.jsx";
 import { useEffect, useState } from "react";
 
 export default function HomePage() {
@@ -33,10 +33,10 @@ export default function HomePage() {
     }
 
     return (
-        <HeaderFooter>
-            <Stack direction={"column"}>
+        <HeaderFooterWrap>
+            <Stack direction={"column"} spacing={"0px"} align="center" justify="center" paddingX={"20px"} bg={"white"}>
                 <PresentationSection />
-                <Divider />
+                <Divider background={"#F1F1F1"}/>
                 <SupportedBy />
                 <SneakPeek />
                 <CommunityComments />
@@ -44,6 +44,6 @@ export default function HomePage() {
                 <EfficiencySection />
                 <JoinQuickCheck />
             </Stack>
-        </HeaderFooter>
+        </HeaderFooterWrap>
     );
 }

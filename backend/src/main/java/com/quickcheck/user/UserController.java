@@ -27,6 +27,10 @@ public class UserController {
         return userService.getAllUsers();
     }
 
+    @GetMapping("/search/{userName}")
+    public List<UserDTO> getUsersBySearch(@PathVariable("userName") String userName){
+        return userService.getUsersBySearch(userName);
+    }
 
     @GetMapping("/id/{userId}")
     public UserDTO getUserById(@PathVariable("userId") Integer userId){

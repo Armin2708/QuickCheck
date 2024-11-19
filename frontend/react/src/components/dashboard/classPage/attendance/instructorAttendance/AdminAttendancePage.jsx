@@ -31,8 +31,9 @@ export default function AdminAttendancePage({classObject, professor, usersInClas
     }, [tag]);
 
     return(
-        <Stack backgroundColor={"#F9F9F9"}
+        <Stack
                height={"100%"}
+               width={"100%"}
                display="flex"
                flexDirection="column"
                alignItems="center"

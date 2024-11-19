@@ -1,10 +1,14 @@
 import {Box, Divider, Spinner, Text, VStack} from "@chakra-ui/react";
-import ClassCard from "../../class/ClassCard.jsx";
-import BrowseClassButton from "../../class/BrowseClassButton.jsx";
+import ClassCard from "./class/ClassCard.jsx";
+import BrowseClassButton from "./class/BrowseClassButton.jsx";
 import React, {useEffect, useState} from "react";
 import {useAuth} from "../../context/AuthContext.jsx";
 import {useParams} from "react-router-dom";
-import {getClassesOfInstructorInOrganization, getClassesOfUserInOrganization} from "../../../services/client.js";
+import {
+    getClassesOfInstructorInOrganization,
+    getClassesOfUserInOrganization,
+    getClassroomById
+} from "../../../services/client.js";
 
 export default function ClassListComponent({fullUser}){
 
@@ -22,7 +26,6 @@ export default function ClassListComponent({fullUser}){
 
     const fetchClasses = () => {
         setLoading(true); // Start loading
-
         Promise.all([
             getClassesOfUserInOrganization(fullUser?.id, organizationName),
             getClassesOfInstructorInOrganization(fullUser?.id, organizationName),
@@ -50,7 +53,7 @@ export default function ClassListComponent({fullUser}){
 
 
     useEffect(() => {
-        if (fullUser?.id) {
+        if (fullUser?.id && organizationName) {
             fetchClasses();
         }
     }, [organizationName,fullUser]);
@@ -58,30 +61,19 @@ export default function ClassListComponent({fullUser}){
 
     return(
         <Box
-            width={{ base: "100%", md: "150px" }} // Full width on mobile, fixed width on larger screens
-            minHeight="100vh" // Full height of the viewport
-            background="#F9F9F9" // Sidebar background
-            boxShadow="2px 0 5px rgba(0, 0, 0, 0.1)" // Optional shadow
-            padding="20px"
-            overflowY="auto" // Scroll if content exceeds available height
+            padding="10px"
+            paddingLeft="40px"
+            display="flex" /* Enables flexbox layout */
+            flexDirection="column" /* Arranges children vertically */
+            alignItems="flex-start" /* Aligns items to the left */
+            gap="10px" /* Adds spacing between items */
         >
-            <Text fontWeight="semibold" fontSize="20px" textAlign={"center"}>
-                Classes
-            </Text>
-            <Divider marginY="10px" />
-            <VStack
-                spacing="20px"
-                width="100%"
-                height={"100%"}
-            >
-                {/* Render organizations */}
-                {Array.isArray(classes) && classes.length > 0 ? (
-                    classes.map((classObject) => (
-                        <ClassCard {...classObject} key={classObject.id} />
-                    ))
-                ) : null}
-                <BrowseClassButton />
-            </VStack>
+            {/* Render organizations */}
+            {Array.isArray(classes) && classes.length > 0 ? (
+                classes.map((classObject) => (
+                    <ClassCard {...classObject} key={classObject.id}/>
+                ))) : null}
+            <BrowseClassButton />
         </Box>
     )
 }

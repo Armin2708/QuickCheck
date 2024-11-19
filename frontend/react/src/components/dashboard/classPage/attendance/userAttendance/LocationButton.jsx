@@ -3,7 +3,6 @@ import isWithinDistance from "./locationDistanceCalculator.js";
 import React, {useState} from "react";
 
 export default function LocationButton({disabled,classroomLocation,validRadius,setIsLocationValid}){
-    const [userLocation,setUserLocation] = useState("");
     const [isLoading, setIsLoading] = useState(false);
     const toast= useToast();
 
@@ -22,7 +21,6 @@ export default function LocationButton({disabled,classroomLocation,validRadius,s
 
                 // Call your function here after getting the user location
                 const isWithin = isWithinDistance(classroomLocation, userLocation, validRadius);
-                console.log("Is within distance:", isWithin);
                 setIsLoading(false);
                 if (isWithin){
                     setIsLocationValid(true);
@@ -61,37 +59,25 @@ export default function LocationButton({disabled,classroomLocation,validRadius,s
                 paddingX="18px"
                 paddingY="7px"
                 borderRadius="8px"
-                direction="row"
-                justify="center"
-                align="center"
-                spacing="10px"
                 width="180px"
                 height="38px"
                 background="#7E3BB5"
                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                fontWeight="medium"
+                fontSize="20px"
+                textAlign="center"
                 disabled={disabled||isLoading}
                 onClick={getUserLocation}
+                color={"white"}
             >
                 {disabled ? (
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="medium"
-                        fontSize="20px"
-                        color="#313131"
-                        textAlign="center"
-                    >
+                    <Text>
                         Valid Location
                     </Text>
                 ) : isLoading ? (
                     <Spinner />
                 ) : (
-                    <Text
-                        fontFamily="Inter"
-                        fontWeight="medium"
-                        fontSize="20px"
-                        color="#313131"
-                        textAlign="center"
-                    >
+                    <Text>
                         Verify Location
                     </Text>
                 )}

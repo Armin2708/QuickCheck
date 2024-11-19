@@ -1,0 +1,15 @@
+html[data-theme='light'] {
+    background-color: white;
+    color: black;
+}
+
+html[data-theme='dark'] {
+    background-color: black;
+    color: white;
+}
+
+html, body {
+    overflow-x: hidden;
+    height: 100%;
+    margin: 0;
+}

@@ -1,8 +1,10 @@
 package com.quickcheck.classes;
 
 import com.quickcheck.classroom.Classroom;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -83,6 +85,25 @@ public class ClassController {
             @PathVariable("classId") Integer classId
     ){
         classService.deleteClass(classId);
+    }
+
+    @PostMapping(
+            value = "{classId}/image",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public void uploadUserProfilePicture(
+            @PathVariable("classId") Integer classId,
+            @RequestParam("file") MultipartFile file){
+        classService.uploadClassImage(classId,file);
+    }
+
+    @GetMapping(
+            value = "{classId}/image",
+            produces = MediaType.IMAGE_JPEG_VALUE
+    )
+    public byte[] getUserProfilePicture(
+            @PathVariable("classId") Integer classId){
+        return classService.getClassImage(classId);
     }
 
 }

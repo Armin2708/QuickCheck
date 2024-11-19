@@ -67,6 +67,18 @@ public class UserJDBCDataAccessService implements UserDao {
             return users;
         }
 
+    @Override
+    public List<User> selectUsersBySearch(String userName) {
+        var sql = """
+                SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
+                FROM users
+                WHERE name ILIKE ?
+                """;
+        List<User> users = jdbcTemplate.query(sql, userRowMapper, userName);
+        users.forEach(user -> user.setRoles(selectUserRoles(user.getId())));
+        return users;
+    }
+
         @Override
         public Optional<User> selectUserByEmail(String email) {
             var sql = """

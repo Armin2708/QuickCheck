@@ -1,6 +1,6 @@
 import { Box, Text, Stack, Button } from "@chakra-ui/react";
 import { LiaAwardSolid } from "react-icons/lia";
-import PresentationButton from "./PresentationButton.jsx";
+import PresentationButton from "./components/PresentationButton.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
 
@@ -13,26 +13,13 @@ export default function PresentationSection() {
         <Stack
             justify="flex-start"
             align="center"  // Center the content horizontally
-            spacing="0px"
             width="100%"
             maxWidth="100%"
+            paddingY={{ base: "50px", md: "80px" }}  // Responsive padding
+            background="#FFFFFF"
+            spacing="50px"
         >
-            <Stack
-                paddingX={{ base: "20px", md: "10%", lg: "15%" }}  // Responsive padding
-                paddingY={{ base: "50px", md: "80px" }}  // Responsive padding
-                justify="flex-start"
-                align="center"  // Center the content horizontally
-                spacing="10px"
-                width="100%"  // Full width
-                background="#FFFFFF"
-            >
-                <Stack
-                    justify="flex-start"
-                    align="center"  // Center the heading horizontally
-                    spacing="50px"
-                    width="100%"  // Full width
-                    maxWidth="690px"
-                >
+
                     {/* Main Heading */}
                     <Text
                         fontFamily="Inter"
@@ -41,6 +28,7 @@ export default function PresentationSection() {
                         color="#313131"
                         textAlign="center"  // Center the text
                         lineHeight={"70px"}
+                        maxW={"1000px"}
                     >
                         Take attendance on your device{" "}
                         <Box as="span" color="#7E3BB5">
@@ -149,8 +137,6 @@ export default function PresentationSection() {
                             </Stack>
                         </PresentationButton>
                     </Stack>
-                </Stack>
-            </Stack>
         </Stack>
     );
 }

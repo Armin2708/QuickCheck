@@ -3,9 +3,9 @@ import { TbClockUp } from "react-icons/tb";
 import { LiaToolsSolid } from "react-icons/lia";
 import { PiSmiley } from "react-icons/pi";
 import {IoMdCheckmarkCircleOutline} from "react-icons/io";
-import TitleWrapper from "./TitleWrapper.jsx";
-import TitleText from "./TitleText.jsx";
-import TitleDescription from "./TitleDescription.jsx";
+import TitleWrapper from "./components/TitleWrapper.jsx";
+import TitleText from "./components/TitleText.jsx";
+import TitleDescription from "./components/TitleDescription.jsx";
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../context/AuthContext.jsx";
 
@@ -16,7 +16,6 @@ export default function JoinQuickCheck() {
     return (
         <Stack
             paddingY={{ base: "20px", md: "50px", lg: "100px" }} // Adjust padding for smaller screens
-            paddingX={{ base: "20px", md: "50px", lg: "100px" }} // Adjust padding for smaller screens
             justify="flex-start"
             align="center"
             spacing="10px"
@@ -56,24 +55,25 @@ export default function JoinQuickCheck() {
                             <Stack
                                 key={index}
                                 direction="row"
-                                justify="flex-start"
                                 align="center"
                                 spacing="10px" // Reduced spacing between icon and text
                                 width="100%"
                             >
                                 <Box
-                                    padding="8px" // Reduced padding for smaller screens
                                     borderRadius="5px"
-                                    width="40px" // Reduced box width
-                                    height="40px" // Reduced box height
+                                    width="45px" // Box width
+                                    height={"40px"} // Box height
+                                    padding={"0px"}
                                     background="#7E3BB5"
-                                    flexShrink={0} // Prevents the box from shrinking
+                                    display="flex" // Use flexbox for centering
+                                    alignItems="center" // Center vertically
+                                    justifyContent="center" // Center horizontally
                                 >
                                     {index === 0
-                                        ? <TbClockUp color="white" size="20px" /> // Reduced icon size
+                                        ? <TbClockUp color="white" size="60%" /> // Adjust icon size relative to the box
                                         : index === 1
-                                            ? <LiaToolsSolid color="white" size="20px" />
-                                            : <PiSmiley color="white" size="20px" />}
+                                            ? <LiaToolsSolid color="white" size="60%" />
+                                            : <PiSmiley color="white" size="60%" />}
                                 </Box>
                                 <Stack spacing="4px" width="100%">
                                     <Text

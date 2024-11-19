@@ -3,9 +3,9 @@ import {useState} from "react";
 import {FiThumbsUp} from "react-icons/fi";
 import {LuPen} from "react-icons/lu";
 import {RiShare2Line} from "react-icons/ri";
-import TitleWrapper from "./TitleWrapper.jsx";
-import TitleText from "./TitleText.jsx";
-import TitleDescription from "./TitleDescription.jsx";
+import TitleWrapper from "./components/TitleWrapper.jsx";
+import TitleText from "./components/TitleText.jsx";
+import TitleDescription from "./components/TitleDescription.jsx";
 
 export default function AdvantageTabs() {
     const [tab, setTab] = useState(1);
@@ -16,7 +16,6 @@ export default function AdvantageTabs() {
 
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "100px" }} // Adjusted padding for responsiveness
             paddingY={{ base: "20px", md: "50px", lg: "100px" }}
             justify="flex-start"
             align="center"
@@ -24,13 +23,6 @@ export default function AdvantageTabs() {
             width="100%"
             background="#F9F9F9"
         >
-            <Stack
-                justify="flex-start"
-                align="center"
-                spacing="20px"
-                width="100%"
-                maxWidth="864px" // Consistent max width for the container
-            >
                 {/* Header Section */}
                 <TitleWrapper>
                     <TitleText>An innovating experience that’d fit your need</TitleText>
@@ -134,7 +126,6 @@ export default function AdvantageTabs() {
                                 : "Quick Check data can be exported to other platforms to help you better fit your needs."}
                     </Text>
                 </Stack>
-            </Stack>
         </Stack>
 
     );

@@ -4,13 +4,12 @@ import {
     getOrganizations,
     getOrganizationsOfUser
 } from "../services/client.js";
-import SideBar from "../components/shared/SideBar.jsx";
-import HeaderFooter from "../components/shared/HeaderFooter.jsx";
 import { FaArrowLeft } from "react-icons/fa";
-import BrowseOrganizationCard from "../components/browseOrganization/BrowseOrganizationCard.jsx";
+import BrowseOrganizationCard from "../components/dashboard/browseOrganization/BrowseOrganizationCard.jsx";
 import { useAuth } from "../components/context/AuthContext.jsx";
 import { useNavigate } from "react-router-dom";
-import CreateOrganizationButton from "../components/browseOrganization/CreateOrganizationButton.jsx";
+import CreateOrganizationButton from "../components/dashboard/browseOrganization/CreateOrganizationButton.jsx";
+import DashboardWrap from "../components/dashboard/DashboardWrap.jsx";
 
 export default function BrowseOrganizationPage() {
     const [organizations, setOrganizations] = useState([]);
@@ -66,8 +65,6 @@ export default function BrowseOrganizationPage() {
     }
 
     return (
-        <HeaderFooter>
-            <SideBar />
             <Wrap justify={"center"}>
                 <Box p="4">
                     <Stack direction={"row"}>
@@ -97,6 +94,5 @@ export default function BrowseOrganizationPage() {
                     </Wrap>
                 </Box>
             </Wrap>
-        </HeaderFooter>
     );
 }

@@ -5,14 +5,10 @@ import{
     useState
 } from "react";
 import {
-    getClassroomById,
-    getUserById,
     getUserByEmail,
     login as performLogin,
-    isUserInOrganization, isUserInClass
 } from "../../services/client.js";
 import {jwtDecode} from "jwt-decode";
-import {useParams} from "react-router-dom";
 
 const AuthContext = createContext({})
 

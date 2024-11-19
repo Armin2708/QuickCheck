@@ -57,7 +57,7 @@ const JoinedClassProtectedRoute = ({ children }) => {
                 const classProfessor = await checkClassProfessor();
 
                 if (!inClass && !classProfessor) {
-                    navigate(`/organization/${name}`)
+                    navigate(`/dashboard/${name}`)
                     return
                 }
 

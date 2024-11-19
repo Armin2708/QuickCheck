@@ -16,8 +16,8 @@ public class ClassRowMapper implements RowMapper<Class> {
                 rs.getDate("start_date"),
                 rs.getDate("end_date"),
                 rs.getInt("classroom_id"),
-                rs.getInt("organization_id")
-
+                rs.getInt("organization_id"),
+                rs.getString("class_image_id")
         );
 
         return classObject;

@@ -8,7 +8,7 @@ import {
     getValidRadius, isUserInAttendance,
     verifyAttendance
 } from "../../../../../services/client.js";
-import {Button, Input, Stack, Text, useToast} from "@chakra-ui/react";
+import {Button, Input, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
 import Navbar from "../Navbar.jsx";
 import getFormattedDate from "../../../../../services/dateDisplay.js";
 import LocationButton from "./LocationButton.jsx";
@@ -37,7 +37,6 @@ export default function UserAttendancePage({classObject, classroom, professor,
         }
         verifyAttendance(fullUser?.id,attendanceData)
             .then(res => {
-                console.log(res.data)
                 successNotification(
                     "Success",
                     "Attended class"
@@ -47,7 +46,6 @@ export default function UserAttendancePage({classObject, classroom, professor,
 
             })
             .catch(error => {
-                console.error('Error fetching users:', error);
                 errorNotification(
                     error.code,
                     error.response.data.message
@@ -75,69 +73,37 @@ export default function UserAttendancePage({classObject, classroom, professor,
 
 
     return (
-        <Stack backgroundColor={"#252525"}
-               height={"100vh"}
-               display="flex"
-               flexDirection="column"
-               alignItems="center"
-               spacing={"20px"}
-        >
-
-            {/*Card*/}
             <Stack
-                marginBottom={"50px"}
-                paddingX="30px"
-                paddingY="30px"
+                spacing="20px"
                 borderRadius="10px"
                 display="flex"
                 flexDirection="column"
                 alignItems="center"
-                spacing="30px"
-                width="700px"
-                height="600px"
-                background={"#313131"}
-                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
             >
                 {/*Top Box*/}
                 <Stack
-                    paddingX="38px"
-                    paddingY="31px"
+                    paddingX="30px"
+                    paddingY="20px"
                     borderRadius="10px"
                     justify="flex-start"
                     align="flex-start"
-                    spacing="10px"
                     width="fit-content"  // Dynamically adjusts to content
-                    height="135px"
-                    background="#444343"
+                    background={useColorModeValue("#FBFBFB","#1F1F1F")}
                     boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+
+                    fontFamily="Inter"
+                    fontWeight="medium"
+                    color={useColorModeValue("#313131","white")}
+                    alignItems="stretch"
                 >
-                    <Stack
-                        justify="flex-start"
-                        align="flex-start"
-                        spacing="4px"
-                    >
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="medium"
-                            fontSize="20px"
-                            color="#707070"
-                            alignSelf="stretch"
-                            width="auto"  // Allows the text width to adjust
-                        >
-                            {classObject?.name} - Prof. {professor?.name}
-                        </Text>
-                        <Text
-                            fontFamily="Inter"
-                            fontWeight="medium"
-                            fontSize="18px"
-                            color="#707070"
-                            alignSelf="stretch"
-                        >
-                            {getFormattedDate()}
-                            <br/>
-                            Class location : {classroom?.roomName}
-                        </Text>
-                    </Stack>
+                    <Text fontSize="20px">
+                        {classObject?.name} - Prof. {professor?.name}
+                    </Text>
+                    <Text fontSize="18px">
+                        {getFormattedDate()}
+                        <br/>
+                        Class location : {classroom?.roomName}
+                    </Text>
                 </Stack>
 
                 {/*Middle Action Cards*/}
@@ -145,29 +111,26 @@ export default function UserAttendancePage({classObject, classroom, professor,
                     direction="row"
                     justify="flex-start"
                     align="flex-start"
-                    spacing="26px"
+                    spacing="20px"
                 >
                     {/*Left Card*/}
                     <Stack
-                        paddingX="34px"
-                        paddingY="12px"
+                        paddingX="30px"
+                        paddingY="20px"
+                        maxH={"150px"}
                         borderRadius="10px"
-                        justify="flex-start"
                         align="center"
-                        spacing="16px"
-                        width="269px"
-                        height="170px"
-                        maxWidth="100%"
-                        background="#444343"
+                        spacing="10px"
+                        background={useColorModeValue("#FBFBFB","#1F1F1F")}
                         boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                        color={useColorModeValue("#313131","white")}
+                        fontFamily="Inter"
                     >
 
                         <Text
-                            fontFamily="Inter"
                             fontWeight="semibold"
-                            fontSize="45px"
-                            color="#707070"
-                            height="47px"
+                            fontSize="40px"
+                            lineHeight="35px"
                             alignSelf="stretch"
                             textAlign="center"
                         >
@@ -186,10 +149,9 @@ export default function UserAttendancePage({classObject, classroom, professor,
                             spacing="7px"
                         >
                             <Text
-                                fontFamily="Inter"
                                 fontWeight="medium"
                                 fontSize="18px"
-                                color="#707070"
+                                lineHeight={"18px"}
                             >
                                 My location
                             </Text>
@@ -200,24 +162,21 @@ export default function UserAttendancePage({classObject, classroom, professor,
 
                     {/*Right Card*/}
                     <Stack
-                        paddingX="34px"
-                        paddingY="12px"
+                        paddingX="30px"
+                        paddingY="20px"
+                        maxH={"150px"}
                         borderRadius="10px"
-                        justify="flex-start"
                         align="center"
-                        spacing="16px"
-                        width="269px"
-                        height="170px"
-                        maxWidth="100%"
-                        background="#444343"
+                        spacing="10px"
+                        background={useColorModeValue("#FBFBFB","#1F1F1F")}
+                        color={useColorModeValue("#313131","white")}
                         boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                        fontFamily="Inter"
                     >
                         <Text
-                            fontFamily="Inter"
                             fontWeight="semibold"
-                            fontSize="45px"
-                            color="#707070"
-                            height="47px"
+                            fontSize="40px"
+                            lineHeight="35px"
                             alignSelf="stretch"
                             textAlign="center"
                         >
@@ -225,23 +184,26 @@ export default function UserAttendancePage({classObject, classroom, professor,
                         </Text>
                         <Stack
                             direction="row"
-                            justify="flex-start"
                             align="center"
                             spacing="6px"
-                            alignSelf="stretch"
                         >
                             <Input
                                 name="code"
                                 type="text"
-                                placeholder="Enter Code"
+                                placeholder="123..."
                                 isDisabled={!isLocationValid}
                                 maxLength={6}
                                 inputMode="numeric"
                                 pattern="[0-9]*"
+
                                 background="#707070"
                                 color="#313131"
                                 fontWeight="medium"
-                                fontSize="20px"
+                                fontSize="19px"
+                                maxH={"38px"}
+
+                                borderRadius="8px"
+                                maxW={"134px"}
                                 boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
                                 border="none"  // Remove default border
                                 _focus={{
@@ -255,34 +217,26 @@ export default function UserAttendancePage({classObject, classroom, professor,
                             />
                             <Button
                                 isDisabled={!isLocationValid}
-                                paddingX="9px"
-                                paddingY="11px"
+                                padding={"7px"}
                                 borderRadius="8px"
-                                justify="flex-start"
-                                align="flex-start"
-                                spacing="10px"
-                                width="38px"
-                                height="38px"
                                 background="#7E3BB5"
+                                maxH={"38px"}
                                 boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
                                 onClick={(e) => {
                                     handleSubmit(e?.target.value)
                                 }}
                             >
-                                <FaCheck color="#313131" size={"100%"}/>
+                                <FaCheck  size={"100%"} color={"white"}/>
                             </Button>
                         </Stack>
                         <Stack
                             direction="row"
-                            justify="flex-start"
                             align="center"
-                            spacing="7px"
                         >
                             <Text
-                                fontFamily="Inter"
                                 fontWeight="medium"
                                 fontSize="18px"
-                                color="#707070"
+                                lineHeight={"18px"}
                             >
                                 {isCodeValid === null ? "Enter Code" : isCodeValid ? "Valid Code" : "Invalid Code"}
                             </Text>
@@ -290,8 +244,8 @@ export default function UserAttendancePage({classObject, classroom, professor,
                                 : isCodeValid === false ?
                                     <IoWarningOutline size="23px" color="#7E3BB5"/> : null}
                         </Stack>
-
                     </Stack>
+
                 </Stack>
 
                 {/*User Icon*/}
@@ -301,13 +255,12 @@ export default function UserAttendancePage({classObject, classroom, professor,
                     spacing="9px"
                     width="269px"
                     maxWidth="100%"
+                    color={isPresent===true ? "#7E3BB5" :"#EBECFF"}
                 >
-                    <FiUser color={isPresent===true ? "7E3BB5" :"#707070"} size={"100px"} />
+                    <FiUser  size={"100px"} />
                     <Text
-                        fontFamily="Inter"
                         fontWeight="semibold"
                         fontSize="36px"
-                        color="#707070"
                         height="47px"
                         alignSelf="stretch"
                         textAlign="center"
@@ -316,6 +269,5 @@ export default function UserAttendancePage({classObject, classroom, professor,
                     </Text>
                 </Stack>
             </Stack>
-        </Stack>
     );
 }

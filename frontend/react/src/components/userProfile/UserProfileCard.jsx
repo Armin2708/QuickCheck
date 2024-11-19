@@ -1,4 +1,3 @@
-import HeaderFooter from "../shared/HeaderFooter.jsx";
 import {
     Avatar,
     Badge,
@@ -13,29 +12,26 @@ import {
     WrapItem
 } from "@chakra-ui/react";
 import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
-import {useNavigate} from "react-router-dom";
 import UpdateUserButton from "../userList/UpdateUserButton.jsx";
 import UpdateUserRolesButton from "../userList/UpdateUserRolesButton.jsx";
 import DeleteUserButton from "../userList/DeleteUserButton.jsx";
-import {useProfileImage} from "../../services/useProfileImage.js";
 import DeleteUserProfileButton from "./DeleteUserProfileButton.jsx";
+import {getUserProfilePictureUrl} from "../../services/client.js";
 
 export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles, onSuccess, userProfile }){
-    const navigate = useNavigate();
-    const { profileImageUrl, fetchProfileImage } = useProfileImage(id);
     return(
             <Center py={6} >
                 <Box
                     maxW={'320px'}
                     w={'full'}
-                    bg={useColorModeValue('white', 'gray.900')}
+                    bg={() =>useColorModeValue('white', 'gray.900')}
                     boxShadow={'2xl'}
                     rounded={'lg'}
                     p={6}
                     textAlign={'center'}>
                     <Avatar
                         size={'xl'}
-                        src={profileImageUrl}
+                        src={getUserProfilePictureUrl(id)|| null}
                         mb={4}
                         pos={'relative'}
                         _after={{
@@ -58,7 +54,7 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                     </Text>
                     <Text
                         textAlign={'center'}
-                        color={useColorModeValue('gray.700', 'gray.400')}
+                        color={() =>useColorModeValue('gray.700', 'gray.400')}
                         px={3}
                     >
                         {address}
@@ -66,7 +62,7 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                     <Text color={'blue.400'}>{dateOfBirth}</Text>
                     <Text
                         textAlign={'center'}
-                        color={useColorModeValue('gray.700', 'gray.400')}
+                        color={() =>useColorModeValue('gray.700', 'gray.400')}
                         px={3}
                     >
                         {gender}
@@ -79,7 +75,7 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                                     key={role}
                                     px={2}
                                     py={1}
-                                    bg={useColorModeValue('gray.50', 'gray.800')}
+                                    bg={() =>useColorModeValue('gray.50', 'gray.800')}
                                     fontWeight={'400'}>
                                     {role}
                                 </Badge>

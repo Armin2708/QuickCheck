@@ -52,6 +52,15 @@ export const getUsers= async () => {
     }
 }
 
+export const searchUsers= async (search) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/search/${search}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
 export const getUserById= async (userId) => {
     try {
         return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/id/${userId}`,
@@ -527,19 +536,26 @@ export const uploadUserProfilePicture = async (userId, formData) =>{
         throw e;
     }
 }
-export const getUserProfilePictureUrl = async (userId) => {
+export const getUserProfilePictureUrl = (userId) => {
+        return `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}/profile-image`
+};
+
+export const uploadClassProfilePicture = async (classId, formData) =>{
     try {
-        return await axios.get(
-            `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}/profile-image`,
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/classes/${classId}/image`,
+            formData,
             {
                 ...getAuthConfig(),
-                responseType: 'blob' // Specify blob to handle binary data
+                'Content-Type' : 'multipart/form-data'
+
             }
         );
-
     } catch (e) {
-        console.error("Failed to fetch profile image:", e);
         throw e;
     }
+}
+export const getClassProfilePictureUrl = (classId) => {
+        return `${import.meta.env.VITE_API_BASE_URL}/api/classes/${classId}/image`
 };
 

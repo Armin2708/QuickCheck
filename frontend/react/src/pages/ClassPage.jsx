@@ -9,10 +9,6 @@ export default function ClassPage(){
     const {fullUser,isAdmin,isUser} = useAuth()
 
     return (
-        <DashboardWrap>
-            <OrganizationListComponent fullUser={fullUser}/>
-            <ClassListComponent fullUser={fullUser}/>
             <ClassPageComponent fullUser={fullUser} isUser={isUser} isAdmin={isAdmin}/>
-        </DashboardWrap>
     )
 }

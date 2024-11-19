@@ -79,6 +79,14 @@ public class UserService{
                 ));
     }
 
+    public List<UserDTO> getUsersBySearch(String userName){
+        return userDao.selectUsersBySearch(userName+"%")
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+
+    }
+
     public UserDTO getUserByEmail(String email){
         return userDao.selectUserByEmail(email)
                 .map(userDTOMapper)

@@ -1,13 +1,12 @@
-import {Center, Spinner, VStack} from "@chakra-ui/react";
+import {VStack} from "@chakra-ui/react";
 
 import { useAuth } from "../components/context/AuthContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import WeeklyCalendar from "../components/dashboard/classList/Calendar.jsx";
+import WeeklyCalendar from "../components/dashboard/classList/calendar/Calendar.jsx";
 import NotificationComponent from "../components/dashboard/notifications/NotificationComponent.jsx";
-import LeaveOrganizationButton from "../components/dashboard/organizationList/LeaveOrganizationButton.jsx";
-import DashboardWrap from "../components/dashboard/DashboardWrap.jsx";
-import OrganizationListComponent from "../components/dashboard/organizationList/OrganizationListComponent.jsx";
-import ClassListComponent from "../components/dashboard/classList/ClassListComponent.jsx";
+import LeaveOrganizationButton from "../components/dashboard/organizationList/organization/LeaveOrganizationButton.jsx";
+import DeleteOrganizationButton
+    from "../components/dashboard/organizationList/organization/DeleteOrganizationButton.jsx";
 
 export default function ClassListPage() {
 
@@ -20,14 +19,13 @@ export default function ClassListPage() {
         Saturday: ["Family picnic", "Grocery shopping"],
         Sunday: ["Relax and plan next week"],
     };
-    const { fullUser } = useAuth();
+    const { fullUser, isAdmin } = useAuth();
     const { name: organizationName } = useParams();
     const navigate = useNavigate()
 
+
     return (
-        <DashboardWrap>
-            <OrganizationListComponent fullUser={fullUser} />
-            <ClassListComponent fullUser={fullUser}/>
+        <>
             <WeeklyCalendar tasks={weeklyTasks} orgName={organizationName} />
             <VStack>
                 <NotificationComponent/>
@@ -36,9 +34,18 @@ export default function ClassListPage() {
                     onSuccess={() =>{
                         navigate("/dashboard")
                     }}
-                    fullUser={fullUser}/>
+                    fullUser={fullUser}
+                />
+                {isAdmin() ? (
+                    <DeleteOrganizationButton
+                        orgName={organizationName}
+                        onSuccess={() => {
+                            navigate("/dashboard")
+                        }}
+                    />
+                ) : null}
             </VStack>
-        </DashboardWrap>
+        </>
     );
 
 }

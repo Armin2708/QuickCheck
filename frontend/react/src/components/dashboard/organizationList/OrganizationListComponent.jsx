@@ -1,37 +1,29 @@
 import {
-    Box, Button,
-    Center,
-    Divider, Drawer, DrawerBody, DrawerCloseButton, DrawerContent, DrawerFooter, DrawerHeader, DrawerOverlay,
-    Flex, Image,
-    Spinner,
-    Stack,
-    Text,
-    VStack,
+    Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel,
+    Box,
+    Text, useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { getOrganizationsOfUser } from "../../../services/client.js";
-import BrowseOrganizationButton from "./BrowseOrganizationButton.jsx";
-import OrganizationCard from "./OrganizationCard.jsx";
+import BrowseOrganizationButton from "./organization/BrowseOrganizationButton.jsx";
+import OrganizationCard from "./organization/OrganizationCard.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
-import {HiOutlineHome} from "react-icons/hi";
-import {MdOutlineSpaceDashboard} from "react-icons/md";
-import {FiUsers} from "react-icons/fi";
-import {LuSettings} from "react-icons/lu";
-import {RiLoginBoxLine} from "react-icons/ri";
+import ClassListComponent from "../classList/ClassListComponent.jsx";
+import {useNavigate} from "react-router-dom";
 
-export default function OrganizationListComponent({fullUser}) {
+export default function OrganizationListComponent(){
+
     const [organizations, setOrganizations] = useState([]);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
+    const {fullUser} = useAuth();
+
 
     const fetchOrganization = () => {
         setLoading(true);
         getOrganizationsOfUser(fullUser.id)
             .then((res) => {
-                if (Array.isArray(res.data)) {
                     setOrganizations(res.data);
-                } else {
-                    console.error("Expected an array but got:", res.data);
-                }
             })
             .catch((error) => {
                 console.error("Error fetching users:", error);
@@ -48,38 +40,63 @@ export default function OrganizationListComponent({fullUser}) {
     }, [fullUser]);
 
 
-
-    return (
+    return(
         <Box
-            width={{ base: "100%", md: "150px" }} // Full width on mobile, fixed width on larger screens
-            minHeight="100vh" // Full height of the viewport
-            background="#D9D9D9" // Sidebar background
-            boxShadow="2px 0 5px rgba(0, 0, 0, 0.1)" // Optional shadow
-            padding="20px"
-            overflowY="auto" // Scroll if content exceeds available height
+            flex={1}
+            minH={0}
+            display="flex"
+            flexDirection="column" /* Ensures vertical stacking of content */
+            borderRadius="8px"
+            p="4"
         >
-            <Text fontWeight="semibold" fontSize="20px" textAlign={"center"}>
-                Groups
-            </Text>
-            <Divider marginY="10px" />
-            <VStack
-                spacing="10px"
-                align="stretch" // Ensures full width for child components
-                width="100%"
-            >
-                {/* Render organizations */}
-                {Array.isArray(organizations) && organizations.length > 0 ? (
-                    organizations.map((organization) => (
-                        <OrganizationCard
-                            key={organization?.id}
-                            {...organization}
-                            onSuccess={fetchOrganization}
-                            fullUser={fullUser}
-                        />
-                    ))
-                ) : null}
-                <BrowseOrganizationButton/>
-            </VStack>
+            {/* Scrollable Content */}
+                <Accordion allowToggle>
+                    <Box
+                        minH={0} /* Prevents overflow issues */
+                        overflow="auto" /* Enables scrolling for overflowing content */
+                    >
+                        {Array.isArray(organizations) && organizations.length > 0 ? (
+                            organizations.map((organization) => (
+                                <AccordionItem key={organization.id} borderColor="transparent" padding={"5px"}>
+                                    <Box
+                                         color={"#9363BA"}
+                                         borderLeft={"2px"}
+                                         borderColor={"#7E3BB5"}
+                                         bg={()=>useColorModeValue("white","#1D1D1D")}
+                                         borderRadius={"8px"}
+                                         maxW={"200px"}
+                                         paddingX={"10px"}
+                                    >
+                                        <AccordionButton onClick={() => navigate(`/dashboard/${organization.name}`)} padding={"0px"}>
+                                            <OrganizationCard {...organization} />
+                                        <AccordionIcon />
+                                    </AccordionButton>
+                                    </Box>
+                                    <AccordionPanel padding="0px" maxH="200px" overflowY="auto">
+                                        <ClassListComponent fullUser={fullUser} />
+                                    </AccordionPanel>
+                                </AccordionItem>
+                            ))
+                        ) : (
+                            <Text>No organizations found.</Text>
+                        )}
+                    </Box>
+
+                    <AccordionItem borderColor="transparent" padding={"5px"}>
+                        <Box paddingX={"20px"}>
+                            <AccordionButton
+                                padding={"0px"}
+                                onClick={() => navigate(`/dashboard/organizations`)}
+                                width="fit-content"
+                                height={"fit-content"}
+                            >
+                                <BrowseOrganizationButton />
+                            </AccordionButton>
+                        </Box>
+                    </AccordionItem>
+            </Accordion>
+
         </Box>
-    );
+
+)
 }

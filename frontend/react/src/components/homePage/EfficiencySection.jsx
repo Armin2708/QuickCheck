@@ -3,7 +3,6 @@ import { Box, Stack, Text } from "@chakra-ui/react";
 export default function EfficiencySection() {
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "174px" }}  // Responsive padding
             paddingY={{ base: "50px", md: "100px", lg: "143px" }}  // Responsive padding
             justify="flex-start"
             align="center"  // Center content horizontally

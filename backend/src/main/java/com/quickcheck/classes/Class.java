@@ -12,6 +12,7 @@ public class Class {
     private Date endDate;
     private Integer classroomId;
     private Integer organizationId;
+    private String imageId;
 
     public Class() {
     }
@@ -33,6 +34,12 @@ public class Class {
         this.endDate = endDate;
         this.classroomId = classroomId;
         this.organizationId = organizationId;
+    }
+
+    public Class(Integer id, String name, Integer professorId, Date startDate,
+                 Date endDate, Integer classroomId,Integer organizationId, String imageId) {
+        this(id,name,professorId,startDate,endDate,classroomId,organizationId);
+        this.imageId=imageId;
     }
 
     public Integer getId() {
@@ -91,36 +98,44 @@ public class Class {
         this.organizationId = organizationId;
     }
 
+    public String getImageId() {
+        return imageId;
+    }
+
+    public void setImageId(String imageId) {
+        this.imageId = imageId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Class classObject = (Class) o;
-        return Objects.equals(id, classObject.id) &&
-                Objects.equals(name, classObject.name) &&
-                Objects.equals(professorId, classObject.professorId) &&
-                Objects.equals(startDate, classObject.startDate) &&
-                Objects.equals(endDate, classObject.endDate) &&
-                Objects.equals(classroomId, classObject.classroomId) &&
-                Objects.equals(organizationId, classObject.organizationId);
+        if (!(o instanceof Class aClass)) return false;
+        return Objects.equals(id, aClass.id) &&
+                Objects.equals(name, aClass.name) &&
+                Objects.equals(professorId, aClass.professorId) &&
+                Objects.equals(startDate, aClass.startDate) &&
+                Objects.equals(endDate, aClass.endDate) &&
+                Objects.equals(classroomId, aClass.classroomId) &&
+                Objects.equals(organizationId, aClass.organizationId) &&
+                Objects.equals(imageId, aClass.imageId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, professorId, startDate,endDate,classroomId,organizationId);
+        return Objects.hash(id, name, professorId, startDate, endDate, classroomId, organizationId, imageId);
     }
 
     @Override
     public String toString() {
-
-        return "admin{" +
+        return "Class{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", professorId='" + professorId + '\'' +
-                ", startDate='" + startDate + '\'' +
-                ", endDate='" + endDate + '\'' +
-                ", classroomId='" + classroomId + '\'' +
-                ", organizationId='" + organizationId + '\'' +
+                ", professorId=" + professorId +
+                ", startDate=" + startDate +
+                ", endDate=" + endDate +
+                ", classroomId=" + classroomId +
+                ", organizationId=" + organizationId +
+                ", imageId='" + imageId + '\'' +
                 '}';
     }
 }

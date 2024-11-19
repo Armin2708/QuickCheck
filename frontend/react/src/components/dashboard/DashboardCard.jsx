@@ -1,21 +1,34 @@
-import {Box, VStack} from "@chakra-ui/react";
+import {
+    Box,
+    Spacer, Text
+} from "@chakra-ui/react";
 
-export default function DashboardCard({children}){
+import HeadSection from "../HeadSection.jsx";
+
+
+export default function DashboardCard({children, cardColor}){
     return(
         <Box
-            width={"100%"}
-            direction={"column"}
-            border={"1px"}
-            borderRadius={"20px"}
-            borderColor={"#D9D9D9"}
-            backgroundColor={"white"}
-            boxShadow={"2xl"}
+            width="100%"
+            height="100%"
+            borderRadius="12px"
+            display="flex"
+            flexDir="column"
+            gap="20px"
+            bg={cardColor}
+            p="12px"
             paddingX={"20px"}
-            paddingY={"10px"}
+            overflow="hidden" /* Prevent the shadow from clipping outside the container */
+            position="relative" /* Ensure the shadow is correctly positioned */
         >
-            <VStack spacing={"10px"}>
-                {children}
-            </VStack>
+            <HeadSection/>
+
+            {children}
+
+            <Spacer/>
+            <Box width="100%">
+                <Text fontSize="20px" textAlign={"center"}>© Quick Check - All Rights Reserved</Text>
+            </Box>
         </Box>
     )
 }

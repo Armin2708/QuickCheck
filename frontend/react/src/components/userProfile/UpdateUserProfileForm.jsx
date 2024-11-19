@@ -6,7 +6,7 @@ import {updateUser} from "../../services/client.js";
 import MyTextInput from "../shared/formFields/MyText.jsx";
 import {useAuth} from "../context/AuthContext.jsx";
 import MySelect from "../shared/formFields/MySelect.jsx";
-import MyDropzone from "../shared/formFields/MyDropzone.jsx";
+import MyUserDropzone from "../shared/formFields/MyDropzone.jsx";
 
 // And now we can use these
 const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
@@ -15,7 +15,7 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
 
     return (
         <>
-            <MyDropzone userId={id}/>
+            <MyUserDropzone userId={id}/>
             <Formik
                 initialValues={{
                     name: name,

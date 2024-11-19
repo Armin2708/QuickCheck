@@ -4,10 +4,17 @@ import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
 import com.quickcheck.organization.OrganizationDao;
+import com.quickcheck.s3.S3Buckets;
+import com.quickcheck.s3.S3Service;
+import com.quickcheck.user.UserDTO;
 import com.quickcheck.user.UserDao;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class ClassService {
@@ -15,11 +22,21 @@ public class ClassService {
     private final ClassDao classDao;
     private final OrganizationDao organizationDao;
     private final UserDao userDao;
+    private final S3Buckets s3Buckets;
+    private final S3Service s3Service;
 
-    public ClassService(ClassDao classDao, OrganizationDao organizationDao, UserDao userDao) {
+    private void checkIfClassExists(Integer classId){
+        if (!classDao.existClassById(classId)){
+            throw new ResourceNotFoundException("No class found with id %s".formatted(classId));
+        }
+    }
+
+    public ClassService(ClassDao classDao, OrganizationDao organizationDao, UserDao userDao, S3Buckets s3Buckets, S3Service s3Service) {
         this.classDao = classDao;
         this.organizationDao = organizationDao;
         this.userDao = userDao;
+        this.s3Buckets = s3Buckets;
+        this.s3Service = s3Service;
     }
 
     public List<Class> getAllClasses() {
@@ -179,5 +196,41 @@ public class ClassService {
             throw new ResourceNotFoundException("Class with id [%s] not found".formatted(classId));
         }
         classDao.deleteClassById(classId);
+    }
+
+    public void uploadClassImage(Integer classId, MultipartFile file) {
+        checkIfClassExists(classId);
+        String imageId = UUID.randomUUID().toString();
+
+        try {
+            s3Service.putObject(
+                    s3Buckets.getClasses(),
+                    "profile-images/%s/%s".formatted(classId, imageId),
+                    file.getBytes()
+            );
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        classDao.updateClassImageId(imageId,classId);
+    }
+
+    public byte[] getClassImage(Integer classId) {
+        Class classObject = classDao.selectClassById(classId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "class with id [%s] not found".formatted(classId)
+                ));
+
+        if (StringUtils.isBlank(classObject.getImageId())){
+            throw new ResourceNotFoundException(
+                    "Class with id [%s], image not found".formatted(classId)
+            );
+        }
+
+        byte[] image = s3Service.getObject(
+                s3Buckets.getClasses(),
+                "profile-images/%s/%s".formatted(classId, classObject.getImageId())
+        );
+
+        return image;
     }
 }

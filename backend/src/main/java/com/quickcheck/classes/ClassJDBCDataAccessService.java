@@ -23,7 +23,7 @@ public class ClassJDBCDataAccessService implements ClassDao {
     @Override
     public List<Class> selectAllClasses() {
         var sql = """
-                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id
+                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id, class_image_id
                 FROM classes
                 """;
         return jdbcTemplate.query(sql, classRowMapper);
@@ -33,7 +33,7 @@ public class ClassJDBCDataAccessService implements ClassDao {
     public List<Class> selectClassesOfUserInOrganization(Integer userId, Integer orgId) {
         var sql = """
                 SELECT classes.id, classes.name, classes.professor_id, classes.start_date, 
-                classes.end_date, classes.classroom_id, classes.organization_id
+                classes.end_date, classes.classroom_id, classes.organization_id, classes.class_image_id
                 FROM classes
                 JOIN class_user ON classes.id = class_user.class_id
                 WHERE class_user.user_id = ? AND classes.organization_id = ?
@@ -44,7 +44,7 @@ public class ClassJDBCDataAccessService implements ClassDao {
     @Override
     public List<Class> selectClassesOfProfessorInOrganization(Integer professorId, Integer orgId) {
         var sql = """
-                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id
+                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id, class_image_id
                 FROM classes
                 WHERE professor_id = ? AND organization_id = ?
                 """;
@@ -55,7 +55,7 @@ public class ClassJDBCDataAccessService implements ClassDao {
     public List<Class> selectClassesOfOrganization(Integer orgId) {
         var sql = """
                 SELECT id, name, professor_id, start_date, 
-                end_date, classroom_id, organization_id
+                end_date, classroom_id, organization_id, class_image_id
                 FROM classes
                 WHERE organization_id = ?
                 """;
@@ -66,7 +66,7 @@ public class ClassJDBCDataAccessService implements ClassDao {
     @Override
     public Optional<Class> selectClassById(Integer id) {
         var sql = """
-                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id
+                SELECT id, name, professor_id, start_date, end_date, classroom_id, organization_id, class_image_id
                 FROM classes
                 WHERE id = ?
                 """;
@@ -219,6 +219,16 @@ public class ClassJDBCDataAccessService implements ClassDao {
                 """;
         int result = jdbcTemplate.update(sql, id);
         System.out.println("deleteClassById result = " + result);
+    }
+
+    @Override
+    public void updateClassImageId(String profileImageId, Integer userId) {
+        var sql = """
+                UPDATE classes
+                SET class_image_id = ?
+                WHERE id = ?
+                """;
+        jdbcTemplate.update(sql, profileImageId, userId);
     }
 
 }

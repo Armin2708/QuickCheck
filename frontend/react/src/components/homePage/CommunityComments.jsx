@@ -1,11 +1,10 @@
 import { Box, Stack, Text, Image } from "@chakra-ui/react";
-import TitleWrapper from "./TitleWrapper.jsx";
-import TitleText from "./TitleText.jsx";
+import TitleWrapper from "./components/TitleWrapper.jsx";
+import TitleText from "./components/TitleText.jsx";
 
 export default function CommunityComments() {
     return (
         <Stack
-            paddingX={{ base: "20px", md: "50px", lg: "65px" }}  // Responsive padding
             paddingY={{ base: "50px", md: "100px", lg: "134px" }}  // Responsive padding
             justify="flex-start"
             align="center"

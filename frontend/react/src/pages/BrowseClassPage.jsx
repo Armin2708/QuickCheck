@@ -5,12 +5,12 @@ import {
     getClassesOfUserInOrganization,
     getOrganizationClasses
 } from "../services/client.js";
-import SideBar from "../components/shared/SideBar.jsx";
-import HeaderFooter from "../components/shared/HeaderFooter.jsx";
-import BrowseClassCard from "../components/class/BrowseClassCard.jsx";
+import SideBar from "../components/dashboard/SideBar.jsx";
+import HeaderFooterWrap from "../components/homePage/headerFooter/HeaderFooterWrap.jsx";
+import BrowseClassCard from "../components/dashboard/browseClass/BrowseClassCard.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa";
-import CreateClassButton from "../components/class/CreateClassButton.jsx";
+import CreateClassButton from "../components/dashboard/browseClass/CreateClassButton.jsx";
 import {useAuth} from "../components/context/AuthContext.jsx";
 
 
@@ -65,14 +65,12 @@ export default function BrowseClassPage() {
     }, [fullUser,organizationName]);
 
     return (
-        <HeaderFooter>
-            <SideBar />
             <Wrap justify={"center"}>
                 <Box p="4">
                     <Stack direction={"row"}>
                         <Button
                             onClick={()=>{
-                                navigate(`/organization/${organizationName}`)
+                                navigate(`/dashboard/${organizationName}`)
                             }}
                             leftIcon={<FaArrowLeft />}
                         >
@@ -93,6 +91,5 @@ export default function BrowseClassPage() {
                     </Wrap>
                 </Box>
             </Wrap>
-        </HeaderFooter>
     );
 }

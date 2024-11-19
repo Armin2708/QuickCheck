@@ -22,6 +22,7 @@ public interface ClassDao {
     boolean existClassesInOrganization(Integer orgId);
     boolean existUserInClass(Integer classId, Integer userId);
 
+    void updateClassImageId(String imageId, Integer classId);
 
     void insertClass(Class aClass);
     void updateClass(Class update);

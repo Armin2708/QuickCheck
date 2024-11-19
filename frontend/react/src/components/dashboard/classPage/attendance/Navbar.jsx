@@ -15,9 +15,9 @@ import React from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import {useAuth} from "../../../context/AuthContext.jsx";
 import {IoMenu} from "react-icons/io5";
-import SideBar from "../../../shared/SideBar.jsx";
+import SideBar from "../../SideBar.jsx";
 import {FaArrowLeft} from "react-icons/fa";
-import {useProfileImage} from "../../../../services/useProfileImage.js";
+import {getUserProfilePictureUrl} from "../../../../services/client.js";
 
 export default  function Navbar({colorTheme,orgName}){
 
@@ -26,8 +26,6 @@ export default  function Navbar({colorTheme,orgName}){
 
     const navigate = useNavigate(); // Get the navigate function from react-router-dom
     const {logOut, user, isUserAuthenticated, fullUser} = useAuth();
-
-    const { profileImageUrl, fetchProfileImage } = useProfileImage(fullUser?.id);
 
     const handleLogOut = () => {
         logOut();
@@ -83,7 +81,7 @@ export default  function Navbar({colorTheme,orgName}){
                 <Button
                     background={colorTheme == "darkMode" ? "#252525" : "#F9F9F9"}
                     leftIcon={<FaArrowLeft color={colorTheme == "darkMode" ? "#707070" : "#313131"}/>}
-                    onClick={() => navigate(`/organization/${orgName}`)}
+                    onClick={() => navigate(`/dashboard/${orgName}`)}
                 >
                     <Text fontFamily="Inter"
                           fontWeight="bold"
@@ -155,7 +153,7 @@ export default  function Navbar({colorTheme,orgName}){
                             </VStack>
                             <Avatar
                                 size={'md'}
-                                src={profileImageUrl}
+                                src={getUserProfilePictureUrl(fullUser.id)|| null}
                             />
                         </HStack>
                     </MenuButton>

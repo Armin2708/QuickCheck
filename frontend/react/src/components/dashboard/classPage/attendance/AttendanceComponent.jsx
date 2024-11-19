@@ -47,7 +47,7 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
 
 
     return(
-        <Box>
+        <Box width={"100%"}>
             {(fullUser.id===professor.id || isAdmin()) ? (
                 <AdminAttendancePage
                     classObject={classObject}
@@ -57,14 +57,14 @@ export default function AttendanceComponent({fullUser, isAdmin, isUser, tag, cla
                     tag={tag}
                 />
             ) : (usersInClass.some(user => user.id === fullUser.id) ? (
-                <UserAttendancePage
-                    classObject={classObject}
-                    classroom={classroom}
-                    professor={professor}
-                    validRadius={validRadius}
-                    fullUser={fullUser}
-                    tag={tag}
-                />)
+                        <UserAttendancePage
+                            classObject={classObject}
+                            classroom={classroom}
+                            professor={professor}
+                            validRadius={validRadius}
+                            fullUser={fullUser}
+                            tag={tag}
+                        />)
                     : (
                         <Spinner/>
                     )
