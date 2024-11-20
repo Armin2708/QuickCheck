@@ -1,6 +1,5 @@
 package com.quickcheck.classes;
 
-import com.quickcheck.classroom.Classroom;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
