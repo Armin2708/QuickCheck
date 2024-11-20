@@ -29,7 +29,7 @@ export default function PageWrap({children,pageName}){
                 bg={useColorModeValue('gray.100', '#121212')}
                 p="12px"
                 paddingX={"20px"}
-                overflow="hidden" /* Prevent the shadow from clipping outside the container */
+                overflow="auto" /* Prevent the shadow from clipping outside the container */
                 position="relative" /* Ensure the shadow is correctly positioned */
             >
 
