@@ -1,5 +1,7 @@
 package com.quickcheck.chat;
 
+import com.quickcheck.user.User;
+
 import java.util.List;
 import java.util.Optional;
 

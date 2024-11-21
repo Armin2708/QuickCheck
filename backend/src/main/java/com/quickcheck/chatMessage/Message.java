@@ -1,6 +1,7 @@
 package com.quickcheck.chatMessage;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class Message {
@@ -8,10 +9,10 @@ public class Message {
     private Integer id;
     private Integer userId;
     private String content;
-    private LocalDate dateTime;
+    private LocalDateTime dateTime;
     private Integer chatId;
 
-    public Message(Integer id, Integer userId, String content, LocalDate dateTime, Integer chatId) {
+    public Message(Integer id, Integer userId, String content, LocalDateTime dateTime, Integer chatId) {
         this.id = id;
         this.userId = userId;
         this.content = content;
@@ -19,7 +20,7 @@ public class Message {
         this.chatId = chatId;
     }
 
-    public Message(Integer userId, String content, LocalDate dateTime, Integer chatId) {
+    public Message(Integer userId, String content, LocalDateTime dateTime, Integer chatId) {
         this.userId = userId;
         this.content = content;
         this.dateTime = dateTime;
@@ -50,11 +51,11 @@ public class Message {
         this.content = content;
     }
 
-    public LocalDate getDateTime() {
+    public LocalDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDate dateTime) {
+    public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

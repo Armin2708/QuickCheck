@@ -1,5 +1,6 @@
 package com.quickcheck.chat;
 
+import com.quickcheck.user.User;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;

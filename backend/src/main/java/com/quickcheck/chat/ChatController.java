@@ -1,5 +1,6 @@
 package com.quickcheck.chat;
 
+import com.quickcheck.user.UserDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class ChatController {
     }
 
     @GetMapping("/class/{classId}/user/{userId}")
-    public List<Chat> getClassChatsJoined(
+    public List<Chat> getClassChatsUserJoined(
             @PathVariable("classId") Integer classId,
             @PathVariable("userId") Integer userId){
         return chatService.getClassChatsJoined(classId,userId);

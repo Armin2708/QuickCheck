@@ -47,6 +47,19 @@ public class UserController {
         return userService.getUsersInClass(classId);
     }
 
+    @GetMapping("/chat/{chatId}")
+    public List<UserDTO> getChatMembers(@PathVariable("chatId") Integer chatId){
+        return userService.getChatMembers(chatId);
+    }
+
+    @GetMapping("/chat/{chatId}/user/{userId}")
+    public ResponseEntity<Boolean> isUserInChat(
+            @PathVariable("userId") Integer userId,
+            @PathVariable("chatId") Integer chatId) {
+        boolean isInAttendance = userService.isUserInChat(userId, chatId);
+        return ResponseEntity.ok(isInAttendance);
+    }
+
     @GetMapping("/attendance/{attendanceTag}")
     public List<UserDTO> getUsersOfAttendance(
             @PathVariable("attendanceTag") String attendanceTag) {

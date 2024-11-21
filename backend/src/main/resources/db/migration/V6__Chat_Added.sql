@@ -15,8 +15,6 @@ CREATE TABLE messages(
 CREATE TABLE chat_members(
                          chat_id INTEGER NOT NULL REFERENCES chat(id),
                          user_id INTEGER NOT NULL REFERENCES chat(id)
-
-
 );
 
 ALTER TABLE classes

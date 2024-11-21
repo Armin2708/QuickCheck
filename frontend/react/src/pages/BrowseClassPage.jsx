@@ -1,12 +1,10 @@
 import {Box, Button, Stack, Wrap, WrapItem} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import {
-    getClassesOfInstructorInOrganization,
     getClassesOfUserInOrganization,
     getOrganizationClasses
 } from "../services/client.js";
-import SideBar from "../components/dashboard/SideBar.jsx";
-import HeaderFooterWrap from "../components/homePage/headerFooter/HeaderFooterWrap.jsx";
+
 import BrowseClassCard from "../components/dashboard/browseClass/BrowseClassCard.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa";

@@ -68,6 +68,18 @@ public class UserJDBCDataAccessService implements UserDao {
         }
 
     @Override
+    public List<User> selectChatMembers(Integer chatId) {
+        var sql = """
+                SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
+                FROM users JOIN chat_members ON users.id = chat_members.user_id
+                WHERE chat_id=?
+                """;
+        List<User> users = jdbcTemplate.query(sql, userRowMapper,chatId);
+        users.forEach(user -> user.setRoles(selectUserRoles(user.getId())));
+        return users;
+    }
+
+    @Override
     public List<User> selectUsersBySearch(String userName) {
         var sql = """
                 SELECT id, name, address, email, password, date_of_birth, gender, profile_image_id
@@ -302,6 +314,17 @@ public class UserJDBCDataAccessService implements UserDao {
                 WHERE user_id = ? AND class_id = ?
                 """;
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, classId);
+        return count != null && count > 0;
+    }
+
+    @Override
+    public boolean existUserInChat(Integer userId, Integer chatId) {
+        var sql = """
+                SELECT count(user_id)
+                FROM chat_members
+                WHERE user_id = ? AND chat_id = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,userId, chatId);
         return count != null && count > 0;
     }
 

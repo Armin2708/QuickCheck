@@ -16,6 +16,9 @@ import StatisticComponent from "./statistic/StatisticComponent.jsx";
 import AttendanceComponent from "./attendance/AttendanceComponent.jsx";
 import UpdateClassButton from "../classList/class/UpdateClassButton.jsx";
 import DeleteClassButton from "../classList/class/DeleteClassButton.jsx";
+import ChatListComponent from "./chat/ChatListComponent.jsx";
+import CreateChatButton from "./chat/CreateChatButton.jsx";
+import ChatPage from "./chat/ChatPage.jsx";
 
 export default function ClassPageComponent({fullUser, isAdmin, isUser}){
 
@@ -125,7 +128,7 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
                             </Box>
                         </TabPanel>
                         <TabPanel>
-                            <ChatComponent />
+                            <ChatPage/>
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

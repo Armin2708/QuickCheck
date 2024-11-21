@@ -2,6 +2,7 @@ package com.quickcheck.user;
 
 import com.quickcheck.Roles;
 import com.quickcheck.attendance.AttendanceDao;
+import com.quickcheck.chat.ChatDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
@@ -29,6 +30,7 @@ public class UserService{
     private final UserDTOMapper userDTOMapper;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
+    private final ChatDao chatDao;
 
     private void checkIfUserExists(Integer userId){
         if (!userDao.existUserById(userId)){
@@ -38,13 +40,20 @@ public class UserService{
         }
     }
 
-    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets) {
+    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets, ChatDao chatDao) {
         this.userDao = userDao;
         this.attendanceDao = attendanceDao;
         this.passwordEncoder = passwordEncoder;
         this.userDTOMapper = userDTOMapper;
         this.s3Service = s3Service;
         this.s3Buckets = s3Buckets;
+        this.chatDao = chatDao;
+    }
+
+    private void checkIfChatExists(Integer chatId){
+        if (!chatDao.existChatById(chatId)){
+            throw new ResourceNotFoundException("No Chat found with id %s".formatted(chatId));
+        }
     }
 
     public List<UserDTO> getAllUsers(){
@@ -66,6 +75,14 @@ public class UserService{
 
     public List<UserDTO> getUsersInClass(Integer classId){
         return userDao.selectAllUserInClassById(classId)
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getChatMembers(Integer chatId){
+        checkIfChatExists(chatId);
+        return userDao.selectChatMembers(chatId)
                 .stream()
                 .map(userDTOMapper)
                 .collect(Collectors.toList());
@@ -98,6 +115,11 @@ public class UserService{
     public Boolean isUserInAttendance(Integer userId, String tag){
         return userDao.existUserInAttendance(userId,tag);
     }
+
+    public Boolean isUserInChat(Integer userId, Integer chatId){
+        return userDao.existUserInChat(userId,chatId);
+    }
+
     public Boolean isUserInOrganization(Integer userId, String orgName){
         return userDao.existUserInOrganization(userId,orgName);
     }

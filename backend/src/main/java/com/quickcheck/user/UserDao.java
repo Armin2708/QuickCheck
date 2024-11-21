@@ -14,6 +14,9 @@ public interface UserDao {
 
     List<User> selectAllUserInClassById(Integer classId);
 
+    List<User> selectChatMembers(Integer chatId);
+
+
     List<User> selectUsersBySearch(String userName);
 
     List<User> selectAllUsersOfAttendance(String attendanceTag);
@@ -31,6 +34,7 @@ public interface UserDao {
     boolean existUserInAttendance(Integer userId, String tag);
     boolean existUserInOrganization(Integer userId, String orgName);
     boolean existUserInClass(Integer userId, Integer classId);
+    boolean existUserInChat(Integer userId, Integer chatId);
 
     void insertUser(User user) throws SQLException;
     void updateUser(User update);

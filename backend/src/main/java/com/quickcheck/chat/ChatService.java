@@ -4,11 +4,14 @@ import com.quickcheck.classes.ClassDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.user.UserDTO;
+import com.quickcheck.user.UserDTOMapper;
 import com.quickcheck.user.UserDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ChatService {
@@ -16,11 +19,13 @@ public class ChatService {
     private final ChatDao chatDao;
     private final ClassDao classDao;
     private final UserDao userDao;
+    private final UserDTOMapper userDTOMapper;
 
-    public ChatService(ChatDao chatDao, ClassDao classDao, UserDao userDao) {
+    public ChatService(ChatDao chatDao, ClassDao classDao, UserDao userDao, UserDTOMapper userDTOMapper) {
         this.chatDao = chatDao;
         this.classDao = classDao;
         this.userDao = userDao;
+        this.userDTOMapper = userDTOMapper;
     }
 
     private void checkIfClassExists(Integer classId){
@@ -44,6 +49,12 @@ public class ChatService {
     private void checkIfUserInChat(Integer chatId, Integer userId){
         if (chatDao.existUserInChat(chatId,userId)){
             throw new DuplicateResourceException("User with id %s is already in chat with id %s".formatted(userId,chatId));
+        }
+    }
+
+    private void checkIfUserNotInChat(Integer chatId, Integer userId){
+        if (!chatDao.existUserInChat(chatId,userId)){
+            throw new ResourceNotFoundException("User with id %s is not in chat with id %s".formatted(userId,chatId));
         }
     }
 
@@ -72,6 +83,8 @@ public class ChatService {
 
     public void addChat(ChatRegistrationRequest request){
 
+        checkIfClassExists(request.classId());
+
         Chat chat = new Chat(
                 request.name(),
                 request.classId()
@@ -92,7 +105,7 @@ public class ChatService {
 
         checkIfChatExists(chatId);
         checkIfUserExists(userId);
-        checkIfUserInChat(chatId,userId);
+        checkIfUserNotInChat(chatId,userId);
         chatDao.leaveChat(chatId, userId);
     }
 
