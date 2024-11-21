@@ -3,7 +3,7 @@
   "containerDefinitions": [
     {
       "name": "quickcheck-api",
-      "image": "armine27/quickcheck-api:21.11.2024.22.35.20",
+      "image": "armine27/quickcheck-api:21.11.2024.23.23.05",
       "essential": true,
       "memory": 512,
       "portMappings": [
