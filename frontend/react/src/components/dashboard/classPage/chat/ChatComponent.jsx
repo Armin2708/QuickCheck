@@ -1,8 +1,9 @@
-import {Box, Button, HStack, Input, VStack, Text, useColorModeValue} from "@chakra-ui/react";
+import {Box, Button, HStack, Input, VStack, Text, useColorModeValue, Divider} from "@chakra-ui/react";
 import {useEffect, useRef, useState} from "react";
 import {getChat, getChatMembers, getChatMessages, saveChatMessage} from "../../../../services/client.js";
 import {useAuth} from "../../../context/AuthContext.jsx";
 import chatMessageNotifications from "../../../../services/chatMessageNotifications.js";
+import ChatMessageCard from "./ChatMessageCard.jsx";
 
 export default function ChatComponent({ chatId }) {
     const [message, setMessage] = useState(""); // State for the current input
@@ -98,18 +99,20 @@ export default function ChatComponent({ chatId }) {
 
     return (
         <Box
-            maxHeight="500px"
+            maxWidth={"1270px"}
             width={"100%"}
-            border="1px solid #ccc"
-            borderRadius="10px"
+            height="100%" // Make the Box take all available vertical space
+            borderRadius={"12px"}
             padding="10px"
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
-            background={useColorModeValue("white", "black")}
+            background={useColorModeValue("white", "gray")}
             boxShadow="lg"
+            gap={"10px"}
         >
             <Text color={() => useColorModeValue()}>#{chat?.name}</Text>
+            <Divider/>
             {/* Chat messages area */}
             <VStack
                 ref={messagesContainerRef} // Attach the ref to the container
@@ -123,25 +126,7 @@ export default function ChatComponent({ chatId }) {
             >
                 {chatMessages.length > 0 ? (
                     chatMessages.map((chatMessage) => (
-                        <HStack
-                            key={chatMessage.id}
-                            justifyContent={chatMessage.userId === fullUser.id ? "flex-end" : "flex-start"}
-                            width="100%" // Ensure HStack spans the full width
-                        >
-                            <Box
-                                backgroundColor={chatMessage.userId === fullUser.id ? "green.100" : "blue.100"}
-                                padding="6px"
-                                borderRadius="8px"
-                                maxWidth="75%" // Limit message width to avoid overflow
-                                wordBreak="break-word" // Handle long text wrapping
-                                color={() => useColorModeValue("white", "black")}
-                            >
-                                <Text fontSize="sm" fontWeight="bold" textAlign={"right"}>
-                                    {chatMessage.userId}
-                                </Text>
-                                <Text>{chatMessage.content}</Text>
-                            </Box>
-                        </HStack>
+                        <ChatMessageCard {...chatMessage} fullUser={fullUser} key={chatMessage.id}/>
                     ))
                 ) : (
                     <Text color="gray.500" textAlign="center" width="100%">

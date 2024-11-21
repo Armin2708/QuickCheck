@@ -7,10 +7,18 @@ export default function ChatButtonCard({id,name,setChatId}){
         setChatId(id);
     }
     return(
-        <Button onClick={()=> {
+        <Button
+            width={"200px"}
+            onClick={()=> {
             handleOnClick()
-        }}>
-            <Text>{name}</Text>
+            }}
+            justifyContent={"flex-start"} // Aligns content to the left
+            textAlign={"left"} // Applies text alignment to the button content
+            paddingLeft={"10px"} // Optional: Add padding for a nicer look
+        >
+            <Text>
+                #{name}
+            </Text>
         </Button>
     )
 }

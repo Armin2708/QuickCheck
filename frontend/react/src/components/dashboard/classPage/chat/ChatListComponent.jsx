@@ -1,4 +1,4 @@
-import {Button, Stack, Text, VStack} from "@chakra-ui/react";
+import {Button, HStack, Stack, Text, useColorModeValue, VStack} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
 import {getClassChats, getClassChatsUserJoined} from "../../../../services/client.js";
 import {useParams} from "react-router-dom";
@@ -30,11 +30,18 @@ export default function ChatListComponent({setChatId}){
 
 
     return(
-        <VStack bg={"green"} padding={"40px"}>
-            {Array.isArray(chats) && chats.length > 0 ? (
+        <VStack
+            bg={()=>useColorModeValue("green", "gray")}
+            padding={"20px"}
+            height={"100%"}
+            borderRadius={"12px"}
+        >
+            <VStack overflow={"auto"}>
+                {Array.isArray(chats) && chats.length > 0 ? (
                     chats.map((chat) => (
                         <ChatButtonCard {...chat} setChatId={setChatId} key={chat.id}/>
                     ))) : null}
+            </VStack>
             <BrowseChatButton setChatId={setChatId}/>
         </VStack>
     )

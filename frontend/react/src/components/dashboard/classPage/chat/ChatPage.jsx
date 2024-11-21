@@ -9,7 +9,12 @@ export default function ChatPage(){
     const [chatId, setChatId] = useState()
 
     return(
-        <HStack bg={"cyan"} padding={"20px"} spacing={"40px"}>
+        <HStack
+            padding={"20px"}
+            spacing={"10px"}
+            align="flex-start"
+            h={"700px"}
+        >
             <ChatListComponent setChatId={setChatId}/>
             {chatId === 0 ?
             <BrowseChatComponent/>

@@ -34,8 +34,9 @@ public class ChatJDBCDataAccessService implements ChatDao{
         var sql = """
                 SELECT id, name, class_id
                 FROM chat
+                WHERE class_id= ?
                 """;
-        return jdbcTemplate.query(sql, chatRowMapper);
+        return jdbcTemplate.query(sql, chatRowMapper, classId);
     }
 
     @Override

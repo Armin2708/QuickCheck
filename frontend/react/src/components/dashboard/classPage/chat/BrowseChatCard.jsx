@@ -34,9 +34,9 @@ export default function BrowseChatCard({id,name}){
     }, [id]);
 
     return(
-        <Stack bg={"orange"} padding={"30px"}>
-            <Text>
-                {name}
+        <Stack bg={useColorModeValue("gray","gray.900")} padding={"30px"} fontWeight={"bold"} borderRadius={"12px"} spacing={"10px"}>
+            <Text textAlign={"center"} bg={"gray.800"} padding={"10px"}>
+                #{name}
             </Text>
             <Button isDisabled={joined} onClick={handleJoinChat}>
                 <Text>

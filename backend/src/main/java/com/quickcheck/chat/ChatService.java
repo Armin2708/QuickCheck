@@ -19,13 +19,11 @@ public class ChatService {
     private final ChatDao chatDao;
     private final ClassDao classDao;
     private final UserDao userDao;
-    private final UserDTOMapper userDTOMapper;
 
     public ChatService(ChatDao chatDao, ClassDao classDao, UserDao userDao, UserDTOMapper userDTOMapper) {
         this.chatDao = chatDao;
         this.classDao = classDao;
         this.userDao = userDao;
-        this.userDTOMapper = userDTOMapper;
     }
 
     private void checkIfClassExists(Integer classId){
