@@ -18,7 +18,7 @@ export default function DashboardCard({children, cardColor}){
             bg={cardColor}
             p="12px"
             paddingX={"20px"}
-            overflow="hidden" /* Prevent the shadow from clipping outside the container */
+            overflow="auto" /* Prevent the shadow from clipping outside the container */
             position="relative" /* Ensure the shadow is correctly positioned */
         >
             <HeadSection/>
