@@ -31,7 +31,7 @@ export default function ChatListComponent({setChatId}){
 
     return(
         <VStack
-            bg={()=>useColorModeValue("green", "gray")}
+            background={()=>useColorModeValue("#FBFBFB","#1F1F1F")}
             padding={"20px"}
             height={"100%"}
             borderRadius={"12px"}

@@ -1,4 +1,4 @@
-import {Box, Button, HStack, Input, VStack, Text, useColorModeValue, Divider} from "@chakra-ui/react";
+import {Box, Button, HStack, Input, VStack, Text, useColorModeValue, Divider, Textarea} from "@chakra-ui/react";
 import {useEffect, useRef, useState} from "react";
 import {getChat, getChatMembers, getChatMessages, saveChatMessage} from "../../../../services/client.js";
 import {useAuth} from "../../../context/AuthContext.jsx";
@@ -107,7 +107,7 @@ export default function ChatComponent({ chatId }) {
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
-            background={useColorModeValue("white", "gray")}
+            background={()=>useColorModeValue("#FBFBFB","#1F1F1F")}
             boxShadow="lg"
             gap={"10px"}
         >
@@ -137,12 +137,16 @@ export default function ChatComponent({ chatId }) {
 
             {/* Input area */}
             <HStack spacing={3} padding="10px">
-                <Input
+                <Textarea
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
                     placeholder="Type a message..."
-                    flexGrow={1}
+                    flexGrow={1} // Ensure it grows to fill available space
                     borderRadius="8px"
+                    resize="none" // Disable resizing (optional)
+                    overflow="hidden" // Prevent awkward scrollbars (optional)
+                    whiteSpace="pre-wrap" // Ensure text wraps properly
+                    maxLength={700} // Set the maximum character count
                 />
                 <Button
                     colorScheme="green"

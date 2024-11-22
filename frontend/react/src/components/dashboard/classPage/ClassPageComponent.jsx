@@ -11,13 +11,11 @@ import {
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
 import {getClassById, getUsersInClass,} from "../../../services/client.js";
-import ChatComponent from "./chat/ChatComponent.jsx";
 import StatisticComponent from "./statistic/StatisticComponent.jsx";
 import AttendanceComponent from "./attendance/AttendanceComponent.jsx";
 import UpdateClassButton from "../classList/class/UpdateClassButton.jsx";
 import DeleteClassButton from "../classList/class/DeleteClassButton.jsx";
-import ChatListComponent from "./chat/ChatListComponent.jsx";
-import CreateChatButton from "./chat/CreateChatButton.jsx";
+
 import ChatPage from "./chat/ChatPage.jsx";
 
 export default function ClassPageComponent({fullUser, isAdmin, isUser}){
@@ -26,6 +24,8 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
     const [usersInClass,setUsersInClass] = useState([]);
 
     const [activeTab, setActiveTab] = useState(0);
+
+    const [chatId, setChatId] = useState(-1)
 
     const { name: orgName, id: classId } = useParams();
 
@@ -128,7 +128,7 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
                             </Box>
                         </TabPanel>
                         <TabPanel>
-                            <ChatPage/>
+                            <ChatPage setChatId={setChatId} chatId={chatId} />
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

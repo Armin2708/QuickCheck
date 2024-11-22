@@ -4,12 +4,11 @@ import React, {useEffect, useState} from "react";
 import {Box, HStack, Stack, useColorModeValue} from "@chakra-ui/react";
 import BrowseChatCard from "./BrowseChatCard.jsx";
 import CreateChatButton from "./CreateChatButton.jsx";
+import {useAuth} from "../../../context/AuthContext.jsx";
 
-export default function BrowseChatComponent(){
+export default function BrowseChatComponent({classId, professorId, fullUser, isAdmin}){
 
     const [classChats, setClassChats] = useState([])
-
-    const {id:classId} = useParams()
 
     const fetchClassChats = () =>{
         getClassChats(classId)
@@ -34,10 +33,12 @@ export default function BrowseChatComponent(){
              display="flex"
              flexDirection="column"
              gap={"20px"}
-             background={useColorModeValue("white", "gray")}
+             background={()=>useColorModeValue("#FBFBFB","#1F1F1F")}
              boxShadow="lg"
         >
-            <CreateChatButton onSuccess={fetchClassChats}/>
+            {(fullUser.id === professorId || isAdmin()) ? (
+                <CreateChatButton onSuccess={fetchClassChats}/>
+                ) : null}
             <HStack padding={"20px"}>
                 {Array.isArray(classChats) && classChats.length > 0 ? (
                     classChats.map((classChat) => (

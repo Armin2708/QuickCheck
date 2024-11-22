@@ -38,7 +38,7 @@ export default function ProfileComponent({}){
                     <HStack>
                         <Avatar
                             size={'md'}
-                            src={getUserProfilePictureUrl(fullUser.id) || null}
+                            src={getUserProfilePictureUrl(fullUser?.id) || null}
                         />
                         <VStack
                             display={{ base: 'none', md: 'flex' }}
