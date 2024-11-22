@@ -34,17 +34,25 @@ export default function ChatMessageCard({userId, content, fullUser}){
                 maxWidth="75%" // Limit message width to avoid overflow
                 wordBreak="break-word" // Handle long text wrapping
                 color={() => useColorModeValue("white", "black")}
+                alignSelf={userId === fullUser.id ? "flex-end" : "flex-start"} // Align bubble
             >
-                <VStack spacing={"0px"} alignItems={userId === fullUser.id ? "flex-end" : "flex-start"}>
+                {userId !== fullUser.id && (
+                    <Avatar src={getUserProfilePictureUrl(userId) || null} />
+                )}
+                <VStack
+                    spacing={"0px"}
+                    alignItems={userId === fullUser.id ? "flex-end" : "flex-start"}
+                >
                     <Text fontSize="lg" fontWeight="bold">
                         {userId === fullUser.id ? "You" : user.name}
                     </Text>
                     <Text>{content}</Text>
                 </VStack>
-                <Avatar
-                    src={getUserProfilePictureUrl(userId)|| null}
-                />
+                {userId === fullUser.id && (
+                    <Avatar src={getUserProfilePictureUrl(userId) || null} />
+                )}
             </HStack>
+
 
         </HStack>
     )
