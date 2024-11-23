@@ -6,7 +6,7 @@ import {
     HStack,
     Flex,
     Menu,
-    MenuButton, Avatar, VStack, MenuList, MenuItem, MenuDivider
+    MenuButton, Avatar, VStack, MenuList, MenuItem, MenuDivider, useColorModeValue
 } from "@chakra-ui/react";
 
 import {useNavigate} from "react-router-dom";
@@ -108,7 +108,7 @@ export default function Header() {
                                 </HStack>
                             </MenuButton>
                             <MenuList
-                                color={"#313131"}
+                                color={ useColorModeValue("#313131","white")}
                                 borderRadius={"6px"}
                                 borderColor={"transparent"}
                                 boxShadow={'2xl'}
