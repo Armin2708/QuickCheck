@@ -6,6 +6,7 @@ import com.quickcheck.chat.ChatDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.organization.OrganizationDao;
 import com.quickcheck.s3.S3Buckets;
 import com.quickcheck.s3.S3Service;
 import org.apache.commons.lang3.StringUtils;
@@ -26,11 +27,23 @@ public class UserService{
 
     private final UserDao userDao;
     private final AttendanceDao attendanceDao;
+    private final OrganizationDao organizationDao;
     private final PasswordEncoder passwordEncoder;
     private final UserDTOMapper userDTOMapper;
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
     private final ChatDao chatDao;
+
+    public UserService(UserDao userDao, AttendanceDao attendanceDao, OrganizationDao organizationDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets, ChatDao chatDao) {
+        this.userDao = userDao;
+        this.attendanceDao = attendanceDao;
+        this.organizationDao = organizationDao;
+        this.passwordEncoder = passwordEncoder;
+        this.userDTOMapper = userDTOMapper;
+        this.s3Service = s3Service;
+        this.s3Buckets = s3Buckets;
+        this.chatDao = chatDao;
+    }
 
     private void checkIfUserExists(Integer userId){
         if (!userDao.existUserById(userId)){
@@ -40,14 +53,12 @@ public class UserService{
         }
     }
 
-    public UserService(UserDao userDao, AttendanceDao attendanceDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets, ChatDao chatDao) {
-        this.userDao = userDao;
-        this.attendanceDao = attendanceDao;
-        this.passwordEncoder = passwordEncoder;
-        this.userDTOMapper = userDTOMapper;
-        this.s3Service = s3Service;
-        this.s3Buckets = s3Buckets;
-        this.chatDao = chatDao;
+    private void checkIfOrganizationExists(Integer orgId){
+        if (!organizationDao.existOrganizationById(orgId)){
+            throw new ResourceNotFoundException(
+                    "Organization with id [%s] does not exist".formatted(orgId)
+            );
+        }
     }
 
     private void checkIfChatExists(Integer chatId){
@@ -58,6 +69,22 @@ public class UserService{
 
     public List<UserDTO> getAllUsers(){
         return userDao.selectAllUsers()
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getAllUsersFromOrganization(Integer organizationId){
+        checkIfOrganizationExists(organizationId);
+        return userDao.selectAllUserInOrganizationById(organizationId)
+                .stream()
+                .map(userDTOMapper)
+                .collect(Collectors.toList());
+    }
+
+    public List<UserDTO> getUsersFromOrganizationBySearch(Integer organizationId, String userName){
+        checkIfOrganizationExists(organizationId);
+        return userDao.selectUsersFromOrganizationBySearch(organizationId,userName+"%")
                 .stream()
                 .map(userDTOMapper)
                 .collect(Collectors.toList());

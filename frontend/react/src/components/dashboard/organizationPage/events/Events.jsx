@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { Box, Text, VStack, HStack, Divider } from "@chakra-ui/react";
-import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 
-const WeeklyCalendar = ({ tasks, name:orgName }) => {
+const Events = ({ tasks, name:orgName }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
 
     // Get the week range based on the selected date
@@ -88,4 +87,4 @@ const WeeklyCalendar = ({ tasks, name:orgName }) => {
     );
 };
 
-export default WeeklyCalendar;
+export default Events;

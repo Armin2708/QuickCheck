@@ -3,6 +3,7 @@ package com.quickcheck.organization;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.organization.joinCode.OrganizationJoinCodeDao;
 import com.quickcheck.user.UserDao;
 import org.springframework.stereotype.Service;
 
@@ -14,11 +15,13 @@ public class OrganizationService {
 
     private final OrganizationDao organizationDao;
     private final UserDao userDao;
+    private final OrganizationJoinCodeDao organizationJoinCodeDao;
 
 
-    public OrganizationService(OrganizationDao organizationDao, UserDao userDao) {
+    public OrganizationService(OrganizationDao organizationDao, UserDao userDao, OrganizationJoinCodeDao organizationJoinCodeDao) {
         this.organizationDao = organizationDao;
         this.userDao = userDao;
+        this.organizationJoinCodeDao = organizationJoinCodeDao;
     }
 
     public List<Organization> getAllOrganizations() {

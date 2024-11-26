@@ -25,12 +25,6 @@ public class ClassService {
     private final S3Buckets s3Buckets;
     private final S3Service s3Service;
 
-    private void checkIfClassExists(Integer classId){
-        if (!classDao.existClassById(classId)){
-            throw new ResourceNotFoundException("No class found with id %s".formatted(classId));
-        }
-    }
-
     public ClassService(ClassDao classDao, OrganizationDao organizationDao, UserDao userDao, S3Buckets s3Buckets, S3Service s3Service) {
         this.classDao = classDao;
         this.organizationDao = organizationDao;
@@ -39,19 +33,33 @@ public class ClassService {
         this.s3Service = s3Service;
     }
 
+    private void checkIfClassExists(Integer classId){
+        if (!classDao.existClassById(classId)){
+            throw new ResourceNotFoundException("No class found with id %s".formatted(classId));
+        }
+    }
+
+    private void checkIfOrganizationExistsByName(String organizationName){
+        if (!organizationDao.existOrganizationByName(organizationName)){
+            throw new ResourceNotFoundException("Organization with name %s not found".formatted(organizationName));
+        }
+    }
+
     public List<Class> getAllClasses() {
         return classDao.selectAllClasses();
     }
 
     public List<Class> getClassesOfOrganization(String organizationName) {
-        if (!organizationDao.existOrganizationByName(organizationName)){
-            throw new ResourceNotFoundException("Organization with name %s not found".formatted(organizationName));
-        }
+        checkIfOrganizationExistsByName(organizationName);
         Integer organizationId = organizationDao.selectOrganizationByName(organizationName).get().getId();
         return classDao.selectClassesOfOrganization(organizationId);
     }
 
-
+    public List<Class> getClassesOfOrganizationByNameSearch(String organizationName,String className) {
+        checkIfOrganizationExistsByName(organizationName);
+        Integer organizationId = organizationDao.selectOrganizationByName(organizationName).get().getId();
+        return classDao.selectClassesOfOrganizationByNameSearch(organizationId, className+"%");
+    }
 
     public Class getClassById(Integer classId) {
         return classDao.selectClassById(classId)

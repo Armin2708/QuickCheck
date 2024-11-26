@@ -37,6 +37,7 @@ public class UserController {
         return userService.getUserById(userId);
     }
 
+
     @GetMapping("/email/{email}")
     public UserDTO getUserByEmail(@PathVariable("email") String email){
         return userService.getUserByEmail(email);
@@ -45,6 +46,18 @@ public class UserController {
     @GetMapping("/class/{classId}")
     public List<UserDTO> getUsersInClass(@PathVariable("classId") Integer classId){
         return userService.getUsersInClass(classId);
+    }
+
+    @GetMapping("/organization/{organizationId}")
+    public List<UserDTO> getUsersInOrganization(@PathVariable("organizationId") Integer organizationId){
+        return userService.getAllUsersFromOrganization(organizationId);
+    }
+
+    @GetMapping("/organization/{organizationId}/search/{userName}")
+    public List<UserDTO> getUsersFromOrganizationBySearch(
+            @PathVariable("organizationId") Integer organizationId,
+            @PathVariable("userName") String userName){
+        return userService.getUsersFromOrganizationBySearch(organizationId,userName);
     }
 
     @GetMapping("/chat/{chatId}")

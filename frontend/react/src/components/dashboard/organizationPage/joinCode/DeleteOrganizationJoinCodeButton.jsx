@@ -1,4 +1,3 @@
-import React from "react";
 import {
     AlertDialog,
     AlertDialogBody,
@@ -6,55 +5,48 @@ import {
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogOverlay,
-    Button,
-    useDisclosure,
+    Button, useDisclosure
 } from "@chakra-ui/react";
-import {deleteOrganization, getOrganizationByName} from "../../../../services/client.js";
+import {LuTrash2} from "react-icons/lu";
+import React from "react";
+
+import {deleteOrganizationJoinCode} from "../../../../services/client.js";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
 
-function DeleteOrganizationButton({ orgName, onSuccess }) {
+export default function DeleteOrganizationJoinCodeButton({id, onSuccess}){
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
 
-    const handleDelete = async () => {
-        getOrganizationByName(orgName)
-            .then((res) =>{
-                deleteOrganization(res.data.id)
-                    .then(()=>{
-                        successNotification("Success", orgName+" Deleted")
-                        onClose()
-                        onSuccess()
-                    })
-                    .catch((err)=>{
-                        errorNotification("Error", err.code)
-                    })
+    const handleDelete = () => {
+        deleteOrganizationJoinCode(id)
+            .then(() => {
+                successNotification(`Code deleted successfully.`);
+                onSuccess();
+                onClose();
             })
-            .catch((err) =>{
-                errorNotification("Error", err.code)
+            .catch((error) => {
+                errorNotification("Failed to delete the code.");
+                console.log(error)
             })
-    };
 
-    return (
+    }
+
+    return(
         <>
-            <Button
-                bg={'red'}
-                color={'white'}
-                _hover={{
-                    transform: 'translateY(-2px)',
-                    boxShadow: 'lg'
-                }}
-                onClick={()=>{
-                    onOpen()
-                }}
+            <Button bg={"transparent"} borderRadius={"full"} padding={"0px"}
+                    onClick={()=>{
+                        onOpen()
+                    }}
             >
-                Delete
+                <LuTrash2 />
             </Button>
 
             <AlertDialog isOpen={isOpen} leastDestructiveRef={cancelRef} onClose={onClose}>
                 <AlertDialogOverlay>
                     <AlertDialogContent>
                         <AlertDialogHeader fontSize="lg" fontWeight="bold">
-                            Delete {orgName}
+                            Delete Code
                         </AlertDialogHeader>
 
                         <AlertDialogBody>
@@ -66,7 +58,7 @@ function DeleteOrganizationButton({ orgName, onSuccess }) {
                                 Cancel
                             </Button>
                             <Button colorScheme="red" onClick={()=>{
-                                handleDelete()
+                                handleDelete();
                             }} ml={3}>
                                 Delete
                             </Button>
@@ -75,7 +67,5 @@ function DeleteOrganizationButton({ orgName, onSuccess }) {
                 </AlertDialogOverlay>
             </AlertDialog>
         </>
-    );
+    )
 }
-
-export default DeleteOrganizationButton;

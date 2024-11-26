@@ -1,6 +1,5 @@
 package com.quickcheck.classes;
 
-import com.quickcheck.classroom.Classroom;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -60,6 +59,17 @@ public class ClassJDBCDataAccessService implements ClassDao {
                 WHERE organization_id = ?
                 """;
         return jdbcTemplate.query(sql, classRowMapper,orgId);
+    }
+
+    @Override
+    public List<Class> selectClassesOfOrganizationByNameSearch(Integer orgId, String className) {
+        var sql = """
+                SELECT id, name, professor_id, start_date, 
+                end_date, classroom_id, organization_id, class_image_id
+                FROM classes
+                WHERE organization_id = ? AND name ILIKE ?
+                """;
+        return jdbcTemplate.query(sql, classRowMapper,orgId, className);
     }
 
 

@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
 import Login from "./components/authentication/login/Login.jsx";
 import ProtectedRoute from "./components/shared/protectedRoutes/ProtectedRoute.jsx";
-import ClassListPage from "./pages/ClassListPage.jsx";
+import OrganizationPage from "./pages/OrganizationPage.jsx";
 import Register from "./components/authentication/register/Register.jsx";
 import BrowseClassPage from "./pages/BrowseClassPage.jsx";
 import ClassPage from "./pages/ClassPage.jsx";
@@ -63,7 +63,7 @@ const App = () => {
                     path=":name"
                     element={
                         <JoinedOrgProtectedRoute>
-                            <ClassListPage />
+                            <OrganizationPage />
                         </JoinedOrgProtectedRoute>
                     }
                 />

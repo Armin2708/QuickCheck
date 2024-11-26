@@ -9,48 +9,31 @@ import {
     Button,
     useDisclosure,
 } from "@chakra-ui/react";
-import {errorNotification, successNotification} from "../../services/notification.js";
-import {deleteClass, deleteUser} from "../../services/client.js";
-import {useAuth} from "../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
+import {deleteOrganization, getOrganizationByName} from "../../../../services/client.js";
+import {errorNotification, successNotification} from "../../../../services/notification.js";
 
-function DeleteUserProfileButton({ userId, name }) {
+function DeleteOrganizationButton({ id, name, onSuccess }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
-    const {logOut, fullUser} = useAuth()
-    const navigate = useNavigate()
 
     const handleDelete = () => {
-        deleteUser(userId)
-            .then(() => {
-                successNotification(`${name} deleted successfully.`);
-                onClose();
-                logOut()
-                navigate("/login")
-
+        deleteOrganization(id)
+            .then(()=>{
+                successNotification("Success", name+" Deleted")
+                onClose()
+                onSuccess()
             })
-            .catch((error) => {
-                errorNotification("Failed to delete the user.");
-                console.log(error)
+            .catch((err)=>{
+                errorNotification("Error", err.code)
             })
-    }
-
+    };
 
     return (
         <>
             <Button
-                flex={1}
-                fontSize={'sm'}
-                rounded={'full'}
-                boxShadow={
-                    '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-                }
+                paddingX={"16px"} paddingY={"8px"} borderRadius={"full"}
                 bg={'red'}
                 color={'white'}
-                _hover={{
-                    transform: 'translateY(-2px)',
-                    boxShadow: 'lg'
-                }}
                 onClick={()=>{
                     onOpen()
                 }}
@@ -74,7 +57,7 @@ function DeleteUserProfileButton({ userId, name }) {
                                 Cancel
                             </Button>
                             <Button colorScheme="red" onClick={()=>{
-                                handleDelete();
+                                handleDelete()
                             }} ml={3}>
                                 Delete
                             </Button>
@@ -86,4 +69,4 @@ function DeleteUserProfileButton({ userId, name }) {
     );
 }
 
-export default DeleteUserProfileButton;
+export default DeleteOrganizationButton;

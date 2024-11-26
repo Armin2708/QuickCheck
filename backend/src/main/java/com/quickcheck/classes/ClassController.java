@@ -34,6 +34,13 @@ public class ClassController {
         return classService.getClassesOfUserInOrganization(orgName,userId);
     }
 
+    @GetMapping("/organization/{orgName}/search/{className}")
+    public List<Class> getClassesOfUserInOrganization(
+            @PathVariable("orgName") String orgName,
+            @PathVariable("className") String className){
+        return classService.getClassesOfOrganizationByNameSearch(orgName,className);
+    }
+
     @GetMapping("/organization/{orgName}/instructor/{professorId}")
     public List<Class> getClassesOfProfessorInOrganization(
             @PathVariable("orgName") String orgName,
