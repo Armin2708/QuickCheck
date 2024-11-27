@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import { isUserInOrganization } from "../../../services/client.js";
+import { isUserInOrganization } from "../../../services/client/users.js";
 
 const JoinedOrgProtectedRoute = ({ children }) => {
     const { isUserAuthenticated, fullUser } = useAuth();

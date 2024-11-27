@@ -10,15 +10,11 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
-import {deleteClass, deleteUser} from "../../services/client.js";
-import {useAuth} from "../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
+import {deleteUser} from "../../services/client/users.js";
 
 function DeleteUserButton({ userId, name, onSuccess }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const cancelRef = React.useRef();
-    const {logOut, fullUser} = useAuth()
-    const navigate = useNavigate()
 
     const handleDelete = () => {
         deleteUser(userId)

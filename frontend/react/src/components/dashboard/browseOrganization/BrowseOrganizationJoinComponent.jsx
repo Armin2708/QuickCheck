@@ -11,14 +11,12 @@ import {
 } from "@chakra-ui/react";
 import { useState } from "react";
 
-import {useNavigate} from "react-router-dom";
+import {errorNotification} from "../../../services/notification.js";
 import {
     decrementOrganizationJoinCode,
-    getOrganizationById,
-    joinOrganization,
     verifyOrganizationJoinCode
-} from "../../../services/client.js";
-import {errorNotification} from "../../../services/notification.js";
+} from "../../../services/client/organizationJoinCode.js";
+import {getOrganizationById, joinOrganization} from "../../../services/client/organizations.js";
 
 
 export default function BrowseOrganizationJoinComponent({fullUser,navigate}) {

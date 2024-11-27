@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
-import {getClassById, isUserInClass, isUserInOrganization} from "../../../services/client.js";
+import {isUserInClass, isUserInOrganization} from "../../../services/client/users.js";
+import {getClassById} from "../../../services/client/classes.js";
 
 const JoinedClassProtectedRoute = ({ children }) => {
     const { isUserAuthenticated, fullUser } = useAuth();

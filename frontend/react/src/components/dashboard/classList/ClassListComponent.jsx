@@ -1,14 +1,13 @@
-import {Box, Divider, Spinner, Text, VStack} from "@chakra-ui/react";
+import {Box} from "@chakra-ui/react";
 import ClassCard from "./class/ClassCard.jsx";
 import BrowseClassButton from "./class/BrowseClassButton.jsx";
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../../context/AuthContext.jsx";
 import {useParams} from "react-router-dom";
 import {
     getClassesOfInstructorInOrganization,
-    getClassesOfUserInOrganization,
-    getClassroomById
-} from "../../../services/client.js";
+    getClassesOfUserInOrganization
+} from "../../../services/client/classes.js";
+
 
 export default function ClassListComponent({fullUser}){
 

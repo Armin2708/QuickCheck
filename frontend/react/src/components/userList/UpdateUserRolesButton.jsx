@@ -9,9 +9,7 @@ import {
     DrawerOverlay,
     useDisclosure
 } from "@chakra-ui/react";
-import UpdateUserProfileForm from "../userProfile/UpdateUserProfileForm.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
-import UpdateUserForm from "./UpdateUserForm.jsx";
+
 import UpdateUserRolesForm from "./UpdateUserRolesForm.jsx";
 
 const CloseIcon = () => "x";

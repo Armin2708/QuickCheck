@@ -1,6 +1,5 @@
 import {
-    Box,
-    Button, Image
+    Button,
 } from "@chakra-ui/react";
 import {useNavigate, useParams} from "react-router-dom";
 import {AddIcon} from "@chakra-ui/icons";

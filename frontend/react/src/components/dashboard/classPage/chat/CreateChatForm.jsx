@@ -4,7 +4,7 @@ import {
     Box, Button, Heading, Stack
 } from '@chakra-ui/react';
 import {useParams} from "react-router-dom";
-import {saveChat} from "../../../../services/client.js";
+import {saveChat} from "../../../../services/client/chat.js";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
 import MyTextInput from "../../../shared/formFields/MyText.jsx";
 

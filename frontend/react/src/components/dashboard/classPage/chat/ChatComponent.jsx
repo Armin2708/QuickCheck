@@ -1,9 +1,11 @@
 import {Box, Button, HStack, Input, VStack, Text, useColorModeValue, Divider, Textarea} from "@chakra-ui/react";
 import {useEffect, useRef, useState} from "react";
-import {getChat, getChatMembers, getChatMessages, saveChatMessage} from "../../../../services/client.js";
+import {getChatMessages, saveChatMessage} from "../../../../services/client/message.js";
 import {useAuth} from "../../../context/AuthContext.jsx";
 import chatMessageNotifications from "../../../../services/chatMessageNotifications.js";
 import ChatMessageCard from "./ChatMessageCard.jsx";
+import {getChat} from "../../../../services/client/chat.js";
+import {getChatMembers} from "../../../../services/client/users.js";
 
 export default function ChatComponent({ chatId }) {
     const [message, setMessage] = useState(""); // State for the current input

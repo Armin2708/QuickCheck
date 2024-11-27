@@ -2,7 +2,7 @@ import {Box, Table, TableCaption, TableContainer, Tbody, Td, Text, Tfoot, Th, Th
 import OrganizationJoinCodeCard from "./OrganizationJoinCodeCard.jsx";
 import React, {useEffect, useState} from "react";
 import CreateOrganizationJoinCodeButton from "./CreateOrganizationJoinCodeButton.jsx";
-import { getOrganizationJoinCodes} from "../../../../services/client.js";
+import { getOrganizationJoinCodes} from "../../../../services/client/organizationJoinCode.js";
 
 export default function OrganizationJoinCodeComponent({organization, fullUser}){
 
@@ -19,7 +19,9 @@ export default function OrganizationJoinCodeComponent({organization, fullUser}){
     }
 
     useEffect(() => {
-        fetchJoinCodes()
+        if (organization){
+            fetchJoinCodes()
+        }
     }, [organization]);
 
 

@@ -1,7 +1,8 @@
 import {useEffect, useState} from "react";
 import {Box, Button, Stack, Text, useColorModeValue} from "@chakra-ui/react";
-import {isUserInChat, joinChat} from "../../../../services/client.js";
+import {joinChat} from "../../../../services/client/chat.js";
 import {useAuth} from "../../../context/AuthContext.jsx";
+import {isUserInChat} from "../../../../services/client/users.js";
 
 export default function BrowseChatCard({id,name}){
     const [joined,setJoined] = useState(false)

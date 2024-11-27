@@ -1,6 +1,5 @@
 import {Box, useColorModeValue} from "@chakra-ui/react";
 import {AddIcon} from "@chakra-ui/icons";
-import {IoAddOutline} from "react-icons/io5";
 
 export default function BrowseOrganizationButton(){
 

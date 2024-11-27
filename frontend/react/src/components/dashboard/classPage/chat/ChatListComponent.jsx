@@ -1,6 +1,6 @@
-import {Button, HStack, Stack, Text, useColorModeValue, VStack} from "@chakra-ui/react";
+import {useColorModeValue, VStack} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {getClassChats, getClassChatsUserJoined} from "../../../../services/client.js";
+import {getClassChatsUserJoined} from "../../../../services/client/chat.js";
 import {useParams} from "react-router-dom";
 import ChatButtonCard from "./ChatButtonCard.jsx";
 import BrowseChatButton from "./BrowseChatButton.jsx";

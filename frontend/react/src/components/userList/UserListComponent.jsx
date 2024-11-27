@@ -1,4 +1,4 @@
-import {Box, Text, Wrap, WrapItem} from "@chakra-ui/react";
+import {Text, Wrap, WrapItem} from "@chakra-ui/react";
 import UserProfileCard from "../userProfile/UserProfileCard.jsx";
 
 export default function UserListComponent({users, fetchUsers}){

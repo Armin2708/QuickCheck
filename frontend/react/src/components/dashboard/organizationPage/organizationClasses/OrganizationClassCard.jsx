@@ -1,26 +1,13 @@
-import {
-    Box,
-    Center,
-    useColorModeValue,
-    Heading,
-    Text,
-    Stack,
-    Image, Button, useToast
-} from '@chakra-ui/react'
+import {Box, Button, Center, Heading, Image, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
+import {getClassProfilePictureUrl} from "../../../../services/client/classes.js";
 import {useEffect, useState} from "react";
-import {useAuth} from "../../context/AuthContext.jsx";
-import {errorNotification, successNotification} from "../../../services/notification.js";
-import {getUserById} from "../../../services/client/users.js";
-import {getClassroomById} from "../../../services/client/classrooms.js";
-import {getClassProfilePictureUrl, joinClass} from "../../../services/client/classes.js";
+import {getUserById} from "../../../../services/client/users.js";
+import {getClassroomById} from "../../../../services/client/classrooms.js";
 
-export default function BrowseClassCard({id: classId,professorId,name,classroomId, joinedClass,userId}) {
+export default function OrganizationClassCard({id: classId, professorId, name, classroomId}){
 
     const [professor, setProfessor] = useState({});
     const [classroom, setClassroom] = useState({});
-
-    const [isJoined, setIsJoined] = useState(null);
-    const {fullUser} = useAuth();
 
     const defaultImage = "https://media.istockphoto.com/id/589985098/photo/los-angeles-skyline-by-night-california-usa.jpg?s=612x612&w=0&k=20&c=o8akFWVTSi6B9l3RbpwvAXlkaisy1aZy70qwi8Yj3Hw="
 
@@ -52,45 +39,17 @@ export default function BrowseClassCard({id: classId,professorId,name,classroomI
             });
     };
 
-    const handleJoinClass = () => {
-        if (!fullUser || !fullUser.id) {
-            console.error("User not loaded");
-            return;
-        }
-
-        joinClass(classId, fullUser.id)
-            .then(() => {
-                successNotification(
-                    "Class Joined",
-                    `${name} was successfully added to your organizations`
-                );
-                setIsJoined(true);
-            })
-            .catch((err) => {
-                errorNotification(
-                    err.code,
-                    err.response?.data?.message || "Error joining class"
-                );
-            });
-    };
-
     useEffect(() => {
-        if (professorId) {
+        if (professorId && classId) {
             fetchProfessor();
         }
 
-        if (classroomId) {
+        if (classroomId && classId) {
             fetchClassroom();
         }
+    }, [ classId, classroomId, professorId]);
 
-        if (Array.isArray(joinedClass) && classId) {
-            const joined = joinedClass.some(org => org.id === classId);
-            setIsJoined(joined);
-        }
-    }, [joinedClass, classId, classroomId, professorId]);
-
-
-    return (
+    return(
         <Center py={12}>
             <Box
                 role={'group'}
@@ -115,7 +74,7 @@ export default function BrowseClassCard({id: classId,professorId,name,classroomI
                         pos: 'absolute',
                         top: 5,
                         left: 0,
-                        backgroundImage: `url(${getClassProfilePictureUrl(classId)})`,
+                        backgroundImage: `url(${getClassProfilePictureUrl(classId) || defaultImage})`,
                         filter: 'blur(15px)',
                         zIndex: -1,
                     }}
@@ -131,6 +90,7 @@ export default function BrowseClassCard({id: classId,professorId,name,classroomI
                         objectFit={'cover'}
                         src={getClassProfilePictureUrl(classId)}
                         fallbackSrc={defaultImage}
+
                         alt="#"
                     />
                 </Box>
@@ -146,14 +106,6 @@ export default function BrowseClassCard({id: classId,professorId,name,classroomI
                             {classroom?.roomName}
                         </Text>
                     </Stack>
-                    {isJoined !== null && (
-                        <Button
-                            isDisabled={isJoined || (userId===professorId)}
-                            onClick={handleJoinClass}
-                        >
-                            {userId===professorId?"Instructor" : (isJoined ? "Joined" : "Join")}
-                        </Button>
-                    )}
                 </Stack>
             </Box>
         </Center>

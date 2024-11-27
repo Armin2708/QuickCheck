@@ -9,12 +9,13 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import { saveUser, verifyCode, verifyEmail } from "../../../services/client.js";
+import {  verifyCode, verifyEmail } from "../../../services/client/email.js";
 import { errorNotification, successNotification } from "../../../services/notification.js";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import MyTextInput from "../../shared/formFields/MyText.jsx";
 import MySelect from "../../shared/formFields/MySelect.jsx";
+import {saveUser} from "../../../services/client/users.js";
 
 const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
     const navigate = useNavigate();

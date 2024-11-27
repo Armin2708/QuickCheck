@@ -1,41 +1,10 @@
-import {Form, Formik, useField} from 'formik';
+import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
-import {saveClassroom, saveOrganizations} from "../../../services/client.js"
+import {Button, Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../../services/notification.js";
-import {useAuth} from "../../context/AuthContext.jsx";
+import {saveOrganizations} from "../../../services/client/organizations.js";
+import MyTextInput from "../../shared/formFields/MyText.jsx";
 
-const MyTextInput = ({label, ...props}) => {
-    const [field, meta] = useField(props);
-    return (
-        <Box>
-            <FormLabel htmlFor={props.id || props.name}>{label}</FormLabel>
-            <Input className="text-input" {...field} {...props} />
-            {meta.touched && meta.error ? (
-                <Alert className="error" status={"error"} mt={2}>
-                    <AlertIcon/>
-                    {meta.error}
-                </Alert>
-            ) : null}
-        </Box>
-    );
-};
-
-const MySelect = ({label, ...props}) => {
-    const [field, meta] = useField(props);
-    return (
-        <Box>
-            <FormLabel htmlFor={props.id || props.name}>{label}</FormLabel>
-            <Select {...field} {...props} />
-            {meta.touched && meta.error ? (
-                <Alert className="error" status={"error"} mt={2}>
-                    <AlertIcon/>
-                    {meta.error}
-                </Alert>
-            ) : null}
-        </Box>
-    );
-};
 
 // Register Form
 const CreateOrganizationForm = ({onSuccess}) => {

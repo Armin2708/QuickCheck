@@ -1,10 +1,8 @@
-import {useParams} from "react-router-dom";
-import {getClassChats} from "../../../../services/client.js";
+import {getClassChats} from "../../../../services/client/chat.js";
 import React, {useEffect, useState} from "react";
 import {Box, HStack, Stack, useColorModeValue} from "@chakra-ui/react";
 import BrowseChatCard from "./BrowseChatCard.jsx";
 import CreateChatButton from "./CreateChatButton.jsx";
-import {useAuth} from "../../../context/AuthContext.jsx";
 
 export default function BrowseChatComponent({classId, professorId, fullUser, isAdmin}){
 

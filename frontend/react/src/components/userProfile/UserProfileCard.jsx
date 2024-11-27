@@ -16,7 +16,7 @@ import UpdateUserButton from "../userList/UpdateUserButton.jsx";
 import UpdateUserRolesButton from "../userList/UpdateUserRolesButton.jsx";
 import DeleteUserButton from "../userList/DeleteUserButton.jsx";
 import DeleteUserProfileButton from "./DeleteUserProfileButton.jsx";
-import {getUserProfilePictureUrl} from "../../services/client.js";
+import {getUserProfilePictureUrl} from "../../services/client/users.js";
 
 export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,roles, onSuccess, userProfile }){
     return(

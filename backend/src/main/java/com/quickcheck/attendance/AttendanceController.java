@@ -36,6 +36,12 @@ public class AttendanceController {
         return attendanceService.getAttendanceStatus(attendanceTag);
     }
 
+    @GetMapping("/exist/{attendanceTag}")
+    public Boolean existAttendance(
+            @PathVariable("attendanceTag") String attendanceTag) {
+        return attendanceService.existAttendance(attendanceTag);
+    }
+
     @PostMapping
     public ResponseEntity<?> registerAttendance(
             @RequestBody AttendanceRegistrationRequest registrationRequest

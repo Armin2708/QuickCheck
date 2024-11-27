@@ -1,8 +1,8 @@
 import { useAuth } from "../components/context/AuthContext.jsx";
 import { useNavigate, useParams } from "react-router-dom";
-import {getOrganizationByName} from "../services/client.js";
 import {useEffect, useState} from "react";
 import OrganizationPageComponent from "../components/dashboard/organizationPage/OrganizationPageComponent.jsx";
+import {getOrganizationByName} from "../services/client/organizations.js";
 
 export default function OrganizationPage() {
     const { fullUser, isAdmin } = useAuth();

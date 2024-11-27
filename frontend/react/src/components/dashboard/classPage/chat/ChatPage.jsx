@@ -4,7 +4,7 @@ import ChatComponent from "./ChatComponent.jsx";
 import BrowseChatComponent from "./BrowseChatComponent.jsx";
 import {useParams} from "react-router-dom";
 import {useAuth} from "../../../context/AuthContext.jsx";
-import {getClassById} from "../../../../services/client.js";
+import {getClassById} from "../../../../services/client/classes.js";
 import {useEffect, useState} from "react";
 
 export default function ChatPage({chatId, setChatId}){

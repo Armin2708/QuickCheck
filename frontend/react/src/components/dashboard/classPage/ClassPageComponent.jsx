@@ -10,20 +10,19 @@ import {
 
 import React, {useEffect, useState} from "react";
 import {useParams} from "react-router-dom";
-import {getClassById, getUsersInClass,} from "../../../services/client.js";
+import {getClassById} from "../../../services/client/classes.js";
 import StatisticComponent from "./statistic/StatisticComponent.jsx";
 import AttendanceComponent from "./attendance/AttendanceComponent.jsx";
 import UpdateClassButton from "../classList/class/UpdateClassButton.jsx";
 import DeleteClassButton from "../classList/class/DeleteClassButton.jsx";
 
 import ChatPage from "./chat/ChatPage.jsx";
+import {getUsersInClass} from "../../../services/client/users.js";
 
 export default function ClassPageComponent({fullUser, isAdmin, isUser}){
 
     const [classObject, setClassObject] = useState({});
     const [usersInClass,setUsersInClass] = useState([]);
-
-    const [activeTab, setActiveTab] = useState(0);
 
     const [chatId, setChatId] = useState(-1)
 
@@ -57,9 +56,12 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
             })
     };
 
+
     useEffect(() => {
-        fetchClass();
-        fetchUsersInClass();
+        if(classId){
+            fetchClass();
+            fetchUsersInClass();
+        }
     }, [classId,orgName]);
 
     return(

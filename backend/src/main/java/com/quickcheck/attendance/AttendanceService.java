@@ -50,6 +50,10 @@ public class AttendanceService {
         return attendance.isOpenStatus();
     }
 
+    public Boolean existAttendance(String tag) {
+        return attendanceDao.existAttendanceWithTag(tag);
+    }
+
     public void addAttendance(AttendanceRegistrationRequest registrationRequest) {
 
         String tag = registrationRequest.classId() + "_" + registrationRequest.date();

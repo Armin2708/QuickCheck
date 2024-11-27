@@ -1,12 +1,10 @@
 import { Box, Button, Stack, Wrap, WrapItem, Center, Spinner } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import {
-    getOrganizations,
-    getOrganizationsOfUser
-} from "../../../services/client.js";
+
 import { FaArrowLeft } from "react-icons/fa";
 import BrowseOrganizationCard from "./BrowseOrganizationCard.jsx";
 import CreateOrganizationButton from "./CreateOrganizationButton.jsx";
+import {getOrganizations, getOrganizationsOfUser} from "../../../services/client/organizations.js";
 
 export default function BrowseOrganizationListComponent({fullUser, navigate}) {
     const [organizations, setOrganizations] = useState([]);

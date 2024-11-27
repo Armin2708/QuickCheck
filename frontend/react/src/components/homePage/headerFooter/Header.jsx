@@ -11,7 +11,7 @@ import {
 
 import {useNavigate} from "react-router-dom";
 import {useAuth} from "../../context/AuthContext.jsx";
-import {getUserProfilePictureUrl} from "../../../services/client.js";
+import {getUserProfilePictureUrl} from "../../../services/client/users.js";
 
 export default function Header() {
     const navigate = useNavigate(); // Get the navigate function from react-router-dom

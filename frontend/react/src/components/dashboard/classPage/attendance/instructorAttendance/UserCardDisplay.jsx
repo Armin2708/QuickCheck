@@ -1,11 +1,10 @@
 import { Wrap, WrapItem } from "@chakra-ui/react";
 import AttendanceUserCard from "./AttendanceUserCard.jsx";
 import { useEffect, useState } from "react";
-import { getUsersOfAttendance } from "../../../../../services/client.js";
-import { errorNotification } from "../../../../../services/notification.js";
-import attendanceNotifications from "../../../../../services/attendanceNotifications.js"; // Adjust the path as needed
+import { getUsersOfAttendance } from "../../../../../services/client/users.js";
+import attendanceNotifications from "../../../../../services/attendanceNotifications.js";
 
-export default function UserCardDisplay({ usersInClass, tag }) {
+export default function UserCardDisplay({ usersInClass, tag, existAttendance }) {
     const [attendedUsers, setAttendedUsers] = useState([]);
 
     const fetchAttendedUsers = () => {
@@ -29,18 +28,17 @@ export default function UserCardDisplay({ usersInClass, tag }) {
     };
 
     useEffect(() => {
-        fetchAttendedUsers();
-
-        // Set up WebSocket for attendance notifications
+        if (tag && existAttendance){
+            fetchAttendedUsers();
+        }
         const disconnectWebSocket = attendanceNotifications(tag, handleNewAttendance);
 
-        // Cleanup function to disconnect WebSocket on component unmount
         return () => {
             if (disconnectWebSocket) {
                 disconnectWebSocket();
             }
         };
-    }, [tag]);
+    }, [tag, existAttendance]);
 
     return (
         <Wrap spacing={2} justify="center" maxWidth="750px" marginTop="20px">

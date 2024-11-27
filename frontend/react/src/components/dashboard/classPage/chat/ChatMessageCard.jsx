@@ -1,5 +1,5 @@
 import {Avatar, Box, HStack, Text, useColorModeValue, VStack} from "@chakra-ui/react";
-import {getUserById, getUserProfilePictureUrl} from "../../../../services/client.js";
+import {getUserById, getUserProfilePictureUrl} from "../../../../services/client/users.js";
 import {useEffect, useState} from "react";
 
 export default function ChatMessageCard({userId, content, fullUser}){

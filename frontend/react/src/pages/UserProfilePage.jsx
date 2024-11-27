@@ -1,14 +1,12 @@
-import {
-    Spinner,
-} from '@chakra-ui/react'
+
 import {useEffect, useState} from "react";
 import {useAuth} from "../components/context/AuthContext.jsx";
 
-import {getUserById} from "../services/client.js";
 import UserProfileCard from "../components/userProfile/UserProfileCard.jsx";
 import HeadSection from "../components/HeadSection.jsx";
 
 import PageWrap from "../components/PageWrap.jsx";
+import {getUserById} from "../services/client/users.js";
 
 export default function UserProfilePage(){
 

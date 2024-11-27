@@ -1,23 +1,17 @@
 import React, {useEffect, useState} from "react";
-import {useAuth} from "../../../../context/AuthContext.jsx";
-import {useParams} from "react-router-dom";
 import {
-    getClassById,
-    getClassroomById,
-    getUserById, getUsersInClass,
-    getValidRadius, isUserInAttendance,
     verifyAttendance
-} from "../../../../../services/client.js";
+} from "../../../../../services/client/attendance.js";
 import {Button, Input, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
-import Navbar from "../Navbar.jsx";
 import getFormattedDate from "../../../../../services/dateDisplay.js";
 import LocationButton from "./LocationButton.jsx";
 import {FiCheckCircle, FiUser} from "react-icons/fi";
 import {FaCheck} from "react-icons/fa";
 import {IoWarningOutline} from "react-icons/io5";
 import {errorNotification, successNotification} from "../../../../../services/notification.js";
+import {isUserInAttendance} from "../../../../../services/client/users.js";
 
-export default function UserAttendancePage({classObject, classroom, professor,
+export default function UserAttendancePage({existAttendance,classObject, classroom, professor,
                                                validRadius, fullUser, tag,})
 {
 
@@ -66,10 +60,10 @@ export default function UserAttendancePage({classObject, classroom, professor,
     }
 
     useEffect(() => {
-        if (fullUser.id){
+        if (fullUser.id && tag && existAttendance){
             checkUserAttendance()
         }
-    }, [fullUser]);
+    }, [fullUser,tag,existAttendance]);
 
 
     return (

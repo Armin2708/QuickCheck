@@ -9,7 +9,7 @@ import {
     Button,
     useDisclosure,
 } from "@chakra-ui/react";
-import {deleteOrganization, getOrganizationByName} from "../../../../services/client.js";
+import {deleteOrganization} from "../../../../services/client/organizations.js";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
 
 function DeleteOrganizationButton({ id, name, onSuccess }) {

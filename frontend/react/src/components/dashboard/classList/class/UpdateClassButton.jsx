@@ -2,7 +2,6 @@ import {
     Button,
     Drawer,
     DrawerBody,
-    DrawerCloseButton,
     DrawerContent,
     DrawerFooter,
     DrawerHeader,

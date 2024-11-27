@@ -1,5 +1,5 @@
 import {Button, Select, Spacer, Stack} from "@chakra-ui/react";
-import {closeAttendance, createAttendance, openAttendance} from "../../../../../services/client.js";
+import {closeAttendance, createAttendance, openAttendance} from "../../../../../services/client/attendance.js";
 import {useEffect, useState} from "react";
 
 export default function AttendanceButton({tag, existAttendance, setExistAttendance, attendanceStatus,

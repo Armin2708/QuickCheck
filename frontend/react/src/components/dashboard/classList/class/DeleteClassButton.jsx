@@ -10,7 +10,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
-import {deleteClass} from "../../../../services/client.js";
+import {deleteClass} from "../../../../services/client/classes.js";
 import {useNavigate, useParams} from "react-router-dom";
 
 function DeleteClassButton({ id:classId,name:className, onSuccess }) {

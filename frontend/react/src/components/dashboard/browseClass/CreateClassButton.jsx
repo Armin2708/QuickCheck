@@ -1,20 +1,12 @@
 import {
-    Button,
-    Drawer, DrawerBody, DrawerCloseButton,
-    DrawerContent, DrawerFooter, DrawerHeader,
-    DrawerOverlay,
-    Flex,
-    Heading,
-    Image, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
-    Stack,
+    Button, Modal, ModalBody, ModalCloseButton,
+    ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+
     useDisclosure
 } from "@chakra-ui/react";
-import {useAuth} from "../../context/AuthContext.jsx";
-import {useNavigate} from "react-router-dom";
-import {useEffect} from "react";
+
 import CreateClassForm from "./CreateClassForm.jsx";
 import {AddIcon, CloseIcon} from "@chakra-ui/icons";
-import Multistep from "./CreateClassForm.jsx";
 
 // Main Register Component
 const CreateClassButton = ({onSuccess}) => {

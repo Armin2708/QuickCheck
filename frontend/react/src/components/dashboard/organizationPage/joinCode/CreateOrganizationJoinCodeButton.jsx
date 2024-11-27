@@ -1,14 +1,10 @@
 import {
-    Button,
-    Drawer, DrawerBody, DrawerCloseButton,
-    DrawerContent, DrawerFooter, DrawerHeader,
-    DrawerOverlay, Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay,
+    Button, Modal, ModalBody, ModalCloseButton,
+    ModalContent, ModalFooter, ModalHeader, ModalOverlay,
     useDisclosure
 } from "@chakra-ui/react";
 import CreateOrganizationJoinCodeForm from "./CreateOrganizationJoinCodeForm.jsx";
-import {AddIcon, CloseIcon} from "@chakra-ui/icons";
-import React, {useState} from "react";
-import {createOrganizationJoinCode} from "../../../../services/client.js";
+import {AddIcon} from "@chakra-ui/icons";
 
 // Main Register Component
 const CreateOrganizationJoinCodeButton = ({onSuccess,fullUser,id}) => {

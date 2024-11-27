@@ -10,7 +10,6 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 import UpdateUserProfileForm from "./UpdateUserProfileForm.jsx";
-import {useAuth} from "../context/AuthContext.jsx";
 
 const CloseIcon = () => "x";
 

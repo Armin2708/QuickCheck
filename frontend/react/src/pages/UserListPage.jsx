@@ -1,12 +1,11 @@
 import {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
-import {getOrganizationsOfUser, getUsers, searchUsers} from "../services/client.js";
-import {Box, Flex, Spinner, Stack, Text, Wrap, WrapItem, Center} from "@chakra-ui/react";
-import UserProfileCard from "../components/userProfile/UserProfileCard.jsx";
+
 import PageWrap from "../components/PageWrap.jsx";
 import HeadSection from "../components/HeadSection.jsx";
-import UserListSearchBar from "../components/userList/UserListSearchBar.jsx";
+import SearchBar from "../components/shared/SearchBar.jsx";
 import UserListComponent from "../components/userList/UserListComponent.jsx";
+import {getUsers, searchUsers} from "../services/client/users.js";
 
 export default function UserListPage() {
     const [users, setUsers] = useState([]);
@@ -47,14 +46,17 @@ export default function UserListPage() {
     };
 
     useEffect(() => {
-        console.log("UserListPage mounted");
         fetchUsers();
     }, []);
 
     return (
             <PageWrap pageName={"Users"}>
                 <HeadSection>
-                    <UserListSearchBar fetch={fetchUsersOnSearch} search={search} setSearch={setSearch}/>
+                    <SearchBar
+                        fetchSearch={fetchUsersOnSearch}
+                        fetchAll={fetchUsers}
+                        search={search}
+                        setSearch={setSearch}/>
                 </HeadSection>
 
                 <UserListComponent users={users} fetchUsers={fetchUsers}/>

@@ -1,12 +1,17 @@
-import {background, Box, Button, Input, useColorModeValue} from "@chakra-ui/react";
-import {SearchIcon} from "@chakra-ui/icons";
+import {Box, Button, Input, useColorModeValue} from "@chakra-ui/react";
 import {FiSearch} from "react-icons/fi";
 
-export default function UserListSearchBar({fetch,search, setSearch}){
+export default function SearchBar({fetchSearch, fetchAll, search, setSearch}){
 
     const handleChange = (event) =>{
-        setSearch(event.target.value)
-        fetch(event.target.value)
+        const input = event.target.value
+        if (input){
+            setSearch(input)
+            fetchSearch(input)
+        }else{
+            setSearch("")
+            fetchAll()
+        }
     }
 
     return(

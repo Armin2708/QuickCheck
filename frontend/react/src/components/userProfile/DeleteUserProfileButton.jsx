@@ -10,7 +10,7 @@ import {
     useDisclosure,
 } from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
-import {deleteClass, deleteUser} from "../../services/client.js";
+import {deleteUser} from "../../services/client/users.js";
 import {useAuth} from "../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 

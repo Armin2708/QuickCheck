@@ -1,10 +1,10 @@
-import {Form, Formik, useField} from 'formik';
+import {Form, Formik,} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Select, Stack} from "@chakra-ui/react";
+import {Button, Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
-import {updateClass, updateClassroom} from "../../../../services/client.js";
 import MyTextInput from "../../../shared/formFields/MyText.jsx";
-import MyUserDropzone, {MyClassDropzone} from "../../../shared/formFields/MyDropzone.jsx";
+import {MyClassDropzone} from "../../../shared/formFields/MyDropzone.jsx";
+import {updateClass} from "../../../../services/client/classes.js";
 
 
 // And now we can use these

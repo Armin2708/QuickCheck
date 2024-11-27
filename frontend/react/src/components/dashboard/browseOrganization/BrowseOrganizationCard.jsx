@@ -7,9 +7,9 @@ import {
     Stack,
     Image, Button, useToast,
 } from '@chakra-ui/react'
-import {joinOrganization, leaveClass} from "../../../services/client.js";
 import {useAuth} from "../../context/AuthContext.jsx";
 import {errorNotification, successNotification} from "../../../services/notification.js";
+import {joinOrganization} from "../../../services/client/organizations.js";
 
 const IMAGE =
     'https://media.istockphoto.com/id/1349030917/photo/business-and-finance-looking-up-at-high-rise-office-buildings-in-the-financial-district-of-a.jpg?s=612x612&w=0&k=20&c=NSnN0va-f1OBG_GA7bTVmUIoBwNDKUXtHD8_PzeTNiA='

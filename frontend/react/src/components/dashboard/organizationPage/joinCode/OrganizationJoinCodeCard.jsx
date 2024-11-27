@@ -1,6 +1,6 @@
 import {HStack, Td, Tr} from "@chakra-ui/react";
 import React, {useEffect, useState} from "react";
-import {getUserById} from "../../../../services/client.js";
+import {getUserById} from "../../../../services/client/users.js";
 import DeleteOrganizationJoinCodeButton from "./DeleteOrganizationJoinCodeButton.jsx";
 import UpdateOrganizationJoinCodeButton from "./UpdateOrganizationJoinCodeButton.jsx";
 

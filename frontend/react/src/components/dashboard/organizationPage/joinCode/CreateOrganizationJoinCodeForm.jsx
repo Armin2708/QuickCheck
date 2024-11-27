@@ -12,7 +12,7 @@ import {
     Stack, Input
 } from "@chakra-ui/react";
 import {useState} from "react";
-import {createOrganizationJoinCode} from "../../../../services/client.js";
+import {createOrganizationJoinCode} from "../../../../services/client/organizationJoinCode.js";
 
 
 // Register Form

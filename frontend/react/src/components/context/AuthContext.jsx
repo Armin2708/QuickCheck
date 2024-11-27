@@ -1,14 +1,14 @@
-import{
+import {
     createContext,
     useContext,
     useEffect,
     useState
 } from "react";
 import {
-    getUserByEmail,
     login as performLogin,
-} from "../../services/client.js";
+} from "../../services/client/auth.js";
 import {jwtDecode} from "jwt-decode";
+import {getUserByEmail} from "../../services/client/users.js";
 
 const AuthContext = createContext({})
 
@@ -66,7 +66,6 @@ const AuthProvider = ({ children }) => {
                     username: decodedToken.sub,
                     roles: decodedToken.scopes
                 })
-                console.log(user)
 
                 getUserByEmail(decodedToken.sub)
                     .then(res => {

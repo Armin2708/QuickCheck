@@ -63,10 +63,10 @@ export default function OrganizationPageComponent({isAdmin,organization,fullUser
                     <OrganizationJoinCodeComponent organization={organization} fullUser={fullUser}/>
                 </TabPanel>
                 <TabPanel>
-                    <OrganizationUsersComponent/>
+                    <OrganizationUsersComponent {...organization}/>
                 </TabPanel>
                 <TabPanel>
-                    <OrganizationClassesComponent/>
+                    <OrganizationClassesComponent {...organization}/>
                 </TabPanel>
             </TabPanels>
         </Tabs>

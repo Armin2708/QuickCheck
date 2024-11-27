@@ -4,7 +4,7 @@ import {
     Text, useColorModeValue,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { getOrganizationsOfUser } from "../../../services/client.js";
+import { getOrganizationsOfUser } from "../../../services/client/organizations.js";
 import BrowseOrganizationButton from "./organization/BrowseOrganizationButton.jsx";
 import OrganizationCard from "./organization/OrganizationCard.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";

@@ -1,17 +1,19 @@
 import * as Yup from 'yup';
 import { Formik, Form, useField } from 'formik';
 import { useToast } from '@chakra-ui/react';
-import {getClassroomByName, getClassrooms, saveClass, saveClassroom} from "../../../services/client.js";
 import { errorNotification, successNotification } from "../../../services/notification.js";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext.jsx";
 import {
-    Box, Button, ButtonGroup, Checkbox, Flex, FormLabel, Heading, Input, Select, Stack, Progress, Alert, AlertIcon
+    Box, Button, ButtonGroup, Checkbox, Flex,
+    Heading, Input, Select, Stack, Progress,
 } from '@chakra-ui/react';
 import MySelect from "../../shared/formFields/MySelect.jsx";
 import MyTextInput from "../../shared/formFields/MyText.jsx";
 import {useParams} from "react-router-dom";
 import MapButton from "../../shared/map/MapButton.jsx";
+import {getClassroomByName, getClassrooms, saveClassroom} from "../../../services/client/classrooms.js";
+import {saveClass} from "../../../services/client/classes.js";
 
 // Multi-Step Form Component
 export default function CreateClassForm() {

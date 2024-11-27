@@ -10,7 +10,7 @@ import {
 import {LuTrash2} from "react-icons/lu";
 import React from "react";
 
-import {deleteOrganizationJoinCode} from "../../../../services/client.js";
+import {deleteOrganizationJoinCode} from "../../../../services/client/organizationJoinCode.js";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
 
 export default function DeleteOrganizationJoinCodeButton({id, onSuccess}){

@@ -1,15 +1,13 @@
 import {Box, Button, Stack, Wrap, WrapItem} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import {
-    getClassesOfUserInOrganization,
-    getOrganizationClasses
-} from "../services/client.js";
+
 
 import BrowseClassCard from "../components/dashboard/browseClass/BrowseClassCard.jsx";
 import {useNavigate, useParams} from "react-router-dom";
 import {FaArrowLeft} from "react-icons/fa";
 import CreateClassButton from "../components/dashboard/browseClass/CreateClassButton.jsx";
 import {useAuth} from "../components/context/AuthContext.jsx";
+import {getClassesOfUserInOrganization, getOrganizationClasses} from "../services/client/classes.js";
 
 
 export default function BrowseClassPage() {

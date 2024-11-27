@@ -13,7 +13,7 @@ import {
     VStack
 } from "@chakra-ui/react";
 import React from "react";
-import {getUserProfilePictureUrl} from "../../services/client.js";
+import {getUserProfilePictureUrl} from "../../services/client/users.js";
 
 export default function ProfileComponent({}){
 

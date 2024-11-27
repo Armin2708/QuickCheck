@@ -1,13 +1,12 @@
-import {Field, Form, Formik, useField} from 'formik';
+import { Form, Formik} from 'formik';
 import * as Yup from 'yup';
-import {Alert, AlertIcon, Box, Button, Text,Stack} from "@chakra-ui/react";
+import {Button,Stack} from "@chakra-ui/react";
 import {errorNotification, successNotification} from "../../services/notification.js";
-import {updateUser} from "../../services/client.js";
+import {updateUser} from "../../services/client/users.js";
 import MyTextInput from "../shared/formFields/MyText.jsx";
 import MySelect from "../shared/formFields/MySelect.jsx";
 
 
-// And now we can use these
 const UpdateUserForm = ({id,name,address,email,dateOfBirth,gender}) => {
 
     return (

@@ -1,9 +1,6 @@
-import DashboardWrap from "../components/dashboard/DashboardWrap.jsx";
-import NotificationComponent from "../components/dashboard/notifications/NotificationComponent.jsx";
-import {Box, useDisclosure, Text, useColorMode, useColorModeValue} from "@chakra-ui/react";
-import OrganizationListComponent from "../components/dashboard/organizationList/OrganizationListComponent.jsx";
+import {Box, useDisclosure, Text, } from "@chakra-ui/react";
 import {useAuth} from "../components/context/AuthContext.jsx";
-import SideBar from "../components/dashboard/SideBar.jsx";
+
 
 export default function Dashboard() {
     const { fullUser } = useAuth();

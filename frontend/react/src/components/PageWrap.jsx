@@ -5,7 +5,6 @@ import {FiUsers} from "react-icons/fi";
 import {LuSettings} from "react-icons/lu";
 import {useAuth} from "./context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
-import OrganizationListComponent from "./dashboard/organizationList/OrganizationListComponent.jsx";
 
 export default function PageWrap({children,pageName}){
     return(

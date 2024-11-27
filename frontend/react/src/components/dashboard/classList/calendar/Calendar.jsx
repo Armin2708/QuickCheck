@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { Box, Text, VStack, HStack, Divider } from "@chakra-ui/react";
-import Calendar from "react-calendar";
+import { Box, Text, VStack, Divider } from "@chakra-ui/react";
 import "react-calendar/dist/Calendar.css";
 
 const WeeklyCalendar = ({ tasks, name:orgName }) => {

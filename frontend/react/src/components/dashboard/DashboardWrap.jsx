@@ -1,4 +1,4 @@
-import {Box, Button, HStack, Spacer, Stack, Text, useColorMode, useColorModeValue} from "@chakra-ui/react";
+import {Box, useColorModeValue} from "@chakra-ui/react";
 
 import SideBar from "./SideBar.jsx";
 import DashboardCard from "./DashboardCard.jsx";

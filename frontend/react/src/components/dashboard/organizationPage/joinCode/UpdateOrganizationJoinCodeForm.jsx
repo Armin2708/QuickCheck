@@ -2,7 +2,7 @@ import {Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import {Box, Button, Checkbox, FormLabel, HStack, Input, Stack, Text} from "@chakra-ui/react";
 import {useState} from "react";
-import {updateOrganizationJoinCode} from "../../../../services/client.js";
+import {updateOrganizationJoinCode} from "../../../../services/client/organizationJoinCode.js";
 import {successNotification} from "../../../../services/notification.js";
 
 const UpdateOrganizationJoinCodeForm = ({id, usageLimit, onSuccess}) => {

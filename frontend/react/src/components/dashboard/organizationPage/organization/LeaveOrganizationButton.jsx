@@ -1,4 +1,4 @@
-import {getOrganizationByName, leaveOrganization} from "../../../../services/client.js";
+import {getOrganizationByName, leaveOrganization} from "../../../../services/client/organizations.js";
 import {errorNotification, successNotification} from "../../../../services/notification.js";
 import {LuTrash2} from "react-icons/lu";
 import {Button} from "@chakra-ui/react";
