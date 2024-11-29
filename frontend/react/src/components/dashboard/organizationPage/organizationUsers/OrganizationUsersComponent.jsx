@@ -3,8 +3,9 @@ import SearchBar from "../../../shared/SearchBar.jsx";
 import UserListComponent from "../../../userList/UserListComponent.jsx";
 import {useEffect, useState} from "react";
 import {getUsersInOrganization, searchUsersInOrganization} from "../../../../services/client/users.js";
+import OrganizationUserListComponent from "./OrganizationUserListComponent.jsx";
 
-export default function OrganizationUsersComponent({id}){
+export default function OrganizationUsersComponent({id:organizationId,name:organizationName}){
 
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -12,7 +13,7 @@ export default function OrganizationUsersComponent({id}){
 
     const fetchUsersInOrganization = () => {
         setLoading(true); // Start loading
-        getUsersInOrganization(id)
+        getUsersInOrganization(organizationId)
             .then(res => {
                 if (Array.isArray(res.data)) {
                     setUsers(res.data);
@@ -30,7 +31,7 @@ export default function OrganizationUsersComponent({id}){
 
     const fetchUsersInOrganizationOnSearch = (search) => {
         setLoading(true); // Start loading
-        searchUsersInOrganization(id,search)
+        searchUsersInOrganization(organizationId,search)
             .then(res => {
                 setUsers(res.data);
             })
@@ -43,10 +44,10 @@ export default function OrganizationUsersComponent({id}){
     };
 
     useEffect(() => {
-        if (id){
+        if (organizationId){
             fetchUsersInOrganization();
         }
-    }, [id]);
+    }, [organizationId]);
 
     return(
         <Box>
@@ -57,7 +58,12 @@ export default function OrganizationUsersComponent({id}){
                 setSearch={setSearch}
             />
 
-            <UserListComponent users={users} fetchUsers={fetchUsersInOrganizationOnSearch}/>
+            <OrganizationUserListComponent
+                users={users}
+                fetchUsers={fetchUsersInOrganizationOnSearch}
+                organizationId={organizationId}
+                organizationName={organizationName}
+            />
         </Box>
     )
 }

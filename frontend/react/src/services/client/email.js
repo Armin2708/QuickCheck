@@ -21,3 +21,25 @@ export const verifyCode = async (verifyCodeRequest) => {
         throw e;
     }
 }
+
+export const resetPasswordEmail = async (emailRequest) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/email/reset-password`,
+            emailRequest
+        )
+    }catch (e){
+        throw e;
+    }
+}
+
+export const resetPasswordCode = async (verifyCodeRequest) => {
+    try{
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/email/reset-password/code`,
+            verifyCodeRequest
+        )
+    }catch (e){
+        throw e;
+    }
+}

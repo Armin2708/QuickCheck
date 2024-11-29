@@ -1,6 +1,6 @@
 package com.quickcheck.attendance;
 
-import com.quickcheck.user.UserRolesRowMapper;
+import com.quickcheck.user.roles.UserRolesRowMapper;
 import com.quickcheck.user.UserRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;

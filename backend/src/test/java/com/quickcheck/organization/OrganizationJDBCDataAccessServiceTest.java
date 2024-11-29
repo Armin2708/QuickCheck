@@ -4,10 +4,10 @@ package com.quickcheck.organization;
 import com.quickcheck.AbstractTestContainer;
 
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.Roles;
 import com.quickcheck.user.User;
 import com.quickcheck.user.UserJDBCDataAccessService;
-import com.quickcheck.user.UserRolesRowMapper;
+import com.quickcheck.user.roles.UserRolesRowMapper;
 import com.quickcheck.user.UserRowMapper;
 import com.zaxxer.hikari.HikariDataSource;
 import org.junit.jupiter.api.AfterEach;

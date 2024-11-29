@@ -11,14 +11,11 @@ import {
     useColorModeValue,
     WrapItem
 } from "@chakra-ui/react";
-import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
-import UpdateUserButton from "../userList/UpdateUserButton.jsx";
-import UpdateUserRolesButton from "../dashboard/organizationPage/organizationUsers/UpdateUserRolesButton.jsx";
-import DeleteUserButton from "../userList/DeleteUserButton.jsx";
-import DeleteUserProfileButton from "./DeleteUserProfileButton.jsx";
-import {getUserProfilePictureUrl} from "../../services/client/users.js";
+import UpdateUserRolesButton from "./UpdateUserRolesButton.jsx";
+import {getUserProfilePictureUrl} from "../../../../services/client/users.js";
+import OrganizationKickButton from "./OrganizationKickButton.jsx";
 
-export default function UserProfileCard({id,name,email,address,dateOfBirth,gender,accountType, onSuccess}){
+export default function OrganizationUserCard({id,name,email,address,dateOfBirth,gender,accountType,roles, organizationId,organizationName, onSuccess}){
     return(
             <Center py={6} >
                 <Box
@@ -78,15 +75,9 @@ export default function UserProfileCard({id,name,email,address,dateOfBirth,gende
                         </Badge>
                     </Stack>
 
-                    <Stack mt={8} direction={'row'} spacing={4}>
-                            <HStack>
-                                <UpdateUserProfileButton
-                                    userId={id} name={name} address={address}
-                                    email={email} dateOfBirth={dateOfBirth}
-                                    gender={gender} onSuccess={onSuccess}
-                                />
-                                <DeleteUserProfileButton userId={id} name={name} />
-                            </HStack>
+                    <Stack mt={8} direction={'row'} spacing={4} justifyContent={"center"} alignItems={"center"}>
+                            <UpdateUserRolesButton userId={id} roles={roles} organizationName={organizationName} onSuccess={onSuccess}/>
+                            <OrganizationKickButton userId={id} userName={name} organizationId={organizationId} onSuccess={onSuccess} />
                     </Stack>
                 </Box>
             </Center>

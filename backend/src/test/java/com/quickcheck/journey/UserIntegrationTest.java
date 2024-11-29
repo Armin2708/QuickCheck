@@ -4,7 +4,7 @@ package com.quickcheck.journey;
 import com.github.javafaker.Faker;
 import com.github.javafaker.Name;
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.Roles;
 import com.quickcheck.user.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

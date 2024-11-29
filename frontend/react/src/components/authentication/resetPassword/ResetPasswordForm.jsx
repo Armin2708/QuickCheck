@@ -9,31 +9,27 @@ import {
 } from "@chakra-ui/react";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
-import {  verifyCode, verifyEmail } from "../../../services/client/email.js";
+import {resetPasswordCode, resetPasswordEmail} from "../../../services/client/email.js";
 import { errorNotification, successNotification } from "../../../services/notification.js";
 import {useNavigate, useParams, useSearchParams} from "react-router-dom";
 import { useAuth } from "../../context/AuthContext.jsx";
 import MyTextInput from "../../shared/formFields/MyText.jsx";
-import MySelect from "../../shared/formFields/MySelect.jsx";
-import {saveUser} from "../../../services/client/users.js";
+import {resetPassword, saveUser} from "../../../services/client/users.js";
 
-const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
+const ResetPasswordForm = ({ initialStep = 1,token , onSuccess}) => {
+
     const navigate = useNavigate();
     const { login } = useAuth();
 
     const [step, setStep] = useState(initialStep);
-    const [progress, setProgress] = useState((initialStep / 4) * 100);
+    const [progress, setProgress] = useState((initialStep / 3) * 100);
     const [isVerified, setIsVerified] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
 
     const [initialValues, setInitialValues] = useState({
-        name: '',
-        address: '',
         email: '',
         password: '',
-        dateOfBirth: '',
-        gender: '',
         verificationCode: '',
     });
 
@@ -49,19 +45,10 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                 });
             case 3:
                 return Yup.object({
-                    password: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
-                });
-            case 4: // Final step, validate all required fields
-                return Yup.object({
                     email: Yup.string().email('Invalid email address').required('Required'),
+                    verificationCode: Yup.string().required("Verification code is required"),
                     password: Yup.string().max(20, 'Must be 20 characters or less').required('Required'),
-                    name: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
-                    address: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
-                    dateOfBirth: Yup.date().required('Required'),
-                    gender: Yup.string().oneOf(['MALE', 'FEMALE'], 'Invalid gender').required('Required'),
                 });
-            default:
-                return Yup.object();
         }
     };
 
@@ -75,7 +62,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
 
     const handleSendEmailVerification = (emailRequest) => {
         setIsLoading(true)
-        verifyEmail(emailRequest)
+        resetPasswordEmail(emailRequest)
             .then(() => {
                 successNotification(
                     "Verification Email Sent",
@@ -96,14 +83,15 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
     };
 
     const handleVerifyCode = (token, email, code, setFieldValue) => {
-        verifyCode({ token, email, code })
+        resetPasswordCode({ token, email, code })
             .then((res) => {
                 setIsVerified(true);
                 setInitialValues((prevValues) => ({
                     ...prevValues,
                     email: res.data.email || prevValues.email,
+                    verificationCode: code,
                 }));
-                setFieldValue("verificationCode", code);
+                setFieldValue("verificationCode", code); // Ensure Formik knows the verified code
                 successNotification(
                     "Email Verified",
                     "Your email has been successfully verified."
@@ -117,7 +105,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                     err.response?.data?.message
                 );
                 console.log(err)
-            })
+            });
     };
 
     return (
@@ -131,34 +119,25 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                 if (step === 1) {
                     // Step 1: Send email verification
                     const emailRequest = {
-                            email: values.email,
-                            url: `${import.meta.env.VITE_REACT_BASE_URL}/register?step=verify`,
-                        };
-                    console.log(emailRequest)
+                        email: values.email,
+                        url: `${import.meta.env.VITE_REACT_BASE_URL}/reset-password?step=verify`,
+                    };
                     handleSendEmailVerification(emailRequest);
-                    setSubmitting(false)
 
                 } else if (step === 2) {
                     // Step 2: Verify the code
                     handleVerifyCode(token, values.email, values.verificationCode, setFieldValue);
                     setSubmitting(false);
                 } else if (step === 3) {
-                    setStep(4);
-                    setProgress(100);
-                    setSubmitting(false);
-                } else if (step === 4) {
-                    saveUser({
-                            name: values.name,
-                            address: values.address,
+                    resetPassword({
                             email: values.email,
                             password: values.password,
-                            dateOfBirth: values.dateOfBirth,
-                            gender: values.gender,
+                            code: values.verificationCode
                     })
                         .then(() => {
                             successNotification(
-                                "Account Created",
-                                `${values.name} was successfully registered.`
+                                "Password Reset Success",
+                                `Password was successfully reset.`
                             );
                             login({ username: values.email, password: values.password })
                                 .then(() => {
@@ -196,18 +175,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                             </>
                         ) : step === 3 ? (
                             <MyTextInput name="password" type="password" placeholder="Password" />
-                        ) : (
-                            <Stack spacing="4px">
-                                <MyTextInput name="name" type="text" placeholder="Name" />
-                                <MyTextInput name="address" type="text" placeholder="Address" />
-                                <MyTextInput name="dateOfBirth" type="date" placeholder="Date of Birth" />
-                                <MySelect name="gender">
-                                    <option value="">Select gender</option>
-                                    <option value="MALE">Male</option>
-                                    <option value="FEMALE">Female</option>
-                                </MySelect>
-                            </Stack>
-                        )}
+                        ) : null}
 
                         <Stack direction="row" width="100%" mt={6}>
                             {step > 1 && (
@@ -232,7 +200,7 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                                 variant="solid"
                                 textColor="#FFFFFF"
                             >
-                                {isLoading ? (<Spinner/>) : (step===2 ? "Verify" : (step===4 ?"Submit" : "Next"))}
+                                {isLoading ? (<Spinner/>) : (step===2 ? "Verify" : (step===3 ?"Submit" : "Next"))}
                             </Button>
                         </Stack>
                     </Box>
@@ -242,4 +210,4 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
     );
 };
 
-export default RegisterForm;
+export default ResetPasswordForm;

@@ -1,7 +1,5 @@
 package com.quickcheck.user;
 
-import com.quickcheck.Roles;
-
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
@@ -22,10 +20,6 @@ public interface UserDao {
     List<User> selectUsersFromOrganizationBySearch(Integer organizationId, String userName);
 
     List<User> selectAllUsersOfAttendance(String attendanceTag);
-
-    void insertUserRoles(Integer userId, List<Roles> roles);
-
-    void deleteUserRoles(Integer userId);
 
     Optional<User> selectUserById(Integer userId);
     Optional<User> selectUserByEmail(String email);

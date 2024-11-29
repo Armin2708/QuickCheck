@@ -41,7 +41,7 @@ export default function UserProfilePage(){
             <HeadSection/>
 
             <UserProfileCard
-                    {...user} onSuccess={fetchUser} userProfile={true}
+                    {...user} onSuccess={fetchUser}
                 />
 
         </PageWrap>

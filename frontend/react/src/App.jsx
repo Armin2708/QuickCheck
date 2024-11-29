@@ -17,6 +17,7 @@ import JoinedClassProtectedRoute from "./components/shared/protectedRoutes/Joine
 import UserListPage from "./pages/UserListPage.jsx";
 import DashboardWrap from "./components/dashboard/DashboardWrap.jsx";
 import Settings from "./pages/Settings.jsx";
+import ResetPassword from "./components/authentication/resetPassword/ResetPassword.jsx";
 
 const App = () => {
     return (
@@ -30,6 +31,7 @@ const App = () => {
             }/>
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/users" element={
                 <AdminProtectedRoute>
                     <UserListPage />

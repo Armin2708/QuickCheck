@@ -106,22 +106,8 @@ export const isUserInChat = async (chatId, userId) =>{
 
 export const updateUser = async (userId, updateRequest) => {
     try {
-        console.log(updateRequest)
         return await axios.put(
             `${import.meta.env.VITE_API_BASE_URL}/api/users/${userId}`,
-            updateRequest,
-            getAuthConfig()
-        )
-    } catch (e) {
-        throw e;
-    }
-}
-
-export const updateUserRoles = async (userId, updateRequest) => {
-    try {
-        console.log(updateRequest)
-        return await axios.put(
-            `${import.meta.env.VITE_API_BASE_URL}/api/users/roles/${userId}`,
             updateRequest,
             getAuthConfig()
         )
@@ -187,6 +173,17 @@ export const getUsersInOrganization= async (organizationId) => {
         return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/users/organization/${organizationId}`,
             getAuthConfig())
     }catch (e){
+        throw e;
+    }
+}
+
+export const resetPassword = async (updateRequest) => {
+    try {
+        return await axios.post(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/reset-password`,
+            updateRequest
+        )
+    } catch (e) {
         throw e;
     }
 }

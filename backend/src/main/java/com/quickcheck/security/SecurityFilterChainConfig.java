@@ -40,25 +40,26 @@ public class SecurityFilterChainConfig {
                             "/api/users",
                             "/api/auth/login",
                             "/api/email/verify",
-                            "/api/email/verify/code"
+                            "/api/email/verify/code",
+                            "/api/email/reset-password",
+                            "/api/email/reset-password/code",
+                            "/api/users/reset-password"
                     )
                     .permitAll()
-
-
 
                         .requestMatchers(
                                 HttpMethod.GET,
                                 "/ping",
                                 "api/users/*/profile-image",
                                 "api/classes/*/image",
-                                "/api/ws/**"
+                                "/api/ws/**",
+                                "/actuator/**"
                                 )
                         .permitAll()
 
-                        .requestMatchers(HttpMethod.GET,"/actuator/**")
-                        .permitAll()
 
-                        .requestMatchers(
+
+                        /*.requestMatchers(
                                 HttpMethod.POST,
                                 "/api/classrooms",
                                 "/api/email/send"
@@ -77,13 +78,22 @@ public class SecurityFilterChainConfig {
                         )
                         .hasAnyAuthority("ADMIN","INSTRUCTOR")
 
+*/
+
                         .requestMatchers(
                                 HttpMethod.PUT,
                                 "/api/users/roles/"
                         )
                         .hasAuthority("ADMIN")
 
-                    .anyRequest()
+                        .requestMatchers(
+                                HttpMethod.POST,
+                                "/api/organizations"
+                        )
+                        .hasAuthority("ADMIN")
+
+
+                        .anyRequest()
                     .authenticated()
                 )
                 .sessionManagement(session -> session

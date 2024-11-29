@@ -1,23 +1,26 @@
 package com.quickcheck.user;
 
-import com.quickcheck.Roles;
 import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.chat.ChatDao;
+import com.quickcheck.classes.ClassDao;
+import com.quickcheck.email.EmailDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.organization.Organization;
 import com.quickcheck.organization.OrganizationDao;
 import com.quickcheck.s3.S3Buckets;
 import com.quickcheck.s3.S3Service;
+import com.quickcheck.user.roles.RoleDTO;
+import com.quickcheck.user.roles.RoleDTOMapper;
+import com.quickcheck.user.roles.RoleDao;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -33,8 +36,12 @@ public class UserService{
     private final S3Service s3Service;
     private final S3Buckets s3Buckets;
     private final ChatDao chatDao;
+    private final RoleDao roleDao;
+    private final RoleDTOMapper roleDTOMapper;
+    private final ClassDao classDao;
+    private final EmailDao emailDao;
 
-    public UserService(UserDao userDao, AttendanceDao attendanceDao, OrganizationDao organizationDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets, ChatDao chatDao) {
+    public UserService(UserDao userDao, AttendanceDao attendanceDao, OrganizationDao organizationDao, PasswordEncoder passwordEncoder, UserDTOMapper userDTOMapper, S3Service s3Service, S3Buckets s3Buckets, ChatDao chatDao, RoleDao roleDao, RoleDTOMapper roleDTOMapper, ClassDao classDao, EmailDao emailDao) {
         this.userDao = userDao;
         this.attendanceDao = attendanceDao;
         this.organizationDao = organizationDao;
@@ -43,6 +50,10 @@ public class UserService{
         this.s3Service = s3Service;
         this.s3Buckets = s3Buckets;
         this.chatDao = chatDao;
+        this.roleDao = roleDao;
+        this.roleDTOMapper = roleDTOMapper;
+        this.classDao = classDao;
+        this.emailDao = emailDao;
     }
 
     private void checkIfUserExists(Integer userId){
@@ -67,26 +78,105 @@ public class UserService{
         }
     }
 
-    public List<UserDTO> getAllUsers(){
+    private void checkIfClassExists(Integer classId){
+        if (!classDao.existClassById(classId)){
+            throw new ResourceNotFoundException("No Class found with id %s".formatted(classId));
+        }
+    }
+
+
+
+    public List<UserDTO> getAllUsers() {
         return userDao.selectAllUsers()
                 .stream()
-                .map(userDTOMapper)
+                .map(user -> {
+                    // Map user to UserDTO
+                    UserDTO userDTO = userDTOMapper.apply(user);
+
+                    // Fetch roles for the user
+                    List<RoleDTO> roles = roleDao.selectUserRoles(user.getId())
+                            .stream()
+                            .map(roleDTOMapper)
+                            .toList();
+
+                    // Return a new UserDTO with roles
+                    return new UserDTO(
+                            userDTO.id(),
+                            userDTO.name(),
+                            userDTO.address(),
+                            userDTO.email(),
+                            userDTO.dateOfBirth(),
+                            userDTO.gender(),
+                            userDTO.accountType(),
+                            roles, // Add roles here
+                            userDTO.username(),
+                            userDTO.profileImageId()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
     public List<UserDTO> getAllUsersFromOrganization(Integer organizationId){
         checkIfOrganizationExists(organizationId);
+        Organization organization = organizationDao.selectOrganizationById(organizationId).get();
         return userDao.selectAllUserInOrganizationById(organizationId)
                 .stream()
-                .map(userDTOMapper)
+                .map(user -> {
+                    // Map user to UserDTO
+                    UserDTO userDTO = userDTOMapper.apply(user);
+
+                    // Fetch roles for the user
+                    List<RoleDTO> roles = roleDao.selectUserOrganizationRoles(user.getId(), organization.getName())
+                            .stream()
+                            .map(roleDTOMapper)
+                            .toList();
+
+                    // Return a new UserDTO with roles
+                    return new UserDTO(
+                            userDTO.id(),
+                            userDTO.name(),
+                            userDTO.address(),
+                            userDTO.email(),
+                            userDTO.dateOfBirth(),
+                            userDTO.gender(),
+                            userDTO.accountType(),
+                            roles, // Add roles here
+                            userDTO.username(),
+                            userDTO.profileImageId()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
     public List<UserDTO> getUsersFromOrganizationBySearch(Integer organizationId, String userName){
         checkIfOrganizationExists(organizationId);
+        Organization organization = organizationDao.selectOrganizationById(organizationId).get();
         return userDao.selectUsersFromOrganizationBySearch(organizationId,userName+"%")
                 .stream()
-                .map(userDTOMapper)
+                .map(user -> {
+                    // Map user to UserDTO
+                    UserDTO userDTO = userDTOMapper.apply(user);
+
+                    // Fetch roles for the user
+                    List<RoleDTO> roles = roleDao.selectUserOrganizationRoles(user.getId(), organization.getName())
+                            .stream()
+                            .map(roleDTOMapper)
+                            .toList();
+
+                    // Return a new UserDTO with roles
+                    return new UserDTO(
+                            userDTO.id(),
+                            userDTO.name(),
+                            userDTO.address(),
+                            userDTO.email(),
+                            userDTO.dateOfBirth(),
+                            userDTO.gender(),
+                            userDTO.accountType(),
+                            roles, // Add roles here
+                            userDTO.username(),
+                            userDTO.profileImageId()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -101,9 +191,33 @@ public class UserService{
     }
 
     public List<UserDTO> getUsersInClass(Integer classId){
+        checkIfClassExists(classId);
         return userDao.selectAllUserInClassById(classId)
                 .stream()
-                .map(userDTOMapper)
+                .map(user -> {
+                    // Map user to UserDTO
+                    UserDTO userDTO = userDTOMapper.apply(user);
+
+                    // Fetch roles for the user
+                    List<RoleDTO> roles = roleDao.selectUserOrganizationRolesInClass(user.getId(), classId)
+                            .stream()
+                            .map(roleDTOMapper)
+                            .toList();
+
+                    // Return a new UserDTO with roles
+                    return new UserDTO(
+                            userDTO.id(),
+                            userDTO.name(),
+                            userDTO.address(),
+                            userDTO.email(),
+                            userDTO.dateOfBirth(),
+                            userDTO.gender(),
+                            userDTO.accountType(),
+                            roles, // Add roles here
+                            userDTO.username(),
+                            userDTO.profileImageId()
+                    );
+                })
                 .collect(Collectors.toList());
     }
 
@@ -116,27 +230,84 @@ public class UserService{
     }
 
     public UserDTO getUserById(Integer userId){
-        return userDao.selectUserById(userId)
+        UserDTO userDTO = userDao.selectUserById(userId)
                 .map(userDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user with id [%s] not found".formatted(userId)
                 ));
+        List<RoleDTO> roleDTO = roleDao.selectUserRoles(userId)
+                .stream()
+                .map(roleDTOMapper)
+                .toList();
+
+        return new UserDTO(
+                userDTO.id(),
+                userDTO.name(),
+                userDTO.address(),
+                userDTO.email(),
+                userDTO.dateOfBirth(),
+                userDTO.gender(),
+                userDTO.accountType(),
+                roleDTO, // Updated roles
+                userDTO.username(),
+                userDTO.profileImageId()
+        );
     }
 
     public List<UserDTO> getUsersBySearch(String userName){
         return userDao.selectUsersBySearch(userName+"%")
                 .stream()
-                .map(userDTOMapper)
+                .map(user -> {
+                    // Map user to UserDTO
+                    UserDTO userDTO = userDTOMapper.apply(user);
+
+                    // Fetch roles for the user
+                    List<RoleDTO> roles = roleDao.selectUserRoles(user.getId())
+                            .stream()
+                            .map(roleDTOMapper)
+                            .toList();
+
+                    // Return a new UserDTO with roles
+                    return new UserDTO(
+                            userDTO.id(),
+                            userDTO.name(),
+                            userDTO.address(),
+                            userDTO.email(),
+                            userDTO.dateOfBirth(),
+                            userDTO.gender(),
+                            userDTO.accountType(),
+                            roles, // Add roles here
+                            userDTO.username(),
+                            userDTO.profileImageId()
+                    );
+                })
                 .collect(Collectors.toList());
 
     }
 
     public UserDTO getUserByEmail(String email){
-        return userDao.selectUserByEmail(email)
+        UserDTO userDTO = userDao.selectUserByEmail(email)
                 .map(userDTOMapper)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user with id [%s] not found".formatted(email)
                 ));
+        List<RoleDTO> roles = roleDao.selectUserRoles(userDTO.id())
+                .stream()
+                .map(roleDTOMapper)
+                .toList();
+
+        return new UserDTO(
+                userDTO.id(),
+                userDTO.name(),
+                userDTO.address(),
+                userDTO.email(),
+                userDTO.dateOfBirth(),
+                userDTO.gender(),
+                userDTO.accountType(),
+                roles, // Updated roles
+                userDTO.username(),
+                userDTO.profileImageId()
+        );
     }
 
     public Boolean isUserInAttendance(Integer userId, String tag){
@@ -154,26 +325,28 @@ public class UserService{
         return userDao.existUserInClass(userId,classId);
     }
 
-    public void addUser(UserRegistrationRequest request) throws SQLException {
-        String email = request.email().toLowerCase();
-        if (userDao.existUserWithEmail(email)) {
+    public String addUser(UserRegistrationRequest request) throws SQLException {
+        if (userDao.existUserWithEmail(request.email())) {
             throw new DuplicateResourceException("Email already exists");
         }
-        Roles role = Roles.USER;
-        if (email.equals("quickcheckteam@gmail.com")){
-            role = Roles.ADMIN;
+
+        AccountType accountType = AccountType.USER;
+        if (request.email().equals("quickcheckteam@gmail.com")){
+            accountType = AccountType.ADMIN;
         }
 
             User user = new User(
                     request.name(),
                     request.address(),
-                    email,
+                    request.email(),
                     passwordEncoder.encode(request.password()),
                     request.dateOfBirth(),
                     request.gender(),
-                    List.of(role)
+                    null,
+                    accountType
             );
             userDao.insertUser(user);
+            return accountType.name();
     }
 
     public void updateUser(Integer userId, UserUpdateRequest userUpdateRequest) {
@@ -225,7 +398,7 @@ public class UserService{
         userDao.updateUser(user);
     }
 
-    public void updateUserRoles(Integer userId, UserRolesUpdateRequest updateRequest){
+    /*public void updateUserRoles(Integer userId, UserRolesUpdateRequest updateRequest){
         User user = userDao.selectUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user with id [%s] not found".formatted(userId)
@@ -243,7 +416,7 @@ public class UserService{
         if (!changes) {
             throw new RequestValidationException("No data changes found");
         }
-    }
+    }*/
 
     public void deleteUser(Integer userId){
         checkIfUserExists(userId);
@@ -283,5 +456,22 @@ public class UserService{
         );
 
         return profileImage;
+    }
+
+    public void resetPassword(UserPasswordResetRequest request){
+        if (!emailDao.getPasswordResetEmailByEmail(request.email()).get().getCode().equals(request.code())){
+            throw new ResourceNotFoundException("Wrong verification Code".formatted(request.code()));
+        }
+
+        User user = userDao.selectUserByEmail(request.email())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                    "user with email [%s] not found".formatted(request.email())
+        ));
+
+        String newPassword = passwordEncoder.encode(request.password());
+        user.setPassword(newPassword);
+
+        userDao.updateUser(user);
+
     }
 }

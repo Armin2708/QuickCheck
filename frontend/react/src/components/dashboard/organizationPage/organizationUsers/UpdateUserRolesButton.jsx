@@ -1,31 +1,29 @@
 import {
-    Button,
+    Button, Divider,
     Drawer,
     DrawerBody,
     DrawerCloseButton,
     DrawerContent,
     DrawerFooter,
     DrawerHeader,
-    DrawerOverlay,
+    DrawerOverlay, Text,
     useDisclosure
 } from "@chakra-ui/react";
 
-import UpdateUserRolesForm from "./UpdateUserRolesForm.jsx";
+import UpdateUserRolesForm from "../../../userList/UpdateUserRolesForm.jsx";
+import ClassCard from "../../classList/class/ClassCard.jsx";
+import React from "react";
 
 const CloseIcon = () => "x";
 
-const UpdateUserRolesButton = ({userId,roles,onSuccess}) => {
+const UpdateUserRolesButton = ({userId,organizationName,roles,onSuccess}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return <>
         <Button
-            flex={1}
             fontSize={'sm'}
             rounded={'full'}
             bg={'blue.400'}
             color={'white'}
-            boxShadow={
-                '0px 1px 25px -5px rgb(66 153 225 / 48%), 0 10px 10px -5px rgb(66 153 225 / 43%)'
-            }
             _hover={{
                 bg: 'blue.500',
             }}
@@ -40,15 +38,14 @@ const UpdateUserRolesButton = ({userId,roles,onSuccess}) => {
             <DrawerOverlay />
             <DrawerContent>
                 <DrawerCloseButton />
-                <DrawerHeader>Update my profile</DrawerHeader>
+                <DrawerHeader>Update Roles</DrawerHeader>
 
                 <DrawerBody>
-                    <UpdateUserRolesForm id={userId} roles={roles}/>
+                    <UpdateUserRolesForm userId={userId} organizationName={organizationName} roles={roles} onSuccess={onSuccess}/>
                 </DrawerBody>
 
                 <DrawerFooter>
                     <Button
-                        leftIcon={<CloseIcon/>}
                         backgroundColor={"#7E3BB5"}
                         color={"white"}
 
@@ -57,7 +54,6 @@ const UpdateUserRolesButton = ({userId,roles,onSuccess}) => {
                         }}
                         onClick={()=>{
                             onClose()
-                            onSuccess()
                         }}
                     >
                         Close

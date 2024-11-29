@@ -2,7 +2,7 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.Roles;
 import com.quickcheck.attendance.AttendanceDao;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;

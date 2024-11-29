@@ -1,4 +1,4 @@
-import {Box} from "@chakra-ui/react";
+import {Box, Divider, Text} from "@chakra-ui/react";
 import ClassCard from "./class/ClassCard.jsx";
 import BrowseClassButton from "./class/BrowseClassButton.jsx";
 import React, {useEffect, useState} from "react";
@@ -11,36 +11,17 @@ import {
 
 export default function ClassListComponent({fullUser}){
 
-    const [classes, setClasses] = useState([]);
+    const [userClasses, setUserClasses] = useState([]);
+    const [instructorClasses, setInstructorClasses] = useState([]);
+
     const [loading, setLoading] = useState(true); // Add loading state
     const { name: organizationName } = useParams();
 
-    const deduplicateClasses = (classes) => {
-        const uniqueClassesMap = new Map();
-        classes.forEach((classObject) => {
-            uniqueClassesMap.set(classObject.id, classObject);
-        });
-        return Array.from(uniqueClassesMap.values());
-    };
-
-    const fetchClasses = () => {
-        setLoading(true); // Start loading
-        Promise.all([
-            getClassesOfUserInOrganization(fullUser?.id, organizationName),
-            getClassesOfInstructorInOrganization(fullUser?.id, organizationName),
-        ])
-            .then(([userClassesResponse, instructorClassesResponse]) => {
-                // Combine both responses
-                const combinedClasses = [
-                    ...(userClassesResponse.data || []),
-                    ...(instructorClassesResponse.data || []),
-                ];
-
-                // Deduplicate classes based on `id`
-                const uniqueClasses = deduplicateClasses(combinedClasses);
-
-                // Update the state with the unique classes
-                setClasses(uniqueClasses);
+    const fetchUserClasses = () => {
+        setLoading(true);
+        getClassesOfUserInOrganization(fullUser?.id, organizationName)
+            .then((res) => {
+                setUserClasses(res.data);
             })
             .catch((error) => {
                 console.error("Error fetching classrooms:", error);
@@ -50,10 +31,25 @@ export default function ClassListComponent({fullUser}){
             });
     };
 
+    const fetchInstructorClasses = () =>{
+        setLoading(true);
+        getClassesOfInstructorInOrganization(fullUser?.id, organizationName)
+            .then((res) => {
+                setInstructorClasses(res.data);
+            })
+            .catch((error) => {
+                console.error("Error fetching classrooms:", error);
+            })
+            .finally(() => {
+                setLoading(false); // End loading
+            });
+    }
+
 
     useEffect(() => {
         if (fullUser?.id && organizationName) {
-            fetchClasses();
+            fetchUserClasses();
+            fetchInstructorClasses();
         }
     }, [organizationName,fullUser]);
 
@@ -67,10 +63,17 @@ export default function ClassListComponent({fullUser}){
             alignItems="flex-start" /* Aligns items to the left */
             gap="10px" /* Adds spacing between items */
         >
-            {/* Render organizations */}
-            {Array.isArray(classes) && classes.length > 0 ? (
-                classes.map((classObject) => (
-                    <ClassCard {...classObject} key={classObject.id}/>
+            <Text >Instructor</Text>
+            <Divider/>
+            {Array.isArray(instructorClasses) && instructorClasses.length > 0 ? (
+                instructorClasses.map((instructorClassObject,index) => (
+                    <ClassCard {...instructorClassObject} key={index}/>
+                ))) : null}
+            <Text marginTop={"10px"}>User</Text>
+            <Divider/>
+            {Array.isArray(userClasses) && userClasses.length > 0 ? (
+                userClasses.map((userClassObject,index) => (
+                    <ClassCard {...userClassObject} key={-index}/>
                 ))) : null}
             <BrowseClassButton />
         </Box>

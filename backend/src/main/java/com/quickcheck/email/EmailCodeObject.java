@@ -64,8 +64,7 @@ public class EmailCodeObject {
 
     @Override
     public String toString() {
-
-        return "User{" +
+        return "EmailCodeObject{" +
                 "id=" + id +
                 ", email='" + email + '\'' +
                 ", code='" + code + '\'' +

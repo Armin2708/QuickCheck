@@ -3,7 +3,7 @@ package com.quickcheck.user;
 
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.Roles;
 import com.quickcheck.classes.Class;
 import com.quickcheck.classes.ClassJDBCDataAccessService;
 import com.quickcheck.classes.ClassRowMapper;

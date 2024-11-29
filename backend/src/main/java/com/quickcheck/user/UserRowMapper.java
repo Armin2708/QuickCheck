@@ -1,7 +1,6 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +24,7 @@ public class UserRowMapper implements RowMapper<User> {
                 dateOfBirth,
                 Gender.valueOf(rs.getString("gender")),
                 null, // Set roles to null or populate as needed
+                AccountType.valueOf(rs.getString("account_type")),
                 rs.getString("profile_image_id")
         );
     }

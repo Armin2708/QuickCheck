@@ -1,14 +1,14 @@
 package com.quickcheck.user;
 
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.RoleDTO;
+import com.quickcheck.user.roles.RolesTitle;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class User implements UserDetails {
     private Integer id;
@@ -18,13 +18,14 @@ public class User implements UserDetails {
     private String password;
     private LocalDate dateOfBirth;
     private Gender gender;
-    private List<Roles> roles;
+    private AccountType accountType;
+    private List<RoleDTO> roles;
     private String profileImageId;
 
     public User() {}
 
     public User(String name, String address, String email,
-                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles) {
+                String password, LocalDate dateOfBirth, Gender gender, List<RoleDTO> roles, AccountType accountType) {
         this.name = name;
         this.address = address;
         this.email = email;
@@ -32,10 +33,11 @@ public class User implements UserDetails {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.roles = roles;
+        this.accountType=accountType;
     }
 
     public User(Integer id, String name, String address, String email,
-                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles) {
+                String password, LocalDate dateOfBirth, Gender gender, List<RoleDTO> roles, AccountType accountType) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -44,12 +46,13 @@ public class User implements UserDetails {
         this.dateOfBirth = dateOfBirth;
         this.gender = gender;
         this.roles = roles;
+        this.accountType=accountType;
     }
 
     public User(Integer id, String name, String address, String email,
-                String password, LocalDate dateOfBirth, Gender gender, List<Roles> roles,
-                String profileImageId) {
-        this(id, name, address,email, password, dateOfBirth, gender,roles);
+                String password, LocalDate dateOfBirth, Gender gender,
+                List<RoleDTO> roles, AccountType accountType, String profileImageId) {
+        this(id, name, address,email, password, dateOfBirth, gender,roles,accountType);
         this.profileImageId=profileImageId;
     }
 
@@ -83,20 +86,29 @@ public class User implements UserDetails {
         this.email = email;
     }
 
-    public List<Roles> getRoles() {
+    public List<RoleDTO> getRoles() {
         return roles;  // Getter for roles
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(List<RoleDTO> roles) {
         this.roles = roles;  // Setter for roles
+    }
+
+    public AccountType getAccountType() {
+        return accountType;
+    }
+
+    public void setAccountType(AccountType accountType) {
+        this.accountType = accountType;
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
 
-        return roles.stream()  // Stream the roles
-                .map(role -> new SimpleGrantedAuthority(role.name()))  // Map each role to a GrantedAuthority with "ROLE_" prefix
-                .collect(Collectors.toList());  // Collect as a list of GrantedAuthority
+        authorities.add(new SimpleGrantedAuthority(accountType.name()));
+
+        return authorities;
     }
 
     public String getPassword() {
@@ -161,12 +173,12 @@ public class User implements UserDetails {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof User user)) return false;
-        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(address, user.address) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(dateOfBirth, user.dateOfBirth) && gender == user.gender && Objects.equals(roles, user.roles) && Objects.equals(profileImageId, user.profileImageId);
+        return Objects.equals(id, user.id) && Objects.equals(name, user.name) && Objects.equals(address, user.address) && Objects.equals(email, user.email) && Objects.equals(password, user.password) && Objects.equals(dateOfBirth, user.dateOfBirth) && gender == user.gender && accountType == user.accountType && Objects.equals(roles, user.roles) && Objects.equals(profileImageId, user.profileImageId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, address, email, password, dateOfBirth, gender, roles, profileImageId);
+        return Objects.hash(id, name, address, email, password, dateOfBirth, gender, accountType, roles, profileImageId);
     }
 
     @Override
@@ -179,6 +191,7 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", dateOfBirth=" + dateOfBirth +
                 ", gender=" + gender +
+                ", accountType=" + accountType +
                 ", roles=" + roles +
                 ", profileImageId='" + profileImageId + '\'' +
                 '}';

@@ -1,6 +1,7 @@
 package com.quickcheck.user;
 
 import com.quickcheck.jwt.JWTUtil;
+import com.quickcheck.user.roles.UserRolesUpdateRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -104,8 +105,12 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> registerUser(
             @RequestBody UserRegistrationRequest registrationRequest) throws SQLException {
-        userService.addUser(registrationRequest);
-        String jwtToken = jwtUtil.issueToken(registrationRequest.email(),List.of("ADMIN"));
+        String accountType = userService.addUser(registrationRequest);
+        String role = "TYPE_"+accountType;
+        String jwtToken = jwtUtil.issueToken(
+                registrationRequest.email(),
+                List.of(role) // Organization roles
+        );
         return ResponseEntity.ok()
                 .header(HttpHeaders.AUTHORIZATION, jwtToken)
                 .build();
@@ -118,12 +123,12 @@ public class UserController {
         userService.updateUser(userId,updateRequest);
     }
 
-    @PutMapping("/roles/{userId}")
+    /*@PutMapping("/roles/{userId}")
     public void updateUserRoles(
             @PathVariable("userId") Integer userId,
             @RequestBody UserRolesUpdateRequest updateRequest){
         userService.updateUserRoles(userId,updateRequest);
-    }
+    }*/
 
     @DeleteMapping("{userId}")
     public void deleteUser(
@@ -149,6 +154,13 @@ public class UserController {
     public byte[] getUserProfilePicture(
             @PathVariable("userId") Integer userId){
         return userService.getUserImage(userId);
+    }
+
+    @PostMapping("/reset-password")
+    public void resetUserPassword(
+            @RequestBody UserPasswordResetRequest request
+    ){
+        userService.resetPassword(request);
     }
 
 }

@@ -1,5 +1,5 @@
 import {Form, Formik, useField} from "formik";
-import {Alert, AlertIcon, Box, Button, FormLabel, Input, Stack} from "@chakra-ui/react";
+import {Alert, AlertIcon, Box, Button, FormHelperText, FormLabel, Input, Stack, Text} from "@chakra-ui/react";
 import {useAuth} from "../../context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
 import * as Yup from "yup";
@@ -54,6 +54,20 @@ const LoginForm = () =>{
                             type={"password"}
                             placeholder={"Password"}
                         />
+
+                        <Text
+                            width="fit-content"
+                            padding={"0px"}
+                            onClick={()=>{
+                                navigate("/reset-password")
+                            }}
+                            cursor="pointer"
+                            _hover={{
+                                color: "blue.500",
+                            }}
+                        >
+                            Forgot password ?
+                        </Text>
 
                         <Stack direction={"row"} width={"100%"}>
                             <Button

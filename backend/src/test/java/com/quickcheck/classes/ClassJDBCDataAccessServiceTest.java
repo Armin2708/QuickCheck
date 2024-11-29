@@ -2,7 +2,7 @@
 
 import com.quickcheck.AbstractTestContainer;
 import com.quickcheck.Gender;
-import com.quickcheck.Roles;
+import com.quickcheck.user.roles.Roles;
 import com.quickcheck.classroom.ClassroomJDBCDataAccessService;
 import com.quickcheck.user.User;
 import com.quickcheck.user.UserJDBCDataAccessService;

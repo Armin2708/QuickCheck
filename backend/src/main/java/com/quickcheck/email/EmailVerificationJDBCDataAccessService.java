@@ -17,7 +17,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public Optional<EmailCodeObject> getEmailObjectByEmail(String email) {
+    public Optional<EmailCodeObject> getVerifyEmailByEmail(String email) {
 
         var sql= """
                 SELECT id, email, code
@@ -31,7 +31,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public Optional<EmailCodeObject> getEmailObjectById(Integer id) {
+    public Optional<EmailCodeObject> getVerifyEmailById(Integer id) {
 
         var sql= """
                 SELECT id, email, code
@@ -45,7 +45,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public boolean existCodeWithEmail(String email) {
+    public boolean existVerifyCodeWithEmail(String email) {
         var sql = """
                 SELECT count(id)
                 FROM email_check
@@ -56,7 +56,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public void saveCodeAndEmail(EmailCodeObject request) {
+    public void saveVerifyEmail(EmailCodeObject request) {
 
         var sql= """
                 INSERT INTO email_check(email, code)
@@ -73,7 +73,7 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
     }
 
     @Override
-    public void updateCodeByEmail(EmailCodeObject update) {
+    public void updateVerifyCodeByEmail(EmailCodeObject update) {
             String sql = """
                     UPDATE email_check 
                     SET code = ? 
@@ -84,12 +84,12 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
                     update.getCode(),
                     update.getEmail()
             );
-            System.out.println("update user schoolName result = " +result);
+            System.out.println("result = " +result);
 
     }
 
     @Override
-    public void deleteCodeByEmail(String email) {
+    public void deleteVerifyCodeByEmail(String email) {
 
         var sql = """
                 DELETE
@@ -99,5 +99,89 @@ public class EmailVerificationJDBCDataAccessService implements EmailDao {
         Integer result = jdbcTemplate.update(sql, email);
         System.out.println("deleteUserById result = "+ result);
 
+    }
+
+    @Override
+    public boolean existPasswordResetCodeWithEmail(String email) {
+        var sql = """
+                SELECT count(id)
+                FROM password_reset_email
+                WHERE email = ?
+                """;
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class,email);
+        return count != null &&count>0;
+    }
+
+    @Override
+    public void savePasswordResetEmail(EmailCodeObject request) {
+
+        var sql= """
+                INSERT INTO password_reset_email(email, code)
+                VALUES(?,?)
+                """;
+
+        int result = jdbcTemplate.update(
+                sql,
+                request.getEmail(),
+                request.getCode()
+        );
+        System.out.println("jdbcTemplate.result = "+result);
+    }
+
+    @Override
+    public void updatePasswordResetCodeByEmail(EmailCodeObject update) {
+        String sql = """
+                    UPDATE password_reset_email 
+                    SET code = ? 
+                    WHERE email = ?
+                    """;
+        int result = jdbcTemplate.update(
+                sql,
+                update.getCode(),
+                update.getEmail()
+        );
+        System.out.println("update user schoolName result = " +result);
+
+    }
+
+    @Override
+    public void deletePasswordResetCodeByEmail(String email) {
+
+        var sql = """
+                DELETE
+                FROM password_reset_email
+                WHERE email=?
+                """;
+        Integer result = jdbcTemplate.update(sql, email);
+        System.out.println("deleteUserById result = "+ result);
+
+    }
+
+    @Override
+    public Optional<EmailCodeObject> getPasswordResetEmailByEmail(String email) {
+
+        var sql= """
+                SELECT id, email, code
+                FROM password_reset_email
+                WHERE email= ?
+                """;
+
+        return jdbcTemplate.query(sql,emailCodeObjectRowMapper,email)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
+    public Optional<EmailCodeObject> getPasswordResetEmailById(Integer id) {
+
+        var sql= """
+                SELECT id, email, code
+                FROM password_reset_email
+                WHERE id= ?
+                """;
+
+        return jdbcTemplate.query(sql,emailCodeObjectRowMapper,id)
+                .stream()
+                .findFirst();
     }
 }

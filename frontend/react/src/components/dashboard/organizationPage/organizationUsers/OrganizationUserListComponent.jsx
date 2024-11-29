@@ -1,16 +1,18 @@
 import {Text, Wrap, WrapItem} from "@chakra-ui/react";
-import UserProfileCard from "../userProfile/UserProfileCard.jsx";
+import OrganizationUserCard from "./OrganizationUserCard.jsx";
 
-export default function UserListComponent({users, fetchUsers}){
+export default function OrganizationUserListComponent({users, fetchUsers, organizationId,organizationName}){
 
     return(
         <Wrap justify="center" spacing="20px">
             {Array.isArray(users) && users.length > 0 ? (
                 users.map((user) => (
                     <WrapItem key={user?.id}>
-                        <UserProfileCard
+                        <OrganizationUserCard
                             {...user}
                             onSuccess={fetchUsers}
+                            organizationId={organizationId}
+                            organizationName={organizationName}
                             key={user.id}
                         />
                     </WrapItem>
