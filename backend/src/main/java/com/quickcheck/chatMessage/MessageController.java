@@ -1,5 +1,6 @@
 package com.quickcheck.chatMessage;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class MessageController {
     @PostMapping
     public ResponseEntity<?> registerMessage(
             @RequestBody MessageRegistrationRequest registrationRequest
-    ) {
+    ) throws JsonProcessingException {
         messageService.addMessage(registrationRequest);
         return ResponseEntity.ok().build();
     }

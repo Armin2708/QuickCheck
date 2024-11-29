@@ -72,7 +72,10 @@ public class MessageService {
         String socketMessage = "{"
                 + "\"id\": \"" + messageId + "\", "
                 + "\"userId\": " + message.getUserId() + ", "
-                + "\"content\": \"" + message.getContent().replace("\"", "\\\"") + "\", " // Escape quotes
+                + "\"content\": \"" + message.getContent()
+                .replace("\"", "\\\"") // Escape quotes
+                .replace("\n", "\\n") // Escape newline characters
+                + "\", "
                 + "\"dateTime\": \"" + message.getDateTime() + "\", "
                 + "\"chatId\": \"" + message.getChatId() + "\""
                 + "}";

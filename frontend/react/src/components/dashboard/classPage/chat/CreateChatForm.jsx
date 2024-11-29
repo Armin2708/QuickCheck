@@ -19,8 +19,9 @@ export default function CreateChatForm({onSuccess}) {
             validationSchema={Yup.object({
                 name: Yup.string().max(30, 'Must be 30 characters or less').required('Required'),
             })}
-            onSubmit={(values, actions) => {
+            onSubmit={(values, {setSubmitting}) => {
 
+                setSubmitting(true)
                 const chatData = {
                     name: values.name,
                     classId: classId
@@ -41,9 +42,10 @@ export default function CreateChatForm({onSuccess}) {
                             err.response?.data?.message
                         );
                     })
+                    .finally(setSubmitting(false))
             }}
         >
-            {({ isValid, isSubmitting, setFieldValue, values }) => (
+            {({ isValid, isSubmitting }) => (
                 <Form>
                     <Box borderWidth="1px" rounded="lg" shadow="1px 1px 3px rgba(0,0,0,0.3)" maxWidth={600} p={6} m="10px auto">
 

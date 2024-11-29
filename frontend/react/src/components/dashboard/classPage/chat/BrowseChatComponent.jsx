@@ -4,7 +4,7 @@ import {Box, HStack, Stack, useColorModeValue} from "@chakra-ui/react";
 import BrowseChatCard from "./BrowseChatCard.jsx";
 import CreateChatButton from "./CreateChatButton.jsx";
 
-export default function BrowseChatComponent({classId, professorId, fullUser, isAdmin}){
+export default function BrowseChatComponent({classId, professorId, fullUser, isAdmin, onSuccess}){
 
     const [classChats, setClassChats] = useState([])
 
@@ -40,7 +40,7 @@ export default function BrowseChatComponent({classId, professorId, fullUser, isA
             <HStack padding={"20px"}>
                 {Array.isArray(classChats) && classChats.length > 0 ? (
                     classChats.map((classChat) => (
-                        <BrowseChatCard {...classChat} key={classChat.id} />
+                        <BrowseChatCard {...classChat} key={classChat.id} onSuccess={onSuccess} />
                     ))) : null}
             </HStack>
         </Box>

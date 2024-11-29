@@ -6,28 +6,7 @@ import ChatButtonCard from "./ChatButtonCard.jsx";
 import BrowseChatButton from "./BrowseChatButton.jsx";
 import {useAuth} from "../../../context/AuthContext.jsx";
 
-export default function ChatListComponent({setChatId}){
-
-    const [chats, setChats] = useState([])
-
-    const {id:classId} = useParams()
-
-    const {fullUser} = useAuth()
-
-    const fetchChats = () =>{
-        getClassChatsUserJoined(classId, fullUser.id)
-            .then((res)=>{
-                setChats(res.data)
-            })
-            .catch((err)=>{
-                console.log(err)
-            })
-    }
-
-    useEffect(() => {
-        fetchChats()
-    }, [classId]);
-
+export default function ChatListComponent({chats,setChatId}){
 
     return(
         <VStack
@@ -39,7 +18,7 @@ export default function ChatListComponent({setChatId}){
             <VStack overflow={"auto"}>
                 {Array.isArray(chats) && chats.length > 0 ? (
                     chats.map((chat) => (
-                        <ChatButtonCard {...chat} setChatId={setChatId} key={chat.id}/>
+                        <ChatButtonCard {...chat} key={chat.id} setChatId={setChatId}/>
                     ))) : null}
             </VStack>
             <BrowseChatButton setChatId={setChatId}/>

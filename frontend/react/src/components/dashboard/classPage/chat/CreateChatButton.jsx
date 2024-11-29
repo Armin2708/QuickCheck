@@ -41,8 +41,8 @@ const CreateChatButton = ({onSuccess}) => {
                             transform: "scale(1)" // Return to original size when clicked
                         }}
                         onClick={()=>{
-                            onClose()
                             onSuccess();
+                            onClose()
                         }}
                         >
                         Close

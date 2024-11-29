@@ -4,7 +4,7 @@ import {joinChat} from "../../../../services/client/chat.js";
 import {useAuth} from "../../../context/AuthContext.jsx";
 import {isUserInChat} from "../../../../services/client/users.js";
 
-export default function BrowseChatCard({id,name}){
+export default function BrowseChatCard({id,name, onSuccess}){
     const [joined,setJoined] = useState(false)
     const {fullUser} = useAuth()
 
@@ -24,6 +24,7 @@ export default function BrowseChatCard({id,name}){
         joinChat(id, fullUser.id)
             .then((res)=>{
                 setJoined(true)
+                onSuccess();
             })
             .catch((err)=>{
                 console.log(err)

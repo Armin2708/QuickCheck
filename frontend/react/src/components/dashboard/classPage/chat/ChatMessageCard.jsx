@@ -46,7 +46,7 @@ export default function ChatMessageCard({userId, content, fullUser}){
                     <Text fontSize="lg" fontWeight="bold">
                         {userId === fullUser.id ? "You" : user.name}
                     </Text>
-                    <Text>{content}</Text>
+                    <Text style={{ whiteSpace: "pre-wrap" }}>{content}</Text>
                 </VStack>
                 {userId === fullUser.id && (
                     <Avatar src={getUserProfilePictureUrl(userId) || null} />

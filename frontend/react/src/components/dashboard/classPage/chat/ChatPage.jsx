@@ -6,11 +6,12 @@ import {useParams} from "react-router-dom";
 import {useAuth} from "../../../context/AuthContext.jsx";
 import {getClassById} from "../../../../services/client/classes.js";
 import {useEffect, useState} from "react";
+import {getClassChatsUserJoined} from "../../../../services/client/chat.js";
 
 export default function ChatPage({chatId, setChatId}){
 
     const [classObject, setClassObject] = useState({})
-
+    const [chats, setChats] = useState([])
     const {id:classId} = useParams()
     const {fullUser,isAdmin} = useAuth()
 
@@ -24,9 +25,21 @@ export default function ChatPage({chatId, setChatId}){
             })
     }
 
+    const fetchChats = () =>{
+        getClassChatsUserJoined(classId, fullUser.id)
+            .then((res)=>{
+                setChats(res.data)
+            })
+            .catch((err)=>{
+                console.log(err)
+            })
+    }
+
     useEffect(() => {
         fetchClass();
+        fetchChats()
     }, [classId]);
+
 
     return(
         <HStack
@@ -35,13 +48,14 @@ export default function ChatPage({chatId, setChatId}){
             align="flex-start"
             h={"700px"}
         >
-            <ChatListComponent setChatId={setChatId}/>
+            <ChatListComponent chats={chats} setChatId={setChatId}/>
             {chatId === 0 ? (
                 <BrowseChatComponent
                     classId={classId}
                     professorId={classObject.professorId}
                     fullUser={fullUser}
                     isAdmin={isAdmin}
+                    onSuccess={fetchChats}
                 />
             ) : ( chatId === -1 ? (
                 <Box
