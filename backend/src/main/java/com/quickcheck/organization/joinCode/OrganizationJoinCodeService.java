@@ -83,19 +83,23 @@ public class OrganizationJoinCodeService {
         return code;
     }
 
-    public void updateOrganizationJoinCode(Integer organizationJoinCodeId, OrganizationJoinCodeUpdateRequest organizationJoinCodeUpdateRequest) {
+    public void updateOrganizationJoinCode(Integer organizationJoinCodeId, OrganizationJoinCodeUpdateRequest update) {
         checkIfOrganizationJoinCodeExists(organizationJoinCodeId);
 
         OrganizationJoinCode organizationJoinCode = organizationJoinCodeDao.selectOrganizationJoinCodeById(organizationJoinCodeId).get();
 
-        OrganizationJoinCode update = new OrganizationJoinCode(
-                organizationJoinCode.getCode(),
-                organizationJoinCode.getOrganizationId(),
-                organizationJoinCodeUpdateRequest.usageLimit(),
-                organizationJoinCode.getCreatorId()
-        );
+        boolean changes = false;
 
-        organizationJoinCodeDao.updateOrganizationJoinCode(organizationJoinCodeId, update);
+        if (update.usageLimit()!=null && !update.usageLimit().equals(organizationJoinCode.getUsageLimit())){
+            organizationJoinCode.setUsageLimit(update.usageLimit());
+            changes=true;
+        }
+
+        if (!changes){
+            throw new RuntimeException("No changes found");
+        }
+
+        organizationJoinCodeDao.updateOrganizationJoinCode(organizationJoinCodeId, organizationJoinCode);
     }
 
     public void deleteOrganizationJoinCode(Integer organizationJoinCodeId){

@@ -9,6 +9,10 @@ public interface AttendanceDao {
 
     List<Attendance> selectAllAttendances();
 
+    List<Attendance> selectAllClassAttendances(Integer classId);
+
+    List<Attendance> selectAllUserAttendancesInClass(Integer classId, Integer userId);
+
     Optional<Attendance> selectAttendance(String attendanceTag);
 
     boolean existAttendanceWithTag(String tag);

@@ -6,18 +6,9 @@ import DeleteOrganizationButton from "./organization/DeleteOrganizationButton.js
 import UpdateOrganizationButton from "./organization/UpdateOrganizationButton.jsx";
 import LeaveOrganizationButton from "./organization/LeaveOrganizationButton.jsx";
 import Events from "./events/Events.jsx";
+import EventsPage from "./events/EventsPage.jsx";
 
 export default function OrganizationPageComponent({isAdmin,organization,fullUser}) {
-
-    const weeklyTasks = {
-        Monday: ["Team meeting at 10 AM", "Project deadline at 3 PM"],
-        Tuesday: ["Doctor's appointment at 2 PM", "Gym session at 5 PM"],
-        Wednesday: ["Work on report", "Dinner with friends"],
-        Thursday: ["Client presentation at 1 PM"],
-        Friday: ["Submit weekly update", "Watch a movie"],
-        Saturday: ["Family picnic", "Grocery shopping"],
-        Sunday: ["Relax and plan next week"],
-    };
 
     return (
         <Tabs
@@ -55,9 +46,7 @@ export default function OrganizationPageComponent({isAdmin,organization,fullUser
 
             <TabPanels flex={1}>
                 <TabPanel>
-                    <Box display="flex" flexDirection="row" gap="16px" flex={1}>
-                        <Events tasks={weeklyTasks} {...organization} />
-                    </Box>
+                    <EventsPage/>
                 </TabPanel>
                 <TabPanel>
                     <OrganizationJoinCodeComponent organization={organization} fullUser={fullUser}/>

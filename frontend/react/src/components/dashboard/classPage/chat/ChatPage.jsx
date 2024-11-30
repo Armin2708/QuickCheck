@@ -45,7 +45,7 @@ export default function ChatPage({chatId, setChatId}){
         <HStack
             padding={"10px"}
             spacing={"10px"}
-            align="flex-start"
+            justifyContent="center"
             h={"700px"}
         >
             <ChatListComponent chats={chats} setChatId={setChatId}/>

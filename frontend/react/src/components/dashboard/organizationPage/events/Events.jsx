@@ -2,8 +2,18 @@ import React, { useState } from "react";
 import { Box, Text, VStack, HStack, Divider } from "@chakra-ui/react";
 import "react-calendar/dist/Calendar.css";
 
-const Events = ({ tasks, name:orgName }) => {
+const Events = ({ name:orgName }) => {
     const [selectedDate, setSelectedDate] = useState(new Date());
+
+    const tasks = {
+        Monday: ["Team meeting at 10 AM", "Project deadline at 3 PM"],
+        Tuesday: ["Doctor's appointment at 2 PM", "Gym session at 5 PM"],
+        Wednesday: ["Work on report", "Dinner with friends"],
+        Thursday: ["Client presentation at 1 PM"],
+        Friday: ["Submit weekly update", "Watch a movie"],
+        Saturday: ["Family picnic", "Grocery shopping"],
+        Sunday: ["Relax and plan next week"],
+    };
 
     // Get the week range based on the selected date
     const getWeekRange = (date) => {
@@ -28,7 +38,6 @@ const Events = ({ tasks, name:orgName }) => {
             paddingTop="10px"
             paddingX={"30px"}
             width="100%"
-            maxWidth="800px"
             height="80vh" // Set a height constraint relative to the viewport
             boxShadow="md"
             borderRadius="lg"

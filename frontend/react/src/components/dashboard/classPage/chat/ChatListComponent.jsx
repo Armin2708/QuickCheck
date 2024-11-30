@@ -14,6 +14,7 @@ export default function ChatListComponent({chats,setChatId}){
             padding={"20px"}
             height={"100%"}
             borderRadius={"12px"}
+            boxShadow="lg"
         >
             <VStack overflow={"auto"}>
                 {Array.isArray(chats) && chats.length > 0 ? (

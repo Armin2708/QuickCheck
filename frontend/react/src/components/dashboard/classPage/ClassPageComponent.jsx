@@ -23,6 +23,7 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
 
     const [classObject, setClassObject] = useState({});
     const [usersInClass,setUsersInClass] = useState([]);
+    const [step, setStep] = useState(1)
 
     const [chatId, setChatId] = useState(-1)
 
@@ -105,6 +106,7 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
                         <TabList>
                             <Tab>Attendance</Tab>
                             <Tab>Chat</Tab>
+                            <Tab onClick={()=>setStep(3)}>Statistics</Tab>
                         </TabList>
                         <Spacer/>
                         {(isAdmin() || fullUser.id===classObject.professorId) ? (
@@ -126,11 +128,15 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
                                     classObject={classObject}
                                     usersInClass={usersInClass}
                                 />
-                                <StatisticComponent statsData={statsData} />
                             </Box>
                         </TabPanel>
                         <TabPanel>
                             <ChatPage setChatId={setChatId} chatId={chatId} />
+                        </TabPanel>
+                        <TabPanel>
+                            {step === 3 ?
+                                <StatisticComponent fullUser={fullUser} tag={tag} classId={classId} isAdmin={isAdmin} professorId={classObject?.professorId} />
+                            : null}
                         </TabPanel>
                     </TabPanels>
                 </Tabs>

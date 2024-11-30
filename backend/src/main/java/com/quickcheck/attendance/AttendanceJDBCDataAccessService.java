@@ -36,6 +36,26 @@ public class AttendanceJDBCDataAccessService implements AttendanceDao {
     }
 
     @Override
+    public List<Attendance> selectAllClassAttendances(Integer classId) {
+        var sql = """
+                SELECT id, tag, date, instructor_id, class_id, code, open_status, class_radius
+                FROM attendance
+                WHERE class_id = ?
+                """;
+        return jdbcTemplate.query(sql, attendanceRowMapper, classId);
+    }
+
+    @Override
+    public List<Attendance> selectAllUserAttendancesInClass(Integer classId, Integer userId) {
+        var sql = """
+                SELECT attendance.id, attendance.tag, attendance.date, attendance.instructor_id, attendance.class_id, attendance.code, attendance.open_status, attendance.class_radius
+                FROM attendance JOIN attendance_user ON attendance.id = attendance_user.attendance_id
+                WHERE attendance.class_id = ? AND attendance_user.user_id = ?
+                """;
+        return jdbcTemplate.query(sql, attendanceRowMapper, classId, userId);
+    }
+
+    @Override
     public Optional<Attendance> selectAttendance(String attendanceTag) {
         var sql = """
                 SELECT id, tag, date, instructor_id, class_id, code, open_status, class_radius
