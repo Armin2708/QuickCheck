@@ -22,17 +22,27 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public List<Classroom> selectAllClassrooms() {
         var sql = """
-                SELECT id, room_name, location, capacity
+                SELECT id, name, location, capacity, organization_id
                 FROM classrooms
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper);
+    }
+
+    @Override
+    public List<Classroom> selectAllOrganizationClassrooms(Integer organizationId) {
+        var sql = """
+                SELECT id, name, location, capacity, organization_id
+                FROM classrooms
+                WHERE organization_id = ?
+                """;
+        return jdbcTemplate.query(sql, classroomRowMapper, organizationId);
     }
 
 
     @Override
     public Optional<Classroom> selectClassroomById(Integer id) {
         var sql = """
-                SELECT id, room_name, location, capacity
+                SELECT id, name, location, capacity, organization_id
                 FROM classrooms
                 WHERE id = ?
                 """;
@@ -42,11 +52,23 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     }
 
     @Override
+    public Optional<Classroom> selectClassroomByNameAndOrganization(String name, Integer organizationId) {
+        var sql = """
+                SELECT id, name, location, capacity, organization_id
+                FROM classrooms
+                WHERE name = ? AND organization_id = ?
+                """;
+        return jdbcTemplate.query(sql, classroomRowMapper, name, organizationId)
+                .stream()
+                .findFirst();
+    }
+
+    @Override
     public Optional<Classroom> selectClassroomByName(String name) {
         var sql = """
-                SELECT id, room_name, location, capacity
+                SELECT id, name, location, capacity, organization_id
                 FROM classrooms
-                WHERE room_name = ?
+                WHERE name = ?
                 """;
         return jdbcTemplate.query(sql, classroomRowMapper, name)
                 .stream()
@@ -56,14 +78,15 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     @Override
     public void insertClassroom(Classroom classroom) {
         var sql = """
-                INSERT INTO classrooms (room_name, location, capacity)
-                VALUES (?, ?, ?)
+                INSERT INTO classrooms (name, location, capacity, organization_id)
+                VALUES (?, ?, ?, ?)
                 """;
         int result = jdbcTemplate.update(
                 sql,
-                classroom.getRoomName(),
+                classroom.getName(),
                 classroom.getLocation(),
-                classroom.getCapacity()
+                classroom.getCapacity(),
+                classroom.getOrganizationId()
         );
         System.out.println("jdbcTemplate result = " + result);
     }
@@ -80,13 +103,13 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
     }
 
     @Override
-    public boolean existClassroomByName(String name) {
+    public boolean existClassroomByNameAndOrganizationId(String name, Integer organizationId) {
         var sql = """
                 SELECT count(id)
                 FROM classrooms
-                WHERE room_name = ?
+                WHERE name = ? AND organization_id = ?
                 """;
-        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name);
+        Integer count = jdbcTemplate.queryForObject(sql, Integer.class, name, organizationId);
         return count != null && count > 0;
     }
 
@@ -107,9 +130,9 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         StringBuilder sqlBuilder = new StringBuilder("UPDATE classrooms SET ");
         List<Object> params = new ArrayList<>();
 
-        if (update.getRoomName() != null) {
-            sqlBuilder.append("room_name = ?, ");
-            params.add(update.getRoomName());
+        if (update.getName() != null) {
+            sqlBuilder.append("name = ?, ");
+            params.add(update.getName());
         }
         if (update.getLocation() != null) {
             sqlBuilder.append("location = ?, ");

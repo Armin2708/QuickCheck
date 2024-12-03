@@ -3,6 +3,7 @@ package com.quickcheck.classroom;
 import com.quickcheck.exception.DuplicateResourceException;
 import com.quickcheck.exception.RequestValidationException;
 import com.quickcheck.exception.ResourceNotFoundException;
+import com.quickcheck.organization.OrganizationDao;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,19 +12,47 @@ import java.util.List;
 public class ClassroomService {
 
     private final ClassroomDao classroomDao;
+    private final OrganizationDao organizationDao;
 
-    public ClassroomService(ClassroomDao classroomDao) {
+    public ClassroomService(ClassroomDao classroomDao, OrganizationDao organizationDao) {
         this.classroomDao = classroomDao;
+        this.organizationDao = organizationDao;
     }
+
+    private void checkIfOrganizationExists(Integer organizationId){
+        if (!organizationDao.existOrganizationById(organizationId)){
+            throw new ResourceNotFoundException("Organization with id [%s] not found".formatted(organizationId));
+        }
+    }
+
+    private void checkIfClassroomDuplicateByNameAndOrganization(String name ,Integer organizationId){
+        if (classroomDao.existClassroomByNameAndOrganizationId(name,organizationId)){
+            throw new DuplicateResourceException("Classroom with name [%s] and organization id [%s] already exists".formatted(name, organizationId));
+        }
+    }
+
+
 
     public List<Classroom> getAllClassrooms() {
         return classroomDao.selectAllClassrooms();
+    }
+
+    public List<Classroom> getAllOrganizationClassrooms(Integer organizationId) {
+        checkIfOrganizationExists(organizationId);
+        return classroomDao.selectAllOrganizationClassrooms(organizationId);
     }
 
     public Classroom getClassroomById(Integer classroomId) {
         return classroomDao.selectClassroomById(classroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Classroom with id [%s] not found".formatted(classroomId)
+                ));
+    }
+
+    public Classroom getClassroomByNameAndOrganization(String name, Integer organizationId) {
+        return classroomDao.selectClassroomByNameAndOrganization(name,organizationId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Classroom with name [%s] and organization id [%s] not found".formatted(name,organizationId)
                 ));
     }
 
@@ -35,19 +64,21 @@ public class ClassroomService {
     }
 
     public void addClassroom(ClassroomRegistrationRequest request) {
-        String name = request.roomName();
-        if (classroomDao.existClassroomByName(name)) {
-            throw new DuplicateResourceException("Classroom with name [%s] already exists".formatted(name));
-        }
+        checkIfOrganizationExists(request.organizationId());
+
+        checkIfClassroomDuplicateByNameAndOrganization(request.roomName(), request.organizationId());
+
         Classroom classroom = new Classroom(
                 request.roomName(),
                 request.location(),
-                request.capacity()
+                request.capacity(),
+                request.organizationId()
         );
         classroomDao.insertClassroom(classroom);
     }
 
     public void updateClassroom(Integer classroomId, ClassroomUpdateRequest classroomUpdateRequest) {
+
         Classroom classroom = classroomDao.selectClassroomById(classroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Classroom with id [%s] not found".formatted(classroomId)
@@ -55,11 +86,9 @@ public class ClassroomService {
         boolean changes = false;
 
         // Check and update name
-        if (classroomUpdateRequest.roomName() != null && !classroomUpdateRequest.roomName().equals(classroom.getRoomName())) {
-            if (classroomDao.existClassroomByName(classroomUpdateRequest.roomName())) {
-                throw new DuplicateResourceException("Classroom name already taken");
-            }
-            classroom.setRoomName(classroomUpdateRequest.roomName());
+        if (classroomUpdateRequest.roomName() != null && !classroomUpdateRequest.roomName().equals(classroom.getName())) {
+            checkIfClassroomDuplicateByNameAndOrganization(classroomUpdateRequest.roomName(), classroom.getOrganizationId());
+            classroom.setName(classroomUpdateRequest.roomName());
             changes = true;
         }
 

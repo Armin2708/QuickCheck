@@ -1,7 +1,6 @@
 package com.quickcheck.user;
 
 import com.quickcheck.jwt.JWTUtil;
-import com.quickcheck.user.roles.UserRolesUpdateRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -123,12 +122,12 @@ public class UserController {
         userService.updateUser(userId,updateRequest);
     }
 
-    /*@PutMapping("/roles/{userId}")
+    @PutMapping("/account-type/{userId}")
     public void updateUserRoles(
             @PathVariable("userId") Integer userId,
-            @RequestBody UserRolesUpdateRequest updateRequest){
-        userService.updateUserRoles(userId,updateRequest);
-    }*/
+            @RequestBody UpdateAccountTypeRequest updateRequest){
+        userService.updateUserAccountType(userId,updateRequest);
+    }
 
     @DeleteMapping("{userId}")
     public void deleteUser(

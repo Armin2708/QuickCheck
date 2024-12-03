@@ -1,27 +1,21 @@
-import {getOrganizationByName, leaveOrganization} from "../../../../services/client/organizations.js";
-import {errorNotification, successNotification} from "../../../../services/notification.js";
+import {successNotification} from "../../../../services/notification.js";
 import {LuTrash2} from "react-icons/lu";
 import {Button} from "@chakra-ui/react";
+import {leaveClass} from "../../../../services/client/classes.js";
+import {useNavigate} from "react-router-dom";
 
-export default function LeaveClassButton({onSuccess, name, fullUser}){
+export default function LeaveClassButton({classId, fullUser, orgName}){
 
-    const handleLeaveOrg = () =>{
-        getOrganizationByName(name)
-            .then((res) =>{
-                leaveOrganization(fullUser.id,res.data?.id)
-                    .then(() => {
-                        successNotification(
-                            "Class Left",
-                            `${name} was successfully Left`
-                        );
-                        onSuccess()
-                    })
-                    .catch((err) => {
-                        errorNotification(
-                            err.code,
-                            err.response?.data?.message
-                        )
-                    })
+    const navigate = useNavigate()
+
+    const handleLeaveClass = () =>{
+        leaveClass(classId, fullUser.id)
+            .then(() =>{
+                successNotification(
+                    "Class Left",
+                    `Class was successfully Left`
+                );
+                navigate(`/dashboard/${orgName}`)
             })
             .catch(err =>{
                 console.log(err)
@@ -35,10 +29,10 @@ export default function LeaveClassButton({onSuccess, name, fullUser}){
             color={"white"}
             onClick={(e) => {
                 e.stopPropagation(); // Prevent click from propagating to the outer Box
-                handleLeaveOrg();
+                handleLeaveClass();
             }}
         >
-           Leave Organization<LuTrash2 />
+           Leave Class<LuTrash2 />
         </Button>
     )
 }

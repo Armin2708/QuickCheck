@@ -13,6 +13,9 @@ public interface ClassDao {
     List<Class> selectClassesOfOrganizationByNameSearch(Integer orgId, String className);
     List<Class> selectClassesOfProfessorInOrganization(Integer professorId ,Integer orgId);
 
+    List<Class> selectUserClasses(Integer userId);
+
+
     Optional<Class> selectClassById(Integer id);
 
     void joinClass(Integer classId, Integer userId);

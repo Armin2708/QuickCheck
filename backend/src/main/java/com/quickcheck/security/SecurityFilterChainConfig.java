@@ -82,7 +82,8 @@ public class SecurityFilterChainConfig {
 
                         .requestMatchers(
                                 HttpMethod.PUT,
-                                "/api/users/roles/"
+                                "/api/users/roles/",
+                                "api/users/account-type/{userId}"
                         )
                         .hasAuthority("ADMIN")
 

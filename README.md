@@ -1,6 +1,6 @@
 # 🎉 QuickCheck - The Ultimate Attendance Management Tool 🎉
 
-Welcome to **QuickCheck**! QuickCheck aims to be your go-to solution for smooth, reliable, and secure attendance management, but that's not all! Alongside attendance, QuickCheck brings together **group chat** and a **schedule calendar**—all in one perfect tool for classrooms! 🏫🎒
+Welcome to **QuickCheck**! QuickCheck aims to be your go-to solution for smooth, reliable, and secure attendance management, but that's not all! Alongside attendance, QuickCheck brings together **group chat** and a **schedule event**—all in one perfect tool for classrooms! 🏫🎒
 
 ---
 
@@ -17,7 +17,7 @@ Welcome to **QuickCheck**! QuickCheck aims to be your go-to solution for smooth,
    - Exchange ideas, share files, and get the latest announcements all in one place.
 
 ### 3. 📅 Schedule Calendar
-   - A shared calendar for **scheduling classes**, assignments, and important deadlines.
+   - A shared event for **scheduling classes**, assignments, and important deadlines.
    - **Color-coded events** help students and teachers stay organized at a glance. 🌈🗓️
    - Never miss a beat—QuickCheck keeps everyone on track!
 
@@ -53,7 +53,7 @@ Follow these simple steps to set up QuickCheck :
 ![Group Chat Demo](https://your-link-to-gif.com/chat.gif)
 
 ### 📅 Scheduling and Organizing with the Calendar
-![Calendar Demo](https://your-link-to-gif.com/calendar.gif)
+![Calendar Demo](https://your-link-to-gif.com/event.gif)
 
 ---
 

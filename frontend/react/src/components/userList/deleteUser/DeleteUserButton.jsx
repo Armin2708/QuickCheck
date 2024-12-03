@@ -9,8 +9,8 @@ import {
     Button,
     useDisclosure,
 } from "@chakra-ui/react";
-import {errorNotification, successNotification} from "../../services/notification.js";
-import {deleteUser} from "../../services/client/users.js";
+import {errorNotification, successNotification} from "../../../services/notification.js";
+import {deleteUser} from "../../../services/client/users.js";
 
 function DeleteUserButton({ userId, name, onSuccess }) {
     const { isOpen, onOpen, onClose } = useDisclosure();

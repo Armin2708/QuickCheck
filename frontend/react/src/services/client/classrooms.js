@@ -10,9 +10,18 @@ export const getClassrooms= async () => {
     }
 }
 
-export const getClassroomByName= async (classroomName) => {
+export const getOrganizationClassrooms= async (organizationId) => {
     try {
-        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/name/${classroomName}`,
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/organization/${organizationId}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
+export const getClassroomByNameAndOrganization= async (name,organizationId) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/name/${name}/organization/${organizationId}`,
             getAuthConfig())
     }catch (e){
         throw e;

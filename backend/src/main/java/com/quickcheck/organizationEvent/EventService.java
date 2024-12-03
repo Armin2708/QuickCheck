@@ -1,4 +1,4 @@
-package com.quickcheck.event;
+package com.quickcheck.organizationEvent;
 
 import com.quickcheck.exception.ResourceNotFoundException;
 import com.quickcheck.organization.OrganizationDao;

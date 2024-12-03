@@ -1,5 +1,5 @@
 import {
-    Box, Button, HStack, Spacer,
+    Box, Button, HStack, Spacer, Spinner,
     Tab,
     TabList,
     TabPanel,
@@ -18,6 +18,9 @@ import DeleteClassButton from "../classList/class/DeleteClassButton.jsx";
 
 import ChatPage from "./chat/ChatPage.jsx";
 import {getUsersInClass} from "../../../services/client/users.js";
+import CalendarComponent from "./calendar/CalendarComponent.jsx";
+import MyCalendar from "../../shared/calendar/MyCalendar.jsx";
+import LeaveClassButton from "../classList/class/LeaveClassButton.jsx";
 
 export default function ClassPageComponent({fullUser, isAdmin, isUser}){
 
@@ -96,50 +99,64 @@ export default function ClassPageComponent({fullUser, isAdmin, isUser}){
                 WebkitBackdropFilter: 'blur(10px)', // Safari support
             }}
         >
-                <Tabs
-                    variant="soft-rounded"
-                    colorScheme="green"
-                    width="100%"
-                    flex={1}
-                >
-                    <HStack width="100%" padding="16px" >
-                        <TabList>
-                            <Tab>Attendance</Tab>
-                            <Tab>Chat</Tab>
-                            <Tab onClick={()=>setStep(3)}>Statistics</Tab>
-                        </TabList>
-                        <Spacer/>
-                        {(isAdmin() || fullUser.id===classObject.professorId) ? (
-                            <>
-                                <UpdateClassButton {...classObject} onSuccess={fetchClass}/>
-                                <DeleteClassButton {...classObject} onSuccess={fetchClass}/>
-                            </>
-                        ):null}
-                    </HStack>
+            <Tabs
+                variant="soft-rounded"
+                colorScheme="green"
 
-                    <TabPanels flex={1}>
-                        <TabPanel>
-                            <Box display="flex" flexDirection="row" gap="16px" flex={1}>
-                                <AttendanceComponent
-                                    fullUser={fullUser}
-                                    isAdmin={isAdmin}
-                                    isUser={isUser}
-                                    tag={tag}
-                                    classObject={classObject}
-                                    usersInClass={usersInClass}
-                                />
-                            </Box>
-                        </TabPanel>
-                        <TabPanel>
-                            <ChatPage setChatId={setChatId} chatId={chatId} />
-                        </TabPanel>
-                        <TabPanel>
-                            {step === 3 ?
-                                <StatisticComponent fullUser={fullUser} tag={tag} classId={classId} isAdmin={isAdmin} professorId={classObject?.professorId} />
-                            : null}
-                        </TabPanel>
-                    </TabPanels>
-                </Tabs>
+            >
+                <HStack width="100%" padding="16px">
+                    <TabList>
+                        <Tab>Attendance</Tab>
+                        <Tab>Chat</Tab>
+                        <Tab onClick={() => setStep(3)}>Statistics</Tab>
+                        <Tab onClick={() => setStep(4)}>Calendar</Tab>
+                    </TabList>
+                    <Spacer />
+                    {(isAdmin() || fullUser.id === classObject.professorId) ? (
+                        <>
+                            <UpdateClassButton {...classObject} onSuccess={fetchClass} />
+                            <DeleteClassButton {...classObject} onSuccess={fetchClass} />
+                        </>
+                    ) : null}
+                    <LeaveClassButton fullUser={fullUser} classId={classId} orgName={orgName}/>
+                </HStack>
+
+                <TabPanels height={"100%"} width={"100%"}>
+                    <TabPanel height="100%"> {/* Ensure TabPanel stretches */}
+                        <Box display="flex" flexDirection="row" gap="16px" flex={1}>
+                            <AttendanceComponent
+                                fullUser={fullUser}
+                                isAdmin={isAdmin}
+                                isUser={isUser}
+                                tag={tag}
+                                classObject={classObject}
+                                usersInClass={usersInClass}
+                            />
+                        </Box>
+                    </TabPanel>
+                    <TabPanel height="100%"> {/* Ensure height propagates */}
+                        <ChatPage setChatId={setChatId} chatId={chatId} />
+                    </TabPanel>
+                    <TabPanel height="100%"> {/* Ensure height propagates */}
+                        {step === 3 ? (
+                            <StatisticComponent
+                                fullUser={fullUser}
+                                tag={tag}
+                                classId={classId}
+                                isAdmin={isAdmin}
+                                professorId={classObject?.professorId}
+                            />
+                        ) : null}
+                    </TabPanel>
+                    <TabPanel >
+
+                        {step === 4 ? (
+                            <CalendarComponent fullUser={fullUser} professorId={classObject?.professorId}
+                                            classId={classId} isAdmin={isAdmin}/>
+                        ) : <Spinner/>}
+                    </TabPanel>
+                </TabPanels>
+            </Tabs>
         </Box>
     )
 }

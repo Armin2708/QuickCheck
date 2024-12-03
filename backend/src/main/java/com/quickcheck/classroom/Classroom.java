@@ -5,24 +5,28 @@ import java.util.Objects;
 public class Classroom {
 
     private Integer id;
-    private String roomName;
+    private String name;
     private String location;
     private Integer capacity;
+    private Integer organizationId;
+
 
     public Classroom() {
     }
 
-    public Classroom(String roomName, String location, Integer capacity) {
-        this.roomName = roomName;
+    public Classroom(String name, String location, Integer capacity, Integer organizationId) {
+        this.name = name;
         this.location = location;
         this.capacity = capacity;
+        this.organizationId = organizationId;
     }
 
-    public Classroom(Integer id, String roomName, String location, Integer capacity) {
+    public Classroom(Integer id, String name, String location, Integer capacity, Integer organizationId) {
         this.id = id;
-        this.roomName = roomName;
+        this.name = name;
         this.location = location;
         this.capacity = capacity;
+        this.organizationId = organizationId;
     }
 
     public Integer getId() {
@@ -33,12 +37,12 @@ public class Classroom {
         this.id = id;
     }
 
-    public String getRoomName() {
-        return roomName;
+    public String getName() {
+        return name;
     }
 
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getLocation() {
@@ -57,30 +61,34 @@ public class Classroom {
         this.capacity = capacity;
     }
 
+    public Integer getOrganizationId() {
+        return organizationId;
+    }
+
+    public void setOrganizationId(Integer organizationId) {
+        this.organizationId = organizationId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Classroom classroom = (Classroom) o;
-        return Objects.equals(id, classroom.id) &&
-                Objects.equals(roomName, classroom.roomName) &&
-                Objects.equals(location, classroom.location) &&
-                Objects.equals(capacity, classroom.capacity);
+        if (!(o instanceof Classroom classroom)) return false;
+        return Objects.equals(id, classroom.id) && Objects.equals(name, classroom.name) && Objects.equals(location, classroom.location) && Objects.equals(capacity, classroom.capacity) && Objects.equals(organizationId, classroom.organizationId);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roomName, location, capacity);
+        return Objects.hash(id, name, location, capacity, organizationId);
     }
 
     @Override
     public String toString() {
-
-        return "classroom{" +
+        return "Classroom{" +
                 "id=" + id +
-                ", roomName='" + roomName + '\'' +
+                ", name='" + name + '\'' +
                 ", location='" + location + '\'' +
-                ", capacity='" + capacity + '\'' +
+                ", capacity=" + capacity +
+                ", organizationId=" + organizationId +
                 '}';
     }
 }

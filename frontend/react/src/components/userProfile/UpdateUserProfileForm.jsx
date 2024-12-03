@@ -67,11 +67,11 @@ const UpdateUserProfileForm = ({id,name,address,email,dateOfBirth,gender}) => {
                 {({isValid, isSubmitting, dirty}) => (
                     <Form>
                         <Stack spacing={"5px"}>
-                            <MyTextInput name="name" type="text" placeholder={name}/>
-                            <MyTextInput name="address" type="text" placeholder={address}/>
-                            <MyTextInput name="password" type="password" placeholder={fullUser.password} />
-                            <MyTextInput name="dateOfBirth" type="date" placeholder={dateOfBirth} />
-                            <MySelect name="gender" >
+                            <MyTextInput label={"Name"} name="name" type="text" placeholder={name}/>
+                            <MyTextInput label={"Address"} name="address" type="text" placeholder={address}/>
+                            <MyTextInput label={"Password"} name="password" type="password" placeholder={fullUser.password} />
+                            <MyTextInput label={"Date of birth"} name="dateOfBirth" type="date" placeholder={dateOfBirth} />
+                            <MySelect label={"Gender"} name="gender" >
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                             </MySelect>

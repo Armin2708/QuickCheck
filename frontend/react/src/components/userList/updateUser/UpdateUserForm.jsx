@@ -1,10 +1,10 @@
 import { Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import {Button,Stack} from "@chakra-ui/react";
-import {errorNotification, successNotification} from "../../services/notification.js";
-import {updateUser} from "../../services/client/users.js";
-import MyTextInput from "../shared/formFields/MyText.jsx";
-import MySelect from "../shared/formFields/MySelect.jsx";
+import {errorNotification, successNotification} from "../../../services/notification.js";
+import {updateUser} from "../../../services/client/users.js";
+import MyTextInput from "../../shared/formFields/MyText.jsx";
+import MySelect from "../../shared/formFields/MySelect.jsx";
 
 
 const UpdateUserForm = ({id,name,address,email,dateOfBirth,gender}) => {
@@ -59,10 +59,10 @@ const UpdateUserForm = ({id,name,address,email,dateOfBirth,gender}) => {
                 {({isValid, isSubmitting, dirty}) => (
                     <Form>
                         <Stack spacing={"5px"}>
-                            <MyTextInput name="name" type="text" placeholder={name}/>
-                            <MyTextInput name="address" type="text" placeholder={address}/>
-                            <MyTextInput name="dateOfBirth" type="date" placeholder={dateOfBirth} />
-                            <MySelect name="gender" >
+                            <MyTextInput label={"Name"} name="name" type="text" placeholder={name} />
+                            <MyTextInput label={"Address"} name="address" type="text" placeholder={address} />
+                            <MyTextInput label={"Date of birth"} name="dateOfBirth" type="date" placeholder={dateOfBirth} />
+                            <MySelect label={"Gender"} name="gender" >
                                 <option value="MALE">Male</option>
                                 <option value="FEMALE">Female</option>
                             </MySelect>

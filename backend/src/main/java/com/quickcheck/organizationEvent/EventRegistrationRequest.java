@@ -1,4 +1,4 @@
-package com.quickcheck.event;
+package com.quickcheck.organizationEvent;
 
 import java.time.LocalDateTime;
 

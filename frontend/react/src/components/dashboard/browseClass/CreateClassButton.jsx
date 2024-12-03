@@ -9,7 +9,7 @@ import CreateClassForm from "./CreateClassForm.jsx";
 import {AddIcon, CloseIcon} from "@chakra-ui/icons";
 
 // Main Register Component
-const CreateClassButton = ({onSuccess}) => {
+const CreateClassButton = ({fullUser,organizationId,organizationName,onSuccess}) => {
     const { isOpen, onOpen, onClose } = useDisclosure()
     return <>
         <Button
@@ -31,7 +31,7 @@ const CreateClassButton = ({onSuccess}) => {
                 <ModalHeader>Create New Class</ModalHeader>
                 <ModalCloseButton />
                 <ModalBody>
-                    <CreateClassForm onSuccess={onSuccess} />
+                    <CreateClassForm fullUser={fullUser} organizationId={organizationId} organizationName={organizationName} onSuccess={onSuccess} />
                 </ModalBody>
 
                 <ModalFooter>

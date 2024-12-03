@@ -51,6 +51,16 @@ public class ClassJDBCDataAccessService implements ClassDao {
     }
 
     @Override
+    public List<Class> selectUserClasses(Integer userId) {
+        var sql = """
+                SELECT classes.id, name, professor_id, start_date, end_date, classroom_id, organization_id, class_image_id
+                FROM classes JOIN class_user ON classes.id = class_user.class_id
+                WHERE class_user.user_id = ?
+                """;
+        return jdbcTemplate.query(sql, classRowMapper,userId);
+    }
+
+    @Override
     public List<Class> selectClassesOfOrganization(Integer orgId) {
         var sql = """
                 SELECT id, name, professor_id, start_date, 

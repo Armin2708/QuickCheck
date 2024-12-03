@@ -6,14 +6,17 @@ import java.util.Optional;
 public interface ClassroomDao {
 
     List<Classroom> selectAllClassrooms();
+    List<Classroom> selectAllOrganizationClassrooms(Integer organizationId);
+
 
     Optional<Classroom> selectClassroomById(Integer id);
+    Optional<Classroom> selectClassroomByNameAndOrganization(String name, Integer organizationId);
     Optional<Classroom> selectClassroomByName(String roomName);
 
     void insertClassroom(Classroom classroom);
 
     boolean existClassroomById(Integer id);
-    boolean existClassroomByName(String roomName);
+    boolean existClassroomByNameAndOrganizationId(String name, Integer organizationId);
 
     void updateClassroom(Classroom update);
     void deleteClassroomById(Integer id);

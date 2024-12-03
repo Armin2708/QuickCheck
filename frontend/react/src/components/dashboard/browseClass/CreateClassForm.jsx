@@ -1,42 +1,32 @@
 import * as Yup from 'yup';
 import { Formik, Form, useField } from 'formik';
-import { useToast } from '@chakra-ui/react';
 import { errorNotification, successNotification } from "../../../services/notification.js";
 import { useState, useEffect } from "react";
-import { useAuth } from "../../context/AuthContext.jsx";
 import {
     Box, Button, ButtonGroup, Checkbox, Flex,
     Heading, Input, Select, Stack, Progress,
 } from '@chakra-ui/react';
 import MySelect from "../../shared/formFields/MySelect.jsx";
 import MyTextInput from "../../shared/formFields/MyText.jsx";
-import {useParams} from "react-router-dom";
 import MapButton from "../../shared/map/MapButton.jsx";
-import {getClassroomByName, getClassrooms, saveClassroom} from "../../../services/client/classrooms.js";
+import {
+    getClassroomByNameAndOrganization,
+    getOrganizationClassrooms,
+    saveClassroom
+} from "../../../services/client/classrooms.js";
 import {saveClass} from "../../../services/client/classes.js";
 
 // Multi-Step Form Component
-export default function CreateClassForm() {
-    const toast = useToast();
-    const { fullUser } = useAuth();
-    const { name: organizationName } = useParams();
+export default function CreateClassForm({fullUser, organizationName, organizationId}) {
     const [step, setStep] = useState(1);
     const [progress, setProgress] = useState(50);
     const [existClassroom, setExistingClassroom] = useState(false);
     const [classrooms,setClassrooms] = useState([])
-    const [classroom,setClassroom] = useState({})
-
-
-
 
     const fetchClassrooms = () => {
-        getClassrooms()
+        getOrganizationClassrooms(organizationId)
             .then((res) => {
-                if (Array.isArray(res.data)) {
-                    setClassrooms(res.data);
-                } else {
-                    console.error("Expected an array but got:", res.data);
-                }
+                setClassrooms(res.data);
             })
             .catch((error) => {
                 console.error("Error fetching classrooms:", error);
@@ -44,8 +34,10 @@ export default function CreateClassForm() {
     };
 
     useEffect(() => {
-        fetchClassrooms()
-    }, []);
+        if (organizationId){
+            fetchClassrooms()
+        }
+    }, [organizationId]);
 
     return (
         <Formik
@@ -55,7 +47,6 @@ export default function CreateClassForm() {
                 startDate: '',
                 endDate: '',
                 classroomId: '',
-                organizationName: organizationName,
 
                 roomName: '',
                 location: '',
@@ -79,19 +70,22 @@ export default function CreateClassForm() {
                     Yup.number().required('Required')
                 })
             }
-            onSubmit={async (values, actions) => {
+            onSubmit={(values, {setSubmitting}) => {
+
+                setSubmitting(true);
 
                 const classroomData = {
                     roomName: values.roomName,
                     location: values.location,
-                    capacity: values.capacity
+                    capacity: values.capacity,
+                    organizationId: organizationId
                 };
                 const classData = {
                     name: values.name,
                     professorId: values.professorId,
                     startDate: values.startDate,
                     endDate: values.endDate,
-                    organizationName:values.organizationName
+                    organizationName: organizationName
                 };
 
                 if (values.classroomId !== '') {
@@ -99,51 +93,59 @@ export default function CreateClassForm() {
                     classData.classroomId = values.classroomId;
                     saveClass(classData)
                         .then(() => {
-                            successNotification("Class saved", `${values.name} was successfully saved with existing classroom`);
-                            toast({
-                                title: 'Class created.',
-                                description: `${values.name} has been created successfully.`,
-                                status: 'success',
-                                duration: 3000,
-                                isClosable: true,
-                            });
+                            successNotification(
+                                "Class saved",
+                                `${values.name} was successfully saved with existing classroom`
+                            );
                         })
-                        .catch((err) => errorNotification(err.code, err.response?.data?.message))
-                        .finally(() => actions.setSubmitting(false));
-                } else {
-                    // Create new classroom first
-                    try {
-                        // Save the classroom first
-                        const classroomRes = await saveClassroom(classroomData);
-                        console.log(classroomRes);
-                        successNotification(
-                            "Classroom saved",
-                            `${classroomData.roomName} was successfully saved`
-                        );
+                        .catch((err) => {
+                            errorNotification(
+                                err.code,
+                                err.response?.data?.message
+                            );
+                        })
+                        .finally(setSubmitting(false));
+                }
+                else {
+                    saveClassroom(classroomData)
+                        .then(() =>{
+                            successNotification(
+                                "Classroom saved",
+                                `${classroomData.roomName} was successfully saved`
+                            );
 
-                        // Fetch the classroom by name
-                        const getClassroomRes = await getClassroomByName(classroomData.roomName);
-                        const classroom = getClassroomRes.data;
-                        console.log(classroom);
-                        setClassroom(classroom); // Optional: if you want to store it in state
+                            getClassroomByNameAndOrganization(classroomData.roomName, classroomData.organizationId)
+                                .then((res) => {
+                                    classData.classroomId = res.data.id;
 
-                        // Assign the classroom ID to classData
-                        classData.classroomId = classroom.id;
+                                    // Save the class with the assigned classroom ID
+                                    saveClass(classData)
+                                        .then(() =>{
+                                            successNotification(
+                                                "Class saved",
+                                                `${classData.name} was successfully saved`
+                                            );
+                                        })
+                                        .catch((err) =>{
+                                            errorNotification(
+                                                err.code,
+                                                err.response?.data?.message
+                                            );
+                                        })
 
-                        // Save the class with the assigned classroom ID
-                        const classRes = await saveClass(classData);
-                        console.log(classRes);
-                        successNotification(
-                            "Class saved",
-                            `${classData.name} was successfully saved`
-                        );
-                    } catch (err) {
-                        console.log(err);
-                        errorNotification(
-                            err.code,
-                            err.response?.data?.message
-                        );
-                    }
+                                })
+                                .catch((err) =>{
+                                    console.log(err)
+                                })
+
+                        })
+                        .catch((err) =>{
+                            errorNotification(
+                                err.code,
+                                err.response?.data?.message
+                            );
+                        })
+                        .finally(setSubmitting(false))
                 }
             }}
 

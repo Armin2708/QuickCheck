@@ -187,3 +187,15 @@ export const resetPassword = async (updateRequest) => {
         throw e;
     }
 }
+
+export const updateUserAccountType = async (userId,update) => {
+    try {
+        return await axios.put(
+            `${import.meta.env.VITE_API_BASE_URL}/api/users/account-type/${userId}`,
+            update,
+            getAuthConfig()
+        )
+    } catch (e) {
+        throw e;
+    }
+}

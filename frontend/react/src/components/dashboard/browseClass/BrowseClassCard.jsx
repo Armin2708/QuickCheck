@@ -41,11 +41,7 @@ export default function BrowseClassCard({id: classId,professorId,name,classroomI
     const fetchClassroom = () =>{
         getClassroomById(classroomId)
             .then(res => {
-                if (res.data) {
-                    setClassroom(res.data); // Set the admins state
-                } else {
-                    console.error('Expected an object but got:', res.data);
-                }
+                setClassroom(res.data); // Set the admins state
             })
             .catch(error => {
                 console.error('Error fetching classroom:', error); // Log any errors

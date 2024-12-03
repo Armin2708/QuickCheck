@@ -1,5 +1,5 @@
 import {Text, Wrap, WrapItem} from "@chakra-ui/react";
-import UserProfileCard from "../userProfile/UserProfileCard.jsx";
+import UserListCard from "./UserListCard.jsx";
 
 export default function UserListComponent({users, fetchUsers}){
 
@@ -8,7 +8,7 @@ export default function UserListComponent({users, fetchUsers}){
             {Array.isArray(users) && users.length > 0 ? (
                 users.map((user) => (
                     <WrapItem key={user?.id}>
-                        <UserProfileCard
+                        <UserListCard
                             {...user}
                             onSuccess={fetchUsers}
                             key={user.id}

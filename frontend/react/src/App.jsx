@@ -18,6 +18,7 @@ import UserListPage from "./pages/UserListPage.jsx";
 import DashboardWrap from "./components/dashboard/DashboardWrap.jsx";
 import Settings from "./pages/Settings.jsx";
 import ResetPassword from "./components/authentication/resetPassword/ResetPassword.jsx";
+import CalendarPage from "./pages/CalendarPage.jsx";
 
 const App = () => {
     return (
@@ -37,6 +38,13 @@ const App = () => {
                     <UserListPage />
                 </AdminProtectedRoute>
             }/>
+
+            <Route path="/calendar" element={
+                <ProtectedRoute>
+                    <CalendarPage />
+                </ProtectedRoute>
+            } />
+
             <Route path="/profile" element={
                 <ProtectedRoute>
                     <UserProfilePage />

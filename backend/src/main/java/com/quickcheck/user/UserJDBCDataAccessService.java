@@ -114,15 +114,13 @@ public class UserJDBCDataAccessService implements UserDao {
     }
 
         @Override
-        @Transactional
         public void insertUser(User user) {
-            var userSql = """
+            var sql = """
                 INSERT INTO users (name, address, email, password, date_of_birth, gender, account_type)
                 VALUES (?, ?, ?, ?, ?, ?, ?)
                 """;
 
-            jdbcTemplate.update(
-                    userSql,
+            jdbcTemplate.update(sql,
                     user.getName(),
                     user.getAddress(),
                     user.getEmail(),
@@ -131,71 +129,38 @@ public class UserJDBCDataAccessService implements UserDao {
                     user.getGender().name(),
                     user.getAccountType().name()
             );
+    }
 
-            int userId = selectUserByEmail(user.getEmail()).get().getId();
+    @Override
+    public void updateUser(User update) {
 
-        }
-
-        @Override
-        @Transactional
-        public void updateUser(User update) {
-            StringBuilder sqlBuilder = new StringBuilder("UPDATE users SET ");
-            List<Object> params = new ArrayList<>();
-
-            if (update.getName() != null) {
-                sqlBuilder.append("name = ?, ");
-                params.add(update.getName());
-            }
-            if (update.getAddress() != null) {
-                sqlBuilder.append("address = ?, ");
-                params.add(update.getAddress());
-            }
-            if (update.getEmail() != null) {
-                sqlBuilder.append("email = ?, ");
-                params.add(update.getEmail());
-            }
-            if (update.getPassword() != null) {
-                sqlBuilder.append("password = ?, ");
-                params.add(update.getPassword());
-            }
-            if (update.getDateOfBirth() != null) {
-                sqlBuilder.append("date_of_birth = ?, ");
-                params.add(update.getDateOfBirth());
-            }
-            if (update.getGender() != null) {
-                sqlBuilder.append("gender = ?, ");
-                params.add(update.getGender().name());
-            }
-
-            if (params.isEmpty()) {
-                System.out.println("No fields to update for user with ID: " + update.getId());
-                return;
-            }
-
-            sqlBuilder.setLength(sqlBuilder.length() - 2);
-            sqlBuilder.append(" WHERE id = ?");
-            params.add(update.getId());
-
-            jdbcTemplate.update(sqlBuilder.toString(), params.toArray());
-
-            int userId = selectUserByEmail(update.getEmail()).get().getId();
-
-        }
-
-        @Override
-        @Transactional
-        public void deleteUserById(Integer id) {
-            var userEmailSql = """
-                SELECT email FROM users WHERE id = ?
-                """;
-            String email = jdbcTemplate.queryForObject(userEmailSql, String.class, id);
-
-            var userDeleteSql = """
-                DELETE FROM users
+        var sql = """
+                UPDATE users
+                SET name = ?, address = ?, email = ?, password = ?, date_of_birth = ?, gender = ?, account_type = ?
                 WHERE id = ?
                 """;
-            jdbcTemplate.update(userDeleteSql, id);
-        }
+
+        jdbcTemplate.update(sql,
+                update.getName(),
+                update.getAddress(),
+                update.getEmail(),
+                update.getPassword(),
+                update.getDateOfBirth(),
+                update.getGender().name(),
+                update.getAccountType().name(),
+                update.getId()
+                );
+    }
+
+    @Override
+    public void deleteUserById(Integer id) {
+        var userDeleteSql =
+               """
+                DELETE FROM users
+                WHERE id = ?
+               """;
+        jdbcTemplate.update(userDeleteSql, id);
+    }
 
     @Override
     public void updateUserProfileImageId(String profileImageId, Integer userId) {

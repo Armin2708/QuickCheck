@@ -10,7 +10,7 @@ import {
     useDisclosure
 } from "@chakra-ui/react";
 
-import UpdateUserRolesForm from "../../../userList/UpdateUserRolesForm.jsx";
+import UpdateUserRolesForm from "./UpdateUserRolesForm.jsx";
 import ClassCard from "../../classList/class/ClassCard.jsx";
 import React from "react";
 

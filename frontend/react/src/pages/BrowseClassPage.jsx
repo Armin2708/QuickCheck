@@ -8,11 +8,13 @@ import {FaArrowLeft} from "react-icons/fa";
 import CreateClassButton from "../components/dashboard/browseClass/CreateClassButton.jsx";
 import {useAuth} from "../components/context/AuthContext.jsx";
 import {getClassesOfUserInOrganization, getOrganizationClasses} from "../services/client/classes.js";
+import {getOrganizationByName} from "../services/client/organizations.js";
 
 
 export default function BrowseClassPage() {
     const [classes, setClasses] = useState([]);
     const [joinedClass, setJoinedClass] = useState([]);
+    const [organization, setOrganization] = useState()
 
 
     const {name:organizationName} = useParams()
@@ -20,11 +22,18 @@ export default function BrowseClassPage() {
 
     const navigate = useNavigate();
 
+    const fetchOrganization = () =>{
+        getOrganizationByName(organizationName)
+            .then((res) =>{
+                setOrganization(res.data)
+            })
+            .catch((err) =>{
+                console.log(err)
+            })
+    }
+
 
     const fetchClasses = () => {
-        if (!organizationName){
-            return
-        }
         getOrganizationClasses(organizationName)
             .then((res) => {
                 if (Array.isArray(res.data)) {
@@ -39,9 +48,6 @@ export default function BrowseClassPage() {
     };
 
     const fetchUserClasses = () => {
-        if (!fullUser && !fullUser.id) {
-            return
-        }
         getClassesOfUserInOrganization(fullUser.id,organizationName)
             .then((res) => {
                 if (Array.isArray(res.data)) {
@@ -56,8 +62,11 @@ export default function BrowseClassPage() {
     };
 
     useEffect(() => {
+        if (fullUser && organizationName){
             fetchClasses();
             fetchUserClasses();
+            fetchOrganization()
+        }
     }, [fullUser,organizationName]);
 
     return (
@@ -72,7 +81,7 @@ export default function BrowseClassPage() {
                         >
                             Return
                         </Button>
-                        {(isAdmin() || isInstructor()) &&<CreateClassButton onSuccess={fetchClasses} />}
+                        {(isAdmin() || isInstructor()) && <CreateClassButton onSuccess={fetchClasses} organizationName={organizationName} organizationId={organization?.id} fullUser={fullUser} />}
                     </Stack>
                     <Wrap justify={"center"} spacing={"30px"}>
                         {Array.isArray(classes) && classes.length > 0 ? (

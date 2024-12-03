@@ -1,8 +1,8 @@
 import {Field, Form, Formik} from 'formik';
 import * as Yup from 'yup';
 import {Box, Button, Text,Stack} from "@chakra-ui/react";
-import {errorNotification, successNotification} from "../../services/notification.js";
-import {updateUserRoles} from "../../services/client/role.js";
+import {errorNotification, successNotification} from "../../../../services/notification.js";
+import {updateUserRoles} from "../../../../services/client/role.js";
 
 const UpdateUserRolesForm = ({userId,organizationName,roles, onSuccess}) => {
     const initialRoles = roles.map((role) => role.roleTitle);

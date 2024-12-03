@@ -12,9 +12,6 @@ import {
     WrapItem
 } from "@chakra-ui/react";
 import UpdateUserProfileButton from "./UpdateUserProfileButton.jsx";
-import UpdateUserButton from "../userList/UpdateUserButton.jsx";
-import UpdateUserRolesButton from "../dashboard/organizationPage/organizationUsers/UpdateUserRolesButton.jsx";
-import DeleteUserButton from "../userList/DeleteUserButton.jsx";
 import DeleteUserProfileButton from "./DeleteUserProfileButton.jsx";
 import {getUserProfilePictureUrl} from "../../services/client/users.js";
 

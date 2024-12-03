@@ -5,6 +5,7 @@ import {FiUsers} from "react-icons/fi";
 import {LuSettings} from "react-icons/lu";
 import {useAuth} from "./context/AuthContext.jsx";
 import {useNavigate} from "react-router-dom";
+import {IoCalendarOutline} from "react-icons/io5";
 
 export default function PageWrap({children,pageName}){
     return(
@@ -34,8 +35,7 @@ export default function PageWrap({children,pageName}){
 
                 {children}
 
-                <Spacer/>
-                <Box width="100%">
+                <Box width="100%" mt={"auto"}>
                     <Text fontSize="20px" textAlign={"center"}>© Quick Check - All Rights Reserved</Text>
                 </Box>
             </Box>
@@ -59,6 +59,10 @@ function PageBar({pageName}) {
                 <SideBarPageButton onClick={() =>navigate("/dashboard")}>
                     <MdOutlineSpaceDashboard size="24px" />
                     <ButtonText>Dash Board</ButtonText>
+                </SideBarPageButton>
+                <SideBarPageButton onClick={() => navigate("/calendar")}>
+                    <IoCalendarOutline size="24px" />
+                    <ButtonText>Calendar</ButtonText>
                 </SideBarPageButton>
                 {isAdmin() && (
                     <SideBarPageButton onClick={() =>navigate("/users")}>

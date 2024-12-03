@@ -60,7 +60,7 @@ export default function OrganizationUsersComponent({id:organizationId,name:organ
 
             <OrganizationUserListComponent
                 users={users}
-                fetchUsers={fetchUsersInOrganizationOnSearch}
+                fetchUsers={fetchUsersInOrganization}
                 organizationId={organizationId}
                 organizationName={organizationName}
             />

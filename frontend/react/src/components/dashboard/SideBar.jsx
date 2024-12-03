@@ -12,6 +12,7 @@ import { MdOutlineSpaceDashboard } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext.jsx';
 import OrganizationListComponent from "./organizationList/OrganizationListComponent.jsx";
+import {IoCalendarOutline} from "react-icons/io5";
 
 
 export default function SideBar({cardColor}) {
@@ -30,6 +31,10 @@ export default function SideBar({cardColor}) {
                 <SideBarPageButton onClick={() =>navigate("/dashboard")}>
                     <MdOutlineSpaceDashboard size="24px" />
                     <ButtonText>Dash Board</ButtonText>
+                </SideBarPageButton>
+                <SideBarPageButton onClick={() =>navigate("/calendar")}>
+                    <IoCalendarOutline size="24px" />
+                    <ButtonText>Calendar</ButtonText>
                 </SideBarPageButton>
                 {isAdmin() && (
                     <SideBarPageButton onClick={() =>navigate("/users")}>

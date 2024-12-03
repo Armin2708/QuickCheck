@@ -25,8 +25,10 @@ export default function DashboardCard({children, cardColor}){
 
             {children}
 
-            <Spacer/>
-            <Box width="100%">
+            <Box
+                width="100%"
+                mt="auto" // Ensures it is pushed to the bottom
+            >
                 <Text fontSize="20px" textAlign={"center"}>© Quick Check - All Rights Reserved</Text>
             </Box>
         </Box>

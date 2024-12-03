@@ -2,7 +2,7 @@ import React, {useEffect, useState} from "react";
 import {
     verifyAttendance
 } from "../../../../../services/client/attendance.js";
-import {Button, Input, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Input, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
 import getFormattedDate from "../../../../../services/dateDisplay.js";
 import LocationButton from "./LocationButton.jsx";
 import {FiCheckCircle, FiUser} from "react-icons/fi";
@@ -20,8 +20,6 @@ export default function UserAttendancePage({existAttendance,classObject, classro
     const [inputCode,setInputCode] = useState()
     const [isLoading, setIsLoading] = useState(false);
     const [isPresent,setIsPresent] = useState(false)
-
-    const toast = useToast()
 
     const handleSubmit = () =>{
         setIsLoading(true); // Start loading
@@ -63,6 +61,7 @@ export default function UserAttendancePage({existAttendance,classObject, classro
         if (fullUser.id && tag && existAttendance){
             checkUserAttendance()
         }
+        console.log(classroom)
     }, [fullUser,tag,existAttendance]);
 
 
@@ -96,151 +95,159 @@ export default function UserAttendancePage({existAttendance,classObject, classro
                     <Text fontSize="18px">
                         {getFormattedDate()}
                         <br/>
-                        Class location : {classroom?.roomName}
+                        Class location : {classroom?.name}
                     </Text>
                 </Stack>
 
                 {/*Middle Action Cards*/}
-                <Stack
-                    direction="row"
-                    justify="flex-start"
-                    align="flex-start"
-                    spacing="20px"
-                >
-                    {/*Left Card*/}
+                { existAttendance ?
                     <Stack
-                        paddingX="30px"
-                        paddingY="20px"
-                        maxH={"150px"}
-                        borderRadius="10px"
-                        align="center"
-                        spacing="10px"
-                        background={useColorModeValue("#FBFBFB","#1F1F1F")}
-                        boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                        color={useColorModeValue("#313131","white")}
-                        fontFamily="Inter"
+                        direction="row"
+                        justify="flex-start"
+                        align="flex-start"
+                        spacing="20px"
                     >
-
-                        <Text
-                            fontWeight="semibold"
-                            fontSize="40px"
-                            lineHeight="35px"
-                            alignSelf="stretch"
-                            textAlign="center"
-                        >
-                            Location
-                        </Text>
-                        <LocationButton
-                            classroomLocation={classroom?.location}
-                            validRadius={validRadius}
-                            disabled={isLocationValid}
-                            setIsLocationValid={setIsLocationValid}
-                        />
+                        {/*Left Card*/}
                         <Stack
-                            direction="row"
-                            justify="flex-start"
+                            paddingX="30px"
+                            paddingY="20px"
+                            maxH={"150px"}
+                            borderRadius="10px"
                             align="center"
-                            spacing="7px"
+                            spacing="10px"
+                            background={useColorModeValue("#FBFBFB", "#1F1F1F")}
+                            boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                            color={useColorModeValue("#313131", "white")}
+                            fontFamily="Inter"
                         >
+
                             <Text
-                                fontWeight="medium"
-                                fontSize="18px"
-                                lineHeight={"18px"}
+                                fontWeight="semibold"
+                                fontSize="40px"
+                                lineHeight="35px"
+                                alignSelf="stretch"
+                                textAlign="center"
                             >
-                                My location
+                                Location
                             </Text>
-                            {isLocationValid && <FiCheckCircle size={"23px"} color={"#7E3BB5"}/>}
-                        </Stack>
-
-                    </Stack>
-
-                    {/*Right Card*/}
-                    <Stack
-                        paddingX="30px"
-                        paddingY="20px"
-                        maxH={"150px"}
-                        borderRadius="10px"
-                        align="center"
-                        spacing="10px"
-                        background={useColorModeValue("#FBFBFB","#1F1F1F")}
-                        color={useColorModeValue("#313131","white")}
-                        boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
-                        fontFamily="Inter"
-                    >
-                        <Text
-                            fontWeight="semibold"
-                            fontSize="40px"
-                            lineHeight="35px"
-                            alignSelf="stretch"
-                            textAlign="center"
-                        >
-                            Code
-                        </Text>
-                        <Stack
-                            direction="row"
-                            align="center"
-                            spacing="6px"
-                        >
-                            <Input
-                                name="code"
-                                type="text"
-                                placeholder="123..."
-                                isDisabled={!isLocationValid}
-                                maxLength={6}
-                                inputMode="numeric"
-                                pattern="[0-9]*"
-
-                                background="#707070"
-                                color="#313131"
-                                fontWeight="medium"
-                                fontSize="19px"
-                                maxH={"38px"}
-
-                                borderRadius="8px"
-                                maxW={"134px"}
-                                boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
-                                border="none"  // Remove default border
-                                _focus={{
-                                    outline: "none",  // Remove default outline
-                                    boxShadow: "0px 0px 0px 2px #7E3BB5",  // Custom focus shadow
-                                    border: "none",  // Ensure no border on focus
-                                }}
-                                onChange={(e)=>{
-                                    setInputCode(e.target.value)
-                                }}
+                            <LocationButton
+                                classroomLocation={classroom?.location}
+                                validRadius={validRadius}
+                                disabled={isLocationValid}
+                                setIsLocationValid={setIsLocationValid}
                             />
-                            <Button
-                                isDisabled={!isLocationValid}
-                                padding={"7px"}
-                                borderRadius="8px"
-                                background="#7E3BB5"
-                                maxH={"38px"}
-                                boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
-                                onClick={(e) => {
-                                    handleSubmit(e?.target.value)
-                                }}
+                            <Stack
+                                direction="row"
+                                justify="flex-start"
+                                align="center"
+                                spacing="7px"
                             >
-                                <FaCheck  size={"100%"} color={"white"}/>
-                            </Button>
+                                <Text
+                                    fontWeight="medium"
+                                    fontSize="18px"
+                                    lineHeight={"18px"}
+                                >
+                                    My location
+                                </Text>
+                                {isLocationValid && <FiCheckCircle size={"23px"} color={"#7E3BB5"}/>}
+                            </Stack>
+
                         </Stack>
+
+                        {/*Right Card*/}
                         <Stack
-                            direction="row"
+                            paddingX="30px"
+                            paddingY="20px"
+                            maxH={"150px"}
+                            borderRadius="10px"
                             align="center"
+                            spacing="10px"
+                            background={useColorModeValue("#FBFBFB", "#1F1F1F")}
+                            color={useColorModeValue("#313131", "white")}
+                            boxShadow="0px 1px 4px 0px rgba(0, 0, 0, 0.25)"
+                            fontFamily="Inter"
                         >
                             <Text
-                                fontWeight="medium"
-                                fontSize="18px"
-                                lineHeight={"18px"}
+                                fontWeight="semibold"
+                                fontSize="40px"
+                                lineHeight="35px"
+                                alignSelf="stretch"
+                                textAlign="center"
                             >
-                                {isCodeValid === null ? "Enter Code" : isCodeValid ? "Valid Code" : "Invalid Code"}
+                                Code
                             </Text>
-                            {isCodeValid === true ? <FiCheckCircle size={"23px"} color={"#7E3BB5"}/>
-                                : isCodeValid === false ?
-                                    <IoWarningOutline size="23px" color="#7E3BB5"/> : null}
-                        </Stack>
-                    </Stack>
+                            <Stack
+                                direction="row"
+                                align="center"
+                                spacing="6px"
+                            >
+                                <Input
+                                    name="code"
+                                    type="text"
+                                    placeholder="123..."
+                                    isDisabled={!isLocationValid}
+                                    maxLength={6}
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
 
-                </Stack>
+                                    background="#707070"
+                                    color="#313131"
+                                    fontWeight="medium"
+                                    fontSize="19px"
+                                    maxH={"38px"}
+
+                                    borderRadius="8px"
+                                    maxW={"134px"}
+                                    boxShadow="inset 1px 1px 2px 1px rgba(0, 0, 0, 0.12)"
+                                    border="none"  // Remove default border
+                                    _focus={{
+                                        outline: "none",  // Remove default outline
+                                        boxShadow: "0px 0px 0px 2px #7E3BB5",  // Custom focus shadow
+                                        border: "none",  // Ensure no border on focus
+                                    }}
+                                    onChange={(e) => {
+                                        setInputCode(e.target.value)
+                                    }}
+                                />
+                                <Button
+                                    isDisabled={!isLocationValid}
+                                    padding={"7px"}
+                                    borderRadius="8px"
+                                    background="#7E3BB5"
+                                    maxH={"38px"}
+                                    boxShadow="0px 4px 4px 0px rgba(0, 0, 0, 0.25)"
+                                    onClick={(e) => {
+                                        handleSubmit(e?.target.value)
+                                    }}
+                                >
+                                    <FaCheck size={"100%"} color={"white"}/>
+                                </Button>
+                            </Stack>
+                            <Stack
+                                direction="row"
+                                align="center"
+                            >
+                                <Text
+                                    fontWeight="medium"
+                                    fontSize="18px"
+                                    lineHeight={"18px"}
+                                >
+                                    {isCodeValid === null ? "Enter Code" : isCodeValid ? "Valid Code" : "Invalid Code"}
+                                </Text>
+                                {isCodeValid === true ? <FiCheckCircle size={"23px"} color={"#7E3BB5"}/>
+                                    : isCodeValid === false ?
+                                        <IoWarningOutline size="23px" color="#7E3BB5"/> : null}
+                            </Stack>
+                        </Stack>
+
+                    </Stack>
+                    :
+                    <Box>
+                        <Text fontSize={'3xl'}>
+                            Attendance closed
+                        </Text>
+                    </Box>
+                }
 
                 {/*User Icon*/}
                 <Stack

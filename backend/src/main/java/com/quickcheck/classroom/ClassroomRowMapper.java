@@ -12,9 +12,10 @@ public class ClassroomRowMapper implements RowMapper<Classroom> {
     public Classroom mapRow(ResultSet rs, int rowNum) throws SQLException {
         Classroom classroom = new Classroom(
                 rs.getInt("id"),
-                rs.getString("room_name"),
+                rs.getString("name"),
                 rs.getString("location"),
-                rs.getInt("capacity")
+                rs.getInt("capacity"),
+                rs.getInt("organization_id")
 
         );
         return classroom;

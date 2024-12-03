@@ -398,25 +398,22 @@ public class UserService{
         userDao.updateUser(user);
     }
 
-    /*public void updateUserRoles(Integer userId, UserRolesUpdateRequest updateRequest){
+    public void updateUserAccountType(Integer userId, UpdateAccountTypeRequest updateRequest){
         User user = userDao.selectUserById(userId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "user with id [%s] not found".formatted(userId)
                 ));
         boolean changes = false;
-        if (updateRequest.roles() != null && !updateRequest.roles().equals(user.getRoles())) {
-            userDao.deleteUserRoles(userId); // Delete existing roles
+        if (updateRequest.accountType() != null && !updateRequest.accountType().equals(user.getAccountType())) {
+            user.setAccountType(updateRequest.accountType());
+            userDao.updateUser(user); // Delete existing roles
 
-            // Insert updated roles
-            userDao.insertUserRoles(userId, updateRequest.roles());
-
-            user.setRoles(updateRequest.roles()); // Update user object roles
             changes = true;
         }
         if (!changes) {
             throw new RequestValidationException("No data changes found");
         }
-    }*/
+    }
 
     public void deleteUser(Integer userId){
         checkIfUserExists(userId);

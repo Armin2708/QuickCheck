@@ -1,0 +1,16 @@
+.calendar-event {
+    font-size: 1.2em;
+    border: 1px solid;
+}
+
+.fc-daygrid-event-dot {
+    background-color: rgb(147, 99, 186);
+}
+
+.fc-daygrid-event {
+    background-color: rgba(147, 99, 186, 0.2);
+    border-color: rgb(147, 99, 186);
+}
+.fc-timegrid-slot {
+    height: 100px !important; /* Fine-tune with CSS */
+}
