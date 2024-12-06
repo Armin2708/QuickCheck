@@ -81,8 +81,8 @@ const RegisterForm = ({ initialStep = 1,token , onSuccess}) => {
                     "Verification Email Sent",
                     "Please check your email for the verification code."
                 )
-                setStep(2); // CHANGE AFTER PRESENTATION
-                setProgress(50);
+                setStep(3); // CHANGE AFTER PRESENTATION
+                setProgress(75); // CHANGE AFTER PRESENTATION
             })
             .catch((err) => {
                 errorNotification(
