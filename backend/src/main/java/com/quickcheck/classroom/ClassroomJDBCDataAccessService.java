@@ -38,6 +38,16 @@ public class ClassroomJDBCDataAccessService implements ClassroomDao {
         return jdbcTemplate.query(sql, classroomRowMapper, organizationId);
     }
 
+    @Override
+    public List<Classroom> selectOrganizationClassroomsByNameSearch(Integer organizationId, String classroomName) {
+        var sql = """
+                SELECT id, name, location, capacity, organization_id
+                FROM classrooms
+                WHERE organization_id = ? AND name ILIKE ?
+                """;
+        return jdbcTemplate.query(sql, classroomRowMapper, organizationId,classroomName);
+    }
+
 
     @Override
     public Optional<Classroom> selectClassroomById(Integer id) {

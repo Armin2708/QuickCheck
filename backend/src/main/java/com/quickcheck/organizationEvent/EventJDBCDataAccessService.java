@@ -3,6 +3,7 @@ package com.quickcheck.organizationEvent;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,10 +22,12 @@ public class EventJDBCDataAccessService implements EventDao{
     @Override
     public List<Event> selectAllEvents() {
         var sql = """
-                SELECT id, name, date_time, location, organization_id, description
-                FROM events
-                """;
-        return jdbcTemplate.query(sql,eventRowMapper);
+            SELECT id, name, date_time, location, organization_id, description
+            FROM events
+            ORDER BY date_time DESC 
+            """;
+
+        return jdbcTemplate.query(sql, eventRowMapper);
     }
 
     @Override
@@ -33,6 +36,7 @@ public class EventJDBCDataAccessService implements EventDao{
                 SELECT id, name, date_time, location, organization_id, description
                 FROM events
                 WHERE organization_id = ?
+                ORDER BY date_time DESC 
                 """;
         return jdbcTemplate.query(sql,eventRowMapper,organizationId);
     }
@@ -58,7 +62,7 @@ public class EventJDBCDataAccessService implements EventDao{
 
         int result = jdbcTemplate.update(sql,
                 event.getName(),
-                event.getDateTime(),
+                Timestamp.from(event.getDateTime().toInstant()),
                 event.getLocation(),
                 event.getOrganizationId(),
                 event.getDescription()
@@ -86,7 +90,7 @@ public class EventJDBCDataAccessService implements EventDao{
                 """;
         int result = jdbcTemplate.update(sql,
                 update.getName(),
-                update.getDateTime(),
+                Timestamp.from(update.getDateTime().toInstant()),
                 update.getLocation(),
                 update.getDescription(),
                 update.getId()

@@ -1,10 +1,12 @@
-import {Box, Button, Center, Heading, Image, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
+import {Box, Button, Center, Heading, HStack, Image, Stack, Text, useColorModeValue, useToast} from "@chakra-ui/react";
 import {getClassProfilePictureUrl} from "../../../../services/client/classes.js";
 import {useEffect, useState} from "react";
 import {getUserById} from "../../../../services/client/users.js";
 import {getClassroomById} from "../../../../services/client/classrooms.js";
+import UpdateClassButton from "../../classList/class/UpdateClassButton.jsx";
+import DeleteClassButton from "../../classList/class/DeleteClassButton.jsx";
 
-export default function OrganizationClassCard({id: classId, professorId, name, classroomId}){
+export default function OrganizationClassCard({id: classId, professorId, name, startDate, endDate , classroomId, isAdmin, onSuccess}){
 
     const [professor, setProfessor] = useState({});
     const [classroom, setClassroom] = useState({});
@@ -106,6 +108,12 @@ export default function OrganizationClassCard({id: classId, professorId, name, c
                             {classroom?.roomName}
                         </Text>
                     </Stack>
+                    {isAdmin() && (
+                        <HStack>
+                            <UpdateClassButton professorId={professorId} id={classId} name={name} location={classroom?.location} startDate={startDate} endDate={endDate} onSuccess={onSuccess}/>
+                            <DeleteClassButton id={classId} name={name} onSuccess={onSuccess} />
+                        </HStack>
+                    )}
                 </Stack>
             </Box>
         </Center>

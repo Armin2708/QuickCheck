@@ -42,6 +42,11 @@ public class ClassroomService {
         return classroomDao.selectAllOrganizationClassrooms(organizationId);
     }
 
+    public List<Classroom> getOrganizationClassroomsByNameSearch(Integer organizationId, String classroomName) {
+        checkIfOrganizationExists(organizationId);
+        return classroomDao.selectOrganizationClassroomsByNameSearch(organizationId,classroomName+"%");
+    }
+
     public Classroom getClassroomById(Integer classroomId) {
         return classroomDao.selectClassroomById(classroomId)
                 .orElseThrow(() -> new ResourceNotFoundException(

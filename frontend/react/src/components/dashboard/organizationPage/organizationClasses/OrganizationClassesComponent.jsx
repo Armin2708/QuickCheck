@@ -5,8 +5,9 @@ import {
 } from "../../../../services/client/classes.js";
 import SearchBar from "../../../shared/SearchBar.jsx";
 import OrganizationClassListComponent from "./OrganizationClassListComponent.jsx";
+import CreateClassButton from "../../browseClass/CreateClassButton.jsx";
 
-export default function OrganizationClassesComponent({name:organizationName}){
+export default function OrganizationClassesComponent({name:organizationName, id:organizationId, isAdmin, fullUser}){
     const [classes, setClasses] = useState([]);
     const [search, setSearch] = useState([])
 
@@ -45,7 +46,12 @@ export default function OrganizationClassesComponent({name:organizationName}){
                 search={search}
                 setSearch={setSearch}
             />
-            <OrganizationClassListComponent organizationName={organizationName} classes={classes}/>
+            {isAdmin() && (
+                <Box paddingTop={"20px"}>
+                    <CreateClassButton onSuccess={fetchClasses} organizationName={organizationName} organizationId={organizationId} fullUser={fullUser}  />
+                </Box>
+            )}
+            <OrganizationClassListComponent organizationName={organizationName} classes={classes} onSuccess={fetchClasses} isAdmin={isAdmin}/>
         </Box>
     );
 }

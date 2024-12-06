@@ -7,6 +7,7 @@ public interface ClassroomDao {
 
     List<Classroom> selectAllClassrooms();
     List<Classroom> selectAllOrganizationClassrooms(Integer organizationId);
+    List<Classroom> selectOrganizationClassroomsByNameSearch(Integer organizationId, String classroomName);
 
 
     Optional<Classroom> selectClassroomById(Integer id);

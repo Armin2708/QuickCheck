@@ -1,10 +1,6 @@
 import {useColorModeValue, VStack} from "@chakra-ui/react";
-import React, {useEffect, useState} from "react";
-import {getClassChatsUserJoined} from "../../../../services/client/chat.js";
-import {useParams} from "react-router-dom";
 import ChatButtonCard from "./ChatButtonCard.jsx";
 import BrowseChatButton from "./BrowseChatButton.jsx";
-import {useAuth} from "../../../context/AuthContext.jsx";
 
 export default function ChatListComponent({chats,setChatId}){
 

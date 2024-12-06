@@ -5,8 +5,9 @@ import OrganizationClassesComponent from "./organizationClasses/OrganizationClas
 import DeleteOrganizationButton from "./organization/DeleteOrganizationButton.jsx";
 import UpdateOrganizationButton from "./organization/UpdateOrganizationButton.jsx";
 import LeaveOrganizationButton from "./organization/LeaveOrganizationButton.jsx";
-import Events from "./events/Events.jsx";
-import EventsPage from "./events/EventsPage.jsx";
+
+import ClassroomComponent from "./organizationClassrooms/ClassroomComponent.jsx";
+import EventsComponent from "./events/EventsComponent.jsx";
 
 export default function OrganizationPageComponent({isAdmin,organization,fullUser}) {
 
@@ -20,11 +21,12 @@ export default function OrganizationPageComponent({isAdmin,organization,fullUser
             <HStack width="100%" padding="16px" >
                 <TabList>
                     <Tab>Events</Tab>
+                    <Tab>Classrooms</Tab>
                     {isAdmin() &&
                         <>
-                            <Tab>Code</Tab>
-                            <Tab>Users</Tab>
                             <Tab>Classes</Tab>
+                            <Tab>Users</Tab>
+                            <Tab>Code</Tab>
                         </>
                     }
                 </TabList>
@@ -46,16 +48,19 @@ export default function OrganizationPageComponent({isAdmin,organization,fullUser
 
             <TabPanels flex={1}>
                 <TabPanel>
-                    <EventsPage/>
+                    <EventsComponent organizationId={organization?.id} isAdmin={isAdmin} fullUser={fullUser}/>
                 </TabPanel>
                 <TabPanel>
-                    <OrganizationJoinCodeComponent organization={organization} fullUser={fullUser}/>
+                    <ClassroomComponent {...organization} isAdmin={isAdmin} fullUser={fullUser}/>
+                </TabPanel>
+                <TabPanel>
+                    <OrganizationClassesComponent {...organization} isAdmin={isAdmin} fullUser={fullUser}/>
                 </TabPanel>
                 <TabPanel>
                     <OrganizationUsersComponent {...organization}/>
                 </TabPanel>
                 <TabPanel>
-                    <OrganizationClassesComponent {...organization}/>
+                    <OrganizationJoinCodeComponent organization={organization} fullUser={fullUser}/>
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -45,7 +45,6 @@ export default function MapPage({ onMarkerSet }) {
                             width="300px"
                             boxShadow="0 2px 6px rgba(0, 0, 0, 0.3)"
                             fontSize="16px"
-                            backgroundColor="white"
                         />
                     </StandaloneSearchBox>
 

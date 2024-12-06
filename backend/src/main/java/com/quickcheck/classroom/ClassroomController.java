@@ -27,6 +27,14 @@ public class ClassroomController {
         return classroomService.getAllOrganizationClassrooms(organizationId);
     }
 
+    @GetMapping("organization/{organizationId}/search/{classroomName}")
+    public List<Classroom> searchOrganizationClassrooms(
+            @PathVariable("organizationId") Integer organizationId,
+            @PathVariable("classroomName") String classroomName
+    ){
+        return classroomService.getOrganizationClassroomsByNameSearch(organizationId,classroomName);
+    }
+
     @GetMapping("/id/{classroomId}")
     public Classroom getClassroomById(@PathVariable("classroomId") Integer classroomId){
         return classroomService.getClassroomById(classroomId);

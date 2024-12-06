@@ -187,7 +187,7 @@ export default function CreateClassForm({fullUser, organizationName, organizatio
                                     <MySelect name="classroomId" placeholder="Select Classroom">
                                         {classrooms?.map((classroom) => (
                                             <option key={classroom.id} value={classroom.id}>
-                                                {classroom.roomName}
+                                                {classroom.name}
                                             </option>
                                         ))}
                                     </MySelect>

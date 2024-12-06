@@ -1,10 +1,10 @@
 package com.quickcheck.organizationEvent;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record EventRegistrationRequest(
         String name,
-        LocalDateTime dateTime,
+        ZonedDateTime dateTime,
         String location,
         Integer organizationId,
         String description

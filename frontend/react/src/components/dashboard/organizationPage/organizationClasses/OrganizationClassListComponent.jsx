@@ -1,7 +1,7 @@
 import {Box, Wrap, WrapItem} from "@chakra-ui/react";
 import OrganizationClassCard from "./OrganizationClassCard.jsx";
 
-export default function OrganizationClassListComponent({organizationName,classes}){
+export default function OrganizationClassListComponent({organizationName,classes, onSuccess, isAdmin}){
 
     return(
         <Wrap justify={"center"}>
@@ -10,7 +10,7 @@ export default function OrganizationClassListComponent({organizationName,classes
                     {Array.isArray(classes) && classes.length > 0 ? (
                         classes.map((classObject) => (
                             <WrapItem key={classObject.id}>
-                                <OrganizationClassCard {...classObject} />
+                                <OrganizationClassCard {...classObject} onSuccess={onSuccess} isAdmin={isAdmin}/>
                             </WrapItem>
                         ))
                     ) : (

@@ -19,6 +19,15 @@ export const getOrganizationClassrooms= async (organizationId) => {
     }
 }
 
+export const searchOrganizationClassrooms= async (organizationId,input) => {
+    try {
+        return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/organization/${organizationId}/search/${input}`,
+            getAuthConfig())
+    }catch (e){
+        throw e;
+    }
+}
+
 export const getClassroomByNameAndOrganization= async (name,organizationId) => {
     try {
         return await axios.get(`${import.meta.env.VITE_API_BASE_URL}/api/classrooms/name/${name}/organization/${organizationId}`,

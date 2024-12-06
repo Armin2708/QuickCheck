@@ -1,10 +1,10 @@
 package com.quickcheck.organizationEvent;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 public record EventUpdateRequest(
         String name,
-        LocalDateTime dateTime,
+        ZonedDateTime dateTime,
         String location,
         String description
 ) {

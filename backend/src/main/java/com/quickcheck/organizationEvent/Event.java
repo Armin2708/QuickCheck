@@ -1,18 +1,18 @@
 package com.quickcheck.organizationEvent;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 
 public class Event {
 
     private Integer id;
     private String name;
-    private LocalDateTime dateTime;
+    private ZonedDateTime dateTime;
     private String location;
     private Integer organizationId;
     private String description;
 
-    public Event(String name, LocalDateTime dateTime, String location, Integer organizationId, String description) {
+    public Event(String name, ZonedDateTime dateTime, String location, Integer organizationId, String description) {
         this.name = name;
         this.dateTime = dateTime;
         this.location = location;
@@ -20,7 +20,7 @@ public class Event {
         this.description = description;
     }
 
-    public Event(Integer id, String name, LocalDateTime dateTime, String location, Integer organizationId, String description) {
+    public Event(Integer id, String name, ZonedDateTime dateTime, String location, Integer organizationId, String description) {
         this.id = id;
         this.name = name;
         this.dateTime = dateTime;
@@ -45,11 +45,11 @@ public class Event {
         this.name = name;
     }
 
-    public LocalDateTime getDateTime() {
+    public ZonedDateTime getDateTime() {
         return dateTime;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+    public void setDateTime(ZonedDateTime dateTime) {
         this.dateTime = dateTime;
     }
 

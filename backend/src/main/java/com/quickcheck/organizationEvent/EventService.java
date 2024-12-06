@@ -65,12 +65,12 @@ public class EventService {
             event.setName(update.name());
             changes=true;
         }
-        if (update.dateTime()!=null && !update.dateTime().equals(event.getDateTime())){
-            event.setDateTime(update.dateTime());
-            changes=true;
-        }
         if (update.location()!=null && !update.location().equals(event.getLocation())){
             event.setLocation(update.location());
+            changes=true;
+        }
+        if (update.dateTime()!=null && !update.dateTime().equals(event.getDateTime())){
+            event.setDateTime(update.dateTime());
             changes=true;
         }
         if (update.description()!=null && !update.description().equals(event.getDescription())){
