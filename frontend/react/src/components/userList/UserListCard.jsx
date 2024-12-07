@@ -4,6 +4,7 @@ import UpdateUserProfileButton from "../userProfile/UpdateUserProfileButton.jsx"
 import DeleteUserProfileButton from "../userProfile/DeleteUserProfileButton.jsx";
 import UpdateUserAccountTypeButton from "./updateAccountType/UpdateUserAccountTypeButton.jsx";
 import UpdateUserButton from "./updateUser/UpdateUserButton.jsx";
+import DeleteUserButton from "./deleteUser/DeleteUserButton.jsx";
 
 export default function UserListCard({id,name,email,address,dateOfBirth,gender,accountType, onSuccess}){
 
@@ -76,7 +77,7 @@ export default function UserListCard({id,name,email,address,dateOfBirth,gender,a
                         <UpdateUserAccountTypeButton
                             userId={id} accountType={accountType} onSuccess={onSuccess}
                         />
-                        <DeleteUserProfileButton userId={id} name={name} />
+                        <DeleteUserButton userId={id} name={name} onSuccess={onSuccess}/>
                     </HStack>
                 </Stack>
             </Box>
